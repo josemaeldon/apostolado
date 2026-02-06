@@ -106,7 +106,10 @@ COPY --from=frontend-builder --chown=laravel:laravel /app/public/build ./public/
 COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY docker/php-fpm/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
+
+# Remove default PHP-FPM www.conf and use custom one to avoid user/group warnings
+RUN rm -f /usr/local/etc/php-fpm.d/www.conf
+COPY docker/php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
 
 # Configurar permissões
 RUN mkdir -p storage/framework/{sessions,views,cache} \
