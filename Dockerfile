@@ -106,6 +106,7 @@ COPY --from=frontend-builder --chown=laravel:laravel /app/public/build ./public/
 COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/php-fpm/zz-docker.conf /usr/local/etc/php-fpm.d/zz-docker.conf
 
 # Configurar permissões
 RUN mkdir -p storage/framework/{sessions,views,cache} \
@@ -115,7 +116,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chmod -R 775 storage bootstrap/cache \
     && mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi \
     && mkdir -p /tmp/supervisor \
-    && chown -R laravel:laravel /tmp/nginx /tmp/supervisor
+    && mkdir -p /var/lib/nginx/logs \
+    && chown -R laravel:laravel /tmp/nginx /tmp/supervisor /var/lib/nginx
 
 # Criar arquivo .env se não existir
 RUN if [ ! -f .env ]; then cp .env.example .env; fi
