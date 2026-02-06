@@ -6,7 +6,7 @@ FROM node:20-alpine AS frontend-builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci --only=production
+RUN npm ci
 
 COPY vite.config.js postcss.config.js tailwind.config.js ./
 COPY resources ./resources
