@@ -32,6 +32,9 @@
                             <p class="text-xs text-green-600 mt-1">Permissão de escrita: OK</p>
                         @else
                             <p class="text-xs text-red-600 mt-1">Sem permissão de escrita</p>
+                            @if($folder === '.env')
+                                <p class="text-xs text-red-600 mt-1">O instalador precisa escrever no arquivo .env para salvar as configurações</p>
+                            @endif
                         @endif
                     </div>
                     @if($writable)
@@ -61,10 +64,15 @@
                 <div>
                     <p class="text-sm text-yellow-800 font-semibold">Ação necessária</p>
                     <p class="text-sm text-yellow-700 mb-2">
-                        Algumas pastas não têm permissão de escrita. Execute os seguintes comandos:
+                        Alguns arquivos/pastas não têm permissão de escrita. Execute os seguintes comandos:
                     </p>
                     <pre class="bg-gray-900 text-gray-100 p-3 rounded text-xs overflow-x-auto">chmod -R 775 storage bootstrap/cache
-chown -R www-data:www-data storage bootstrap/cache</pre>
+chown -R www-data:www-data storage bootstrap/cache
+chmod 664 .env
+chown www-data:www-data .env</pre>
+                    <p class="text-sm text-yellow-700 mt-2">
+                        <strong>Nota para Docker:</strong> Se estiver usando Docker, o script docker-entrypoint.sh cria automaticamente o arquivo .env se ele não existir. Se este erro persistir, verifique os logs do container: <code class="bg-gray-800 px-2 py-1 rounded text-xs">docker logs &lt;nome-container&gt;</code>
+                    </p>
                 </div>
             </div>
         </div>

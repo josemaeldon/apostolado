@@ -99,6 +99,10 @@ COPY --from=php-builder --chown=laravel:laravel /var/www/html/vendor ./vendor
 # Copiar aplicação
 COPY --chown=laravel:laravel . .
 
+# Copiar entrypoint script
+COPY --chown=laravel:laravel docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 # Copiar assets buildados
 COPY --from=frontend-builder --chown=laravel:laravel /app/public/build ./public/build
 
@@ -122,8 +126,12 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p /var/lib/nginx/logs \
     && chown -R laravel:laravel /tmp/nginx /tmp/supervisor /var/lib/nginx
 
-# Criar arquivo .env se não existir
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+# Garantir que .env.example existe e criar .env inicial
+RUN if [ -f .env.example ]; then \
+        cp .env.example .env && \
+        chown laravel:laravel .env && \
+        chmod 664 .env; \
+    fi
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \
@@ -134,6 +142,9 @@ EXPOSE 80
 
 # Usar usuário não-root
 USER laravel
+
+# Entrypoint para garantir configuração correta no startup
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 # Comando de inicialização
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

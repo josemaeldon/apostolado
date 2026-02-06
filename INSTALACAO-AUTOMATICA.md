@@ -131,17 +131,22 @@ O instalador verifica automaticamente:
 
 ### Etapa 2: Permissões de Pastas 📁
 
-Verifica se estas pastas têm permissão de escrita:
+Verifica se estas pastas e arquivos têm permissão de escrita:
 - `storage/framework`
 - `storage/logs`
 - `storage/app`
 - `bootstrap/cache`
+- `.env` (arquivo de configuração)
 
 **Se houver problemas**, comandos para corrigir são exibidos:
 ```bash
 chmod -R 775 storage bootstrap/cache
 chown -R www-data:www-data storage bootstrap/cache
+chmod 664 .env
+chown www-data:www-data .env
 ```
+
+**Nota:** Em ambientes Docker, o arquivo `.env` é criado automaticamente pelo entrypoint se não existir.
 
 ### Etapa 3: Configuração do Banco de Dados 🗄️
 
@@ -261,13 +266,36 @@ docker pull ghcr.io/josemaeldon/apostolado:main
   psql -h 127.0.0.1 -U postgres -d apostolado
   ```
 
-### Erro: "Permissões negadas"
+### Erro: "Permissões negadas" ou "file_put_contents(.env): Failed to open stream"
 
-**Solução:**
+**Causa:** O arquivo `.env` não existe ou não tem permissão de escrita.
+
+**Solução 1 - Desenvolvimento Local:**
 ```bash
-sudo chmod -R 775 storage bootstrap/cache
-sudo chown -R www-data:www-data storage bootstrap/cache
+# Criar arquivo .env se não existir
+cp .env.example .env
+
+# Configurar permissões
+chmod 664 .env
+sudo chown www-data:www-data .env
 ```
+
+**Solução 2 - Docker:**
+```bash
+# Parar o container
+docker stop apostolado-app
+
+# Remover container
+docker rm apostolado-app
+
+# Reconstruir a imagem (se necessário)
+docker build -t apostolado .
+
+# Iniciar novamente - o entrypoint criará o .env automaticamente
+docker run -d --name apostolado-app ...
+```
+
+**Nota:** A partir da versão com entrypoint, o arquivo `.env` é criado automaticamente no início do container se não existir.
 
 ### Erro: "Extensão PHP não encontrada"
 
