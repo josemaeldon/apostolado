@@ -52,7 +52,7 @@ if mkdir -p storage/framework/{sessions,views,cache} 2>/dev/null && \
 else
     echo -e "${YELLOW}⚠ Não foi possível criar alguns diretórios de cache (sem permissão de escrita)${NC}"
     echo -e "${YELLOW}  Docker: Os diretórios devem ser criados durante o build${NC}"
-    echo -e "${YELLOW}  Local: Execute 'mkdir -p storage/{framework/{sessions,views,cache},logs} bootstrap/cache' manualmente${NC}"
+    echo -e "${YELLOW}  Local: Execute 'mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache' manualmente${NC}"
 fi
 
 # Executar o comando fornecido (normalmente supervisord)
