@@ -135,6 +135,12 @@ return [
     |
     */
 
-    'trusted_proxies' => env('TRUSTED_PROXIES', '*'),
+    'trusted_proxies' => (function () {
+        $proxies = env('TRUSTED_PROXIES', '*');
+        if ($proxies === '*') {
+            return '*';
+        }
+        return array_filter(array_map('trim', explode(',', $proxies)));
+    })(),
 
 ];
