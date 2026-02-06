@@ -27,7 +27,7 @@ class MemberRegistrationController extends Controller
 
         $memberRegistration->update($validated);
 
-        return redirect()->route('admin.member-registrations.index')
+        return redirect()->route('admin.member-registrations.show', $memberRegistration)
             ->with('success', 'Status atualizado com sucesso!');
     }
 
