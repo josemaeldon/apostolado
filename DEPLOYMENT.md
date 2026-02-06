@@ -22,6 +22,8 @@ Este guia fornece instruções passo a passo para fazer o deployment do sistema 
 
 ## 🐳 Opção 1: Deploy com Docker (Recomendado)
 
+### Opção 1A: Docker Compose (Single Server)
+
 ### 1. Instale o Docker e Docker Compose
 
 ```bash
@@ -107,6 +109,64 @@ Acesse `http://seu-servidor:8000` para ver o site.
 - Senha: `password`
 
 ⚠️ **IMPORTANTE**: Altere a senha do administrador imediatamente após o primeiro login!
+
+### Opção 1B: Docker Swarm (Cluster/Production)
+
+Para ambientes de produção com alta disponibilidade e Traefik como reverse proxy:
+
+### 1. Prepare o Swarm Cluster
+
+```bash
+# No nó manager
+docker swarm init
+
+# Nos nós workers (use o comando fornecido pelo swarm init)
+docker swarm join --token <TOKEN> <MANAGER-IP>:2377
+```
+
+### 2. Configure a Rede
+
+```bash
+# Criar rede externa para Traefik
+docker network create --driver overlay cloudbrnet
+```
+
+### 3. Configure as Variáveis
+
+Edite o arquivo `docker-stack.yml` e ajuste as variáveis de ambiente, especialmente:
+- `APP_URL`: Seu domínio
+- `DB_PASSWORD`: Senha segura do banco
+- Labels do Traefik com seu domínio
+
+### 4. Deploy da Stack
+
+```bash
+# Deploy usando o arquivo docker-stack.yml
+docker stack deploy -c docker-stack.yml apostolado
+
+# Verificar serviços
+docker stack services apostolado
+
+# Ver logs
+docker service logs apostolado_app -f
+```
+
+### 5. Execute Migrações
+
+```bash
+# Encontrar o container
+docker ps | grep apostolado
+
+# Executar migrações
+docker exec -it <container-id> php artisan migrate --force
+docker exec -it <container-id> php artisan db:seed --force
+```
+
+**Notas sobre Docker Swarm:**
+- A stack usa volumes nomeados para persistência de dados
+- O Traefik gerencia SSL automaticamente com Let's Encrypt
+- As configurações estão otimizadas para não-root (usuário laravel)
+- Logs são redirecionados para stdout/stderr para melhor visibilidade
 
 ## 🖥️ Opção 2: Deploy Manual (Sem Docker)
 
