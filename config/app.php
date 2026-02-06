@@ -123,4 +123,18 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Trusted Proxies
+    |--------------------------------------------------------------------------
+    |
+    | Set the IP addresses or CIDR ranges of trusted proxies. Use '*' to trust
+    | all proxies (useful for cloud environments like AWS, GCP, or when using
+    | Docker with dynamic IPs). For better security, specify exact proxy IPs.
+    | Examples: '192.168.1.0/24', '10.0.0.1', or multiple IPs separated by comma
+    |
+    */
+
+    'trusted_proxies' => env('TRUSTED_PROXIES', '*'),
+
 ];

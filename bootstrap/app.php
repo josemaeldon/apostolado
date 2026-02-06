@@ -15,8 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\CheckInstallation::class,
         ]);
         
-        // Trust all proxies (useful for load balancers, reverse proxies)
-        $middleware->trustProxies(at: '*');
+        // Trust proxies for handling X-Forwarded-* headers
+        // Configure specific proxy IPs via TRUSTED_PROXIES env variable
+        $middleware->trustProxies(at: config('app.trusted_proxies', '*'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
