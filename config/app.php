@@ -137,10 +137,17 @@ return [
 
     'trusted_proxies' => (function () {
         $proxies = env('TRUSTED_PROXIES', '*');
-        if ($proxies === '*') {
+        // Handle null or empty values
+        if (empty($proxies) || $proxies === '*') {
             return '*';
         }
-        return array_filter(array_map('trim', explode(',', $proxies)));
+        // Parse comma-separated values and filter out only empty strings
+        $parsed = array_filter(
+            array_map('trim', explode(',', $proxies)),
+            fn($v) => $v !== ''
+        );
+        // Return array or fallback to wildcard if parsing resulted in empty array
+        return !empty($parsed) ? $parsed : '*';
     })(),
 
 ];
