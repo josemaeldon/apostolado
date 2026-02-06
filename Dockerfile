@@ -122,8 +122,10 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p /var/lib/nginx/logs \
     && chown -R laravel:laravel /tmp/nginx /tmp/supervisor /var/lib/nginx
 
-# Criar arquivo .env se não existir
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+# Criar arquivo .env se não existir e garantir permissões de escrita
+RUN if [ ! -f .env ]; then cp .env.example .env; fi \
+    && chown laravel:laravel .env \
+    && chmod 664 .env
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \

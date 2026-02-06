@@ -79,11 +79,16 @@ class InstallerController extends Controller
             return redirect('/');
         }
 
+        $envPath = base_path('.env');
+        $envExists = file_exists($envPath);
+        $envWritable = $envExists && is_writable($envPath);
+
         $permissions = [
             'storage/framework' => is_writable(storage_path('framework')),
             'storage/logs' => is_writable(storage_path('logs')),
             'storage/app' => is_writable(storage_path('app')),
             'bootstrap/cache' => is_writable(base_path('bootstrap/cache')),
+            '.env' => $envWritable,
         ];
 
         return view('installer.permissions', compact('permissions'));
@@ -251,6 +256,21 @@ class InstallerController extends Controller
     private function updateEnv(array $data)
     {
         $envFile = base_path('.env');
+        
+        // Verificar se o arquivo .env existe
+        if (!file_exists($envFile)) {
+            throw new Exception('Arquivo .env não encontrado. Por favor, copie o arquivo .env.example para .env');
+        }
+        
+        // Verificar se o arquivo .env é gravável
+        if (!is_writable($envFile)) {
+            throw new Exception(
+                'Sem permissão de escrita no arquivo .env. ' .
+                'Execute: chmod 664 ' . $envFile . ' ou ' .
+                'chown www-data:www-data ' . $envFile
+            );
+        }
+
         $env = file_get_contents($envFile);
 
         foreach ($data as $key => $value) {
@@ -264,6 +284,12 @@ class InstallerController extends Controller
             }
         }
 
-        file_put_contents($envFile, $env);
+        $result = file_put_contents($envFile, $env);
+        
+        if ($result === false) {
+            throw new Exception(
+                'Falha ao escrever no arquivo .env. Verifique as permissões do arquivo e do diretório.'
+            );
+        }
     }
 }
