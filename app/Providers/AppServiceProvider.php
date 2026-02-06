@@ -22,8 +22,12 @@ class AppServiceProvider extends ServiceProvider
     {
         // Force HTTPS URLs when the request is over HTTPS
         // This handles both direct HTTPS connections and proxied connections
-        if ($this->app->bound('request') && $this->app['request']->isSecure()) {
-            URL::forceScheme('https');
+        // We defer the check until after middleware has processed proxy headers
+        if ($this->app->bound('request')) {
+            $request = $this->app['request'];
+            if ($request->isSecure()) {
+                URL::forceScheme('https');
+            }
         }
     }
 }
