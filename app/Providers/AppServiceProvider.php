@@ -20,10 +20,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Force HTTPS URLs in production or when behind a proxy using HTTPS
-        if ($this->app->environment('production') || 
-            (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
-            (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')) {
+        // Force HTTPS URLs when the request is over HTTPS
+        // This handles both direct HTTPS connections and proxied connections
+        if ($this->app->bound('request') && $this->app['request']->isSecure()) {
             URL::forceScheme('https');
         }
     }
