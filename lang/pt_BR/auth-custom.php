@@ -36,6 +36,23 @@ return [
     // Dashboard
     'dashboard' => 'Painel',
     'you_are_logged_in' => 'Você está logado!',
+    'management_dashboard' => 'Painel de Gerenciamento',
+    'welcome_message' => 'Bem-vindo ao Painel de Gerenciamento do Apostolado da Oração',
+    
+    // Management Sections
+    'authentication_system' => 'Sistema de Autenticação',
+    'authentication_desc' => 'Controle de acesso administrativo',
+    'dynamic_pages' => 'Páginas Dinâmicas',
+    'dynamic_pages_desc' => 'Criação e edição de páginas do site',
+    'prayer_intentions' => 'Intenções de Oração',
+    'prayer_intentions_desc' => 'Gerenciamento das intenções mensais do Papa',
+    'news_articles' => 'Notícias e Artigos',
+    'news_articles_desc' => 'Sistema completo de publicação de conteúdo',
+    'event_calendar' => 'Calendário de Eventos',
+    'event_calendar_desc' => 'Gestão de eventos e atividades',
+    'media_gallery' => 'Galeria de Mídia',
+    'media_gallery_desc' => 'Gerenciamento de imagens e vídeos',
+    'manage' => 'Gerenciar',
     
     // Email Verification
     'verify_email' => 'Verificar E-mail',
