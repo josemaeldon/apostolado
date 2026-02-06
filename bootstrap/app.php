@@ -18,11 +18,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // Trust proxies for handling X-Forwarded-* headers
         // Configure specific proxy IPs via TRUSTED_PROXIES env variable
         $proxies = env('TRUSTED_PROXIES', '*');
-        // Handle null, empty string, or wildcard
-        if ($proxies === null || $proxies === '' || $proxies === '*') {
+        // Handle empty string or wildcard
+        if ($proxies === '' || $proxies === '*') {
             $trustedProxies = '*';
         } else {
-            // Parse comma-separated values and filter out only empty strings
+            // Parse comma-separated values and trim whitespace
             $parsed = array_filter(
                 array_map('trim', explode(',', (string) $proxies)),
                 fn($v) => $v !== ''
