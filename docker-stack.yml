@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  app:
+    image: ghcr.io/josemaeldon/apostolado:latest
+    working_dir: /var/www/html
+
+    networks:
+      - cloudbrnet
+
+    volumes:
+      - apostolado-storage-data:/var/www/html/storage
+      - apostolado-cache-data:/var/www/html/bootstrap/cache
+
+    environment:
+      APP_NAME: "Apostolado da Oração"
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: https://apostolado.cristocrucificado.com
+
+      DB_CONNECTION: pgsql
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_DATABASE: apostolado
+      DB_USERNAME: postgres
+      # SECURITY WARNING: Replace with actual password or use Docker Secrets
+      # Example with secrets: https://docs.docker.com/engine/swarm/secrets/
+      DB_PASSWORD: ${DB_PASSWORD:-CHANGE_THIS_PASSWORD}
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      # 🔥 MINIO / S3
+      #FILESYSTEM_DISK: s3
+      #AWS_ACCESS_KEY_ID: EFNPR7LGO332G0GJXTKT
+      #AWS_SECRET_ACCESS_KEY: fS1flf1XnEpjhV8dGiIFWKp56DxMFDju1c8foOlh
+      #AWS_DEFAULT_REGION: eu-south
+      #AWS_BUCKET: caixa-cristo
+      #AWS_ENDPOINT: https://minio-hub-s3.cloudbr.app
+      #AWS_USE_PATH_STYLE_ENDPOINT: "true"
+
+      # SECURITY WARNING: Replace with actual app key or use Docker Secrets
+      # Generate with: php artisan key:generate --show
+      APP_KEY: ${APP_KEY:-base64:CHANGE_THIS_TO_YOUR_ACTUAL_APP_KEY}
+
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=cloudbrnet
+
+        - traefik.http.routers.apostolado.rule=Host(`apostolado.cristocrucificado.com`)
+        - traefik.http.routers.apostolado.entrypoints=websecure
+        - traefik.http.routers.apostolado.tls.certresolver=letsencryptresolver
+        - traefik.http.services.apostolado.loadbalancer.server.port=80
+
+        - traefik.http.middlewares.apostolado-upload.buffering.maxRequestBodyBytes=104857600
+        - traefik.http.middlewares.apostolado-upload.buffering.memRequestBodyBytes=2097152
+        - traefik.http.routers.apostolado.middlewares=apostolado-upload
+
+networks:
+  cloudbrnet:
+    external: true
+
+volumes:
+  apostolado-storage-data:
+    driver: local
+  apostolado-cache-data:
+    driver: local
