@@ -259,15 +259,19 @@ class InstallerController extends Controller
         
         // Verificar se o arquivo .env existe
         if (!file_exists($envFile)) {
-            throw new Exception('Arquivo .env não encontrado. Por favor, copie o arquivo .env.example para .env');
+            throw new Exception(
+                'Arquivo .env não encontrado. ' .
+                'Em ambientes Docker, verifique se o entrypoint está sendo executado corretamente. ' .
+                'Em instalações locais, copie o arquivo .env.example para .env'
+            );
         }
         
         // Verificar se o arquivo .env é gravável
         if (!is_writable($envFile)) {
             throw new Exception(
                 'Sem permissão de escrita no arquivo .env. ' .
-                'Execute: chmod 664 ' . $envFile . ' ou ' .
-                'chown www-data:www-data ' . $envFile
+                'Docker: Verifique os logs do container com "docker logs <container-name>". ' .
+                'Local: Execute "chmod 664 ' . $envFile . '" ou "chown www-data:www-data ' . $envFile . '"'
             );
         }
 

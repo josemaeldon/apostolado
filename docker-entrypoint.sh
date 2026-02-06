@@ -26,7 +26,7 @@ if [ -f .env ]; then
     # Verificar se temos permissão de escrita
     if [ ! -w .env ]; then
         echo -e "${YELLOW}Ajustando permissões do arquivo .env...${NC}"
-        chmod 664 .env 2>/dev/null || echo -e "${YELLOW}⚠ Não foi possível alterar permissões (pode precisar de sudo)${NC}"
+        chmod 664 .env 2>/dev/null || echo -e "${YELLOW}⚠ Não foi possível alterar permissões (verifique as permissões no host se estiver usando bind mount)${NC}"
     fi
     echo -e "${GREEN}✓ Arquivo .env está acessível${NC}"
 else

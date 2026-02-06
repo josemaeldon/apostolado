@@ -71,7 +71,7 @@ chown -R www-data:www-data storage bootstrap/cache
 chmod 664 .env
 chown www-data:www-data .env</pre>
                     <p class="text-sm text-yellow-700 mt-2">
-                        <strong>Nota para Docker:</strong> Se estiver usando Docker, certifique-se de que o arquivo .env seja gravável pelo usuário do container.
+                        <strong>Nota para Docker:</strong> Se estiver usando Docker, o script docker-entrypoint.sh cria automaticamente o arquivo .env se ele não existir. Se este erro persistir, verifique os logs do container: <code class="bg-gray-800 px-2 py-1 rounded text-xs">docker logs &lt;nome-container&gt;</code>
                     </p>
                 </div>
             </div>
