@@ -123,4 +123,31 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Trusted Proxies
+    |--------------------------------------------------------------------------
+    |
+    | Set the IP addresses or CIDR ranges of trusted proxies. Use '*' to trust
+    | all proxies (useful for cloud environments like AWS, GCP, or when using
+    | Docker with dynamic IPs). For better security, specify exact proxy IPs.
+    | Examples: '192.168.1.0/24', '10.0.0.1', or multiple IPs separated by comma
+    |
+    */
+
+    'trusted_proxies' => (function () {
+        $proxies = env('TRUSTED_PROXIES', '*');
+        // Handle null, empty string, or wildcard
+        if ($proxies === null || $proxies === '' || $proxies === '*') {
+            return '*';
+        }
+        // Parse comma-separated values and filter out only empty strings
+        $parsed = array_filter(
+            array_map('trim', explode(',', (string) $proxies)),
+            fn($v) => $v !== ''
+        );
+        // Return array or fallback to wildcard if parsing resulted in empty array
+        return !empty($parsed) ? $parsed : '*';
+    })(),
+
 ];

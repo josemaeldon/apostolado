@@ -14,6 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->web(append: [
             \App\Http\Middleware\CheckInstallation::class,
         ]);
+        
+        // Trust proxies for handling X-Forwarded-* headers
+        // Configure specific proxy IPs via TRUSTED_PROXIES env variable
+        $middleware->trustProxies(at: config('app.trusted_proxies'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
