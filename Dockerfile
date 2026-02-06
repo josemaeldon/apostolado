@@ -107,6 +107,10 @@ COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+# Remove default PHP-FPM www.conf and use custom one to avoid user/group warnings
+RUN rm -f /usr/local/etc/php-fpm.d/www.conf
+COPY docker/php-fpm/www.conf /usr/local/etc/php-fpm.d/www.conf
+
 # Configurar permissões
 RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p storage/logs \
@@ -115,7 +119,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && chmod -R 775 storage bootstrap/cache \
     && mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi \
     && mkdir -p /tmp/supervisor \
-    && chown -R laravel:laravel /tmp/nginx /tmp/supervisor
+    && mkdir -p /var/lib/nginx/logs \
+    && chown -R laravel:laravel /tmp/nginx /tmp/supervisor /var/lib/nginx
 
 # Criar arquivo .env se não existir
 RUN if [ ! -f .env ]; then cp .env.example .env; fi
