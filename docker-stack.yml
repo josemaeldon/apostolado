@@ -15,7 +15,7 @@ services:
     environment:
       APP_NAME: "Apostolado da Oração"
       APP_ENV: production
-      APP_DEBUG: "true"
+      APP_DEBUG: "false"
       APP_URL: https://apostolado.cristocrucificado.com
 
       DB_CONNECTION: pgsql
@@ -23,7 +23,9 @@ services:
       DB_PORT: 5432
       DB_DATABASE: apostolado
       DB_USERNAME: postgres
-      DB_PASSWORD: e7a09c8b4e57316ad546bfa1ae98b7a7
+      # SECURITY WARNING: Replace with actual password or use Docker Secrets
+      # Example with secrets: https://docs.docker.com/engine/swarm/secrets/
+      DB_PASSWORD: ${DB_PASSWORD:-CHANGE_THIS_PASSWORD}
 
       REDIS_HOST: redis
       REDIS_PORT: 6379
@@ -37,7 +39,9 @@ services:
       #AWS_ENDPOINT: https://minio-hub-s3.cloudbr.app
       #AWS_USE_PATH_STYLE_ENDPOINT: "true"
 
-      APP_KEY: base64:ALhTX6lwHCjY/7O3Wl61jvS6cqRqQl36H6xR9FBqG2E=
+      # SECURITY WARNING: Replace with actual app key or use Docker Secrets
+      # Generate with: php artisan key:generate --show
+      APP_KEY: ${APP_KEY:-base64:CHANGE_THIS_TO_YOUR_ACTUAL_APP_KEY}
 
     deploy:
       replicas: 1

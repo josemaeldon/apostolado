@@ -135,13 +135,43 @@ docker network create --driver overlay cloudbrnet
 
 Edite o arquivo `docker-stack.yml` e ajuste as variáveis de ambiente, especialmente:
 - `APP_URL`: Seu domínio
-- `DB_PASSWORD`: Senha segura do banco
+- `DB_PASSWORD`: Senha segura do banco (use variável de ambiente ou Docker Secrets)
+- `APP_KEY`: Chave de criptografia da aplicação (use variável de ambiente ou Docker Secrets)
 - Labels do Traefik com seu domínio
+
+**Opção 1: Usando variáveis de ambiente (Recomendado)**
+
+Crie um arquivo `.env.swarm` baseado em `.env.swarm.example`:
+
+```bash
+cp .env.swarm.example .env.swarm
+nano .env.swarm
+```
+
+Preencha com seus valores reais:
+```env
+DB_PASSWORD=sua_senha_segura_aqui
+APP_KEY=base64:sua_chave_app_aqui
+```
+
+**Opção 2: Usando Docker Secrets (Mais seguro para produção)**
+
+```bash
+# Criar secrets
+echo "sua_senha_do_banco" | docker secret create db_password -
+echo "base64:sua_chave_app" | docker secret create app_key -
+
+# Atualizar docker-stack.yml para usar secrets
+# Veja: https://docs.docker.com/engine/swarm/secrets/
+```
 
 ### 4. Deploy da Stack
 
 ```bash
 # Deploy usando o arquivo docker-stack.yml
+# Se estiver usando .env.swarm:
+export $(cat .env.swarm | xargs)
+
 docker stack deploy -c docker-stack.yml apostolado
 
 # Verificar serviços
