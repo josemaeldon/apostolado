@@ -2,11 +2,16 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstallerController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MemberRegistrationController;
 use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\PrayerIntentionController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\MediaGalleryController;
+use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\MemberRegistrationController as AdminMemberRegistrationController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas do Instalador
@@ -21,9 +26,12 @@ Route::prefix('install')->name('installer.')->group(function () {
     Route::post('/install', [InstallerController::class, 'install'])->name('install');
 });
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Home
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Member Registration
+Route::get('/cadastro-membro', [MemberRegistrationController::class, 'create'])->name('member.register');
+Route::post('/cadastro-membro', [MemberRegistrationController::class, 'store'])->name('member.store');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -42,6 +50,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('prayer-intentions', PrayerIntentionController::class);
     Route::resource('events', EventController::class);
     Route::resource('media-gallery', MediaGalleryController::class);
+    Route::resource('sliders', SliderController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'update', 'destroy']);
 });
 
 require __DIR__.'/auth.php';

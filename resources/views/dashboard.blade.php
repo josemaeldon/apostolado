@@ -114,6 +114,54 @@
                     </div>
                 </div>
 
+                <!-- Sliders -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="text-4xl mr-4">🎭</div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800">Sliders da Página Inicial</h4>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm">Gerencie os slides do banner principal da página inicial</p>
+                        <a href="{{ route('admin.sliders.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('auth-custom.manage') }}
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="text-4xl mr-4">📑</div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800">Categorias do Menu</h4>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm">Gerencie as categorias e itens do menu de navegação</p>
+                        <a href="{{ route('admin.categories.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('auth-custom.manage') }}
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Member Registrations -->
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg hover:shadow-md transition-shadow">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="text-4xl mr-4">👥</div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800">Cadastros de Membros</h4>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm">Visualize e gerencie os cadastros recebidos</p>
+                        <a href="{{ route('admin.member-registrations.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                            {{ __('auth-custom.manage') }}
+                        </a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
