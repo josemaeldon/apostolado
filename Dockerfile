@@ -113,7 +113,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p bootstrap/cache \
     && chown -R laravel:laravel storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \
-    && mkdir -p /tmp/nginx /tmp/supervisor \
+    && mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi \
+    && mkdir -p /tmp/supervisor \
     && chown -R laravel:laravel /tmp/nginx /tmp/supervisor
 
 # Criar arquivo .env se não existir
