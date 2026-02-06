@@ -2,6 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InstallerController;
+use App\Http\Controllers\Admin\PageController;
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Admin\PrayerIntentionController;
+use App\Http\Controllers\Admin\EventController;
+use App\Http\Controllers\Admin\MediaGalleryController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas do Instalador
@@ -28,6 +33,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Admin Routes
+Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('pages', PageController::class);
+    Route::resource('articles', ArticleController::class);
+    Route::resource('prayer-intentions', PrayerIntentionController::class);
+    Route::resource('events', EventController::class);
+    Route::resource('media-gallery', MediaGalleryController::class);
 });
 
 require __DIR__.'/auth.php';
