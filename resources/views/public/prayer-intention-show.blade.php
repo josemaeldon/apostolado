@@ -74,7 +74,7 @@
                 <div class="p-8 lg:p-12">
                     <div class="flex items-center space-x-2 mb-6">
                         <span class="inline-block px-4 py-2 bg-gold-100 text-gold-800 text-sm font-bold rounded-full">
-                            {{ \Carbon\Carbon::create($prayerIntention->year, $prayerIntention->month)->locale('pt_BR')->translatedFormat('F') }}
+                            {{ $prayerIntention->month }}
                         </span>
                         <span class="inline-block px-4 py-2 bg-primary-100 text-primary-800 text-sm font-bold rounded-full">
                             {{ $prayerIntention->year }}

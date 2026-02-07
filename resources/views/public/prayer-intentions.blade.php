@@ -75,7 +75,7 @@
                     @endif
                     @if(request()->has('month'))
                     <span class="inline-flex items-center px-4 py-2 bg-primary-100 text-primary-800 rounded-full text-sm font-medium">
-                        Mês: {{ \Carbon\Carbon::create()->month(request('month'))->locale('pt_BR')->translatedFormat('F') }}
+                        Mês: {{ request('month') }}
                         <a href="{{ route('public.prayer-intentions', array_diff_key(request()->all(), ['month' => ''])) }}" class="ml-2 text-primary-600 hover:text-primary-800">×</a>
                     </span>
                     @endif
@@ -107,7 +107,7 @@
                     <div class="p-6">
                         <div class="flex items-center space-x-2 mb-3">
                             <span class="inline-block px-3 py-1 bg-gold-100 text-gold-800 text-xs font-bold rounded-full">
-                                {{ \Carbon\Carbon::create($intention->year, $intention->month)->locale('pt_BR')->translatedFormat('F') }}
+                                {{ $intention->month }}
                             </span>
                             <span class="inline-block px-3 py-1 bg-primary-100 text-primary-800 text-xs font-bold rounded-full">
                                 {{ $intention->year }}

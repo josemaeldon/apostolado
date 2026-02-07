@@ -38,7 +38,7 @@ class EventController extends Controller
             'description' => 'required|string',
             'location' => 'required|string|max:255',
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'image' => 'nullable|image|max:2048',
             'is_published' => 'boolean',
         ]);
@@ -83,7 +83,7 @@ class EventController extends Controller
             'description' => 'required|string',
             'location' => 'required|string|max:255',
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
             'image' => 'nullable|image|max:2048',
             'is_published' => 'boolean',
         ]);
