@@ -157,27 +157,40 @@
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                <div class="bg-gradient-to-br from-primary-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-primary-100">
-                    <div class="text-4xl sm:text-5xl mb-4">🙏</div>
-                    <h4 class="text-xl sm:text-2xl font-bold text-primary-800 mb-3">Oração</h4>
-                    <p class="text-sm sm:text-base text-neutral-700">
-                        Rezamos mensalmente pelas intenções do Papa Francisco, unindo nossos corações em oração.
-                    </p>
-                </div>
-                <div class="bg-gradient-to-br from-gold-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gold-100">
-                    <div class="text-4xl sm:text-5xl mb-4">🌍</div>
-                    <h4 class="text-xl sm:text-2xl font-bold text-gold-800 mb-3">Missão</h4>
-                    <p class="text-sm sm:text-base text-neutral-700">
-                        Colaboramos na missão evangelizadora da Igreja, levando o amor de Cristo ao mundo.
-                    </p>
-                </div>
-                <div class="bg-gradient-to-br from-primary-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-primary-100">
-                    <div class="text-4xl sm:text-5xl mb-4">❤️</div>
-                    <h4 class="text-xl sm:text-2xl font-bold text-primary-800 mb-3">Coração de Jesus</h4>
-                    <p class="text-sm sm:text-base text-neutral-700">
-                        Vivemos nossa espiritualidade centrada no Sagrado Coração de Jesus.
-                    </p>
-                </div>
+                @if($featureCards && $featureCards->count() > 0)
+                    @foreach($featureCards as $card)
+                    <div class="bg-gradient-to-br from-{{ $card->color_from }} to-{{ $card->color_to }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-{{ $card->border_color }}">
+                        <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
+                        <h4 class="text-xl sm:text-2xl font-bold text-{{ $card->text_color }} mb-3">{{ $card->title }}</h4>
+                        <p class="text-sm sm:text-base text-neutral-700">
+                            {{ $card->description }}
+                        </p>
+                    </div>
+                    @endforeach
+                @else
+                    <!-- Default cards if none are configured -->
+                    <div class="bg-gradient-to-br from-primary-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-primary-100">
+                        <div class="text-4xl sm:text-5xl mb-4">🙏</div>
+                        <h4 class="text-xl sm:text-2xl font-bold text-primary-800 mb-3">Oração</h4>
+                        <p class="text-sm sm:text-base text-neutral-700">
+                            Rezamos mensalmente pelas intenções do Papa Francisco, unindo nossos corações em oração.
+                        </p>
+                    </div>
+                    <div class="bg-gradient-to-br from-gold-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gold-100">
+                        <div class="text-4xl sm:text-5xl mb-4">🌍</div>
+                        <h4 class="text-xl sm:text-2xl font-bold text-gold-800 mb-3">Missão</h4>
+                        <p class="text-sm sm:text-base text-neutral-700">
+                            Colaboramos na missão evangelizadora da Igreja, levando o amor de Cristo ao mundo.
+                        </p>
+                    </div>
+                    <div class="bg-gradient-to-br from-primary-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-primary-100">
+                        <div class="text-4xl sm:text-5xl mb-4">❤️</div>
+                        <h4 class="text-xl sm:text-2xl font-bold text-primary-800 mb-3">Coração de Jesus</h4>
+                        <p class="text-sm sm:text-base text-neutral-700">
+                            Vivemos nossa espiritualidade centrada no Sagrado Coração de Jesus.
+                        </p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

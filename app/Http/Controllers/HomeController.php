@@ -6,6 +6,7 @@ use App\Models\Slider;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Event;
+use App\Models\FeatureCard;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -32,6 +33,10 @@ class HomeController extends Controller
             ->take(3)
             ->get();
         
-        return view('welcome', compact('sliders', 'articles', 'categories', 'events'));
+        $featureCards = FeatureCard::where('is_active', true)
+            ->orderBy('order')
+            ->get();
+        
+        return view('welcome', compact('sliders', 'articles', 'categories', 'events', 'featureCards'));
     }
 }

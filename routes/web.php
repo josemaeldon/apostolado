@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\MediaGalleryController;
 use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MemberRegistrationController as AdminMemberRegistrationController;
+use App\Http\Controllers\Admin\FeatureCardController;
 use Illuminate\Support\Facades\Route;
 
 // Rotas do Instalador
@@ -63,6 +64,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('sliders', SliderController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+    Route::resource('feature-cards', FeatureCardController::class);
     
     // Storage Settings
     Route::get('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'index'])->name('storage-settings.index');
