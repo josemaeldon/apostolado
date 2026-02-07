@@ -63,6 +63,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('sliders', SliderController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'update', 'destroy']);
+    
+    // Storage Settings
+    Route::get('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'index'])->name('storage-settings.index');
+    Route::put('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'update'])->name('storage-settings.update');
+    Route::post('storage-settings/test', [App\Http\Controllers\Admin\StorageSettingsController::class, 'test'])->name('storage-settings.test');
 });
 
 require __DIR__.'/auth.php';
