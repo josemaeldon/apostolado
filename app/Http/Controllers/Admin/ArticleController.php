@@ -49,7 +49,7 @@ class ArticleController extends Controller
         $validated['published_at'] = $validated['published_at'] ?? now();
 
         if ($request->hasFile('featured_image')) {
-            $validated['featured_image'] = $request->file('featured_image')->store('articles', 'public');
+            $validated['featured_image'] = $request->file('featured_image')->store('articles');
         }
 
         Article::create($validated);
@@ -94,9 +94,9 @@ class ArticleController extends Controller
 
         if ($request->hasFile('featured_image')) {
             if ($article->featured_image) {
-                Storage::disk('public')->delete($article->featured_image);
+                Storage::delete($article->featured_image);
             }
-            $validated['featured_image'] = $request->file('featured_image')->store('articles', 'public');
+            $validated['featured_image'] = $request->file('featured_image')->store('articles');
         }
 
         $article->update($validated);
@@ -111,7 +111,7 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         if ($article->featured_image) {
-            Storage::disk('public')->delete($article->featured_image);
+            Storage::delete($article->featured_image);
         }
         
         $article->delete();

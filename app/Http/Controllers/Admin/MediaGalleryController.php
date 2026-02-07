@@ -47,7 +47,7 @@ class MediaGalleryController extends Controller
         $validated['is_published'] = $request->has('is_published');
 
         if ($request->hasFile('file_path')) {
-            $validated['file_path'] = $request->file('file_path')->store('media-gallery', 'public');
+            $validated['file_path'] = $request->file('file_path')->store('media-gallery');
         }
 
         MediaGallery::create($validated);
@@ -92,9 +92,9 @@ class MediaGalleryController extends Controller
 
         if ($request->hasFile('file_path')) {
             if ($mediaGallery->file_path) {
-                Storage::disk('public')->delete($mediaGallery->file_path);
+                Storage::delete($mediaGallery->file_path);
             }
-            $validated['file_path'] = $request->file('file_path')->store('media-gallery', 'public');
+            $validated['file_path'] = $request->file('file_path')->store('media-gallery');
         }
 
         $mediaGallery->update($validated);
@@ -109,7 +109,7 @@ class MediaGalleryController extends Controller
     public function destroy(MediaGallery $mediaGallery)
     {
         if ($mediaGallery->file_path) {
-            Storage::disk('public')->delete($mediaGallery->file_path);
+            Storage::delete($mediaGallery->file_path);
         }
         
         $mediaGallery->delete();

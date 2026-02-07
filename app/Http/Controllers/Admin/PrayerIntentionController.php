@@ -46,7 +46,7 @@ class PrayerIntentionController extends Controller
         $validated['is_published'] = $request->has('is_published');
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('prayer-intentions', 'public');
+            $validated['image'] = $request->file('image')->store('prayer-intentions');
         }
 
         PrayerIntention::create($validated);
@@ -90,9 +90,9 @@ class PrayerIntentionController extends Controller
 
         if ($request->hasFile('image')) {
             if ($prayerIntention->image) {
-                Storage::disk('public')->delete($prayerIntention->image);
+                Storage::delete($prayerIntention->image);
             }
-            $validated['image'] = $request->file('image')->store('prayer-intentions', 'public');
+            $validated['image'] = $request->file('image')->store('prayer-intentions');
         }
 
         $prayerIntention->update($validated);
@@ -107,7 +107,7 @@ class PrayerIntentionController extends Controller
     public function destroy(PrayerIntention $prayerIntention)
     {
         if ($prayerIntention->image) {
-            Storage::disk('public')->delete($prayerIntention->image);
+            Storage::delete($prayerIntention->image);
         }
         
         $prayerIntention->delete();
