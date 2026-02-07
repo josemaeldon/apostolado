@@ -48,7 +48,7 @@ class EventController extends Controller
         $validated['is_published'] = $request->has('is_published');
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('events', 'public');
+            $validated['image'] = $request->file('image')->store('events');
         }
 
         Event::create($validated);
@@ -93,9 +93,9 @@ class EventController extends Controller
 
         if ($request->hasFile('image')) {
             if ($event->image) {
-                Storage::disk('public')->delete($event->image);
+                Storage::delete($event->image);
             }
-            $validated['image'] = $request->file('image')->store('events', 'public');
+            $validated['image'] = $request->file('image')->store('events');
         }
 
         $event->update($validated);
@@ -110,7 +110,7 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         if ($event->image) {
-            Storage::disk('public')->delete($event->image);
+            Storage::delete($event->image);
         }
         
         $event->delete();

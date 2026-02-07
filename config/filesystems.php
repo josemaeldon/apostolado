@@ -69,6 +69,7 @@ return [
             'url' => env('MINIO_URL'),
             'endpoint' => env('MINIO_ENDPOINT'),
             'use_path_style_endpoint' => env('MINIO_USE_PATH_STYLE_ENDPOINT', true),
+            'visibility' => 'public',
             'throw' => false,
             'report' => false,
         ],

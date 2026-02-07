@@ -33,7 +33,7 @@ class SliderController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('sliders', 'public');
+            $validated['image'] = $request->file('image')->store('sliders');
         }
 
         Slider::create($validated);
@@ -61,9 +61,9 @@ class SliderController extends Controller
 
         if ($request->hasFile('image')) {
             if ($slider->image) {
-                Storage::disk('public')->delete($slider->image);
+                Storage::delete($slider->image);
             }
-            $validated['image'] = $request->file('image')->store('sliders', 'public');
+            $validated['image'] = $request->file('image')->store('sliders');
         }
 
         $slider->update($validated);
@@ -75,7 +75,7 @@ class SliderController extends Controller
     public function destroy(Slider $slider)
     {
         if ($slider->image) {
-            Storage::disk('public')->delete($slider->image);
+            Storage::delete($slider->image);
         }
         
         $slider->delete();

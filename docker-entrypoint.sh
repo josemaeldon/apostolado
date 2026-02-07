@@ -55,6 +55,18 @@ else
     echo -e "${YELLOW}  Local: Execute 'mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache' manualmente${NC}"
 fi
 
+# Criar link simbólico do storage (se ainda não existir)
+if [ ! -L public/storage ]; then
+    echo -e "${YELLOW}Criando link simbólico do storage...${NC}"
+    if php artisan storage:link 2>/dev/null; then
+        echo -e "${GREEN}✓ Link simbólico do storage criado${NC}"
+    else
+        echo -e "${YELLOW}⚠ Não foi possível criar o link simbólico (será criado durante a instalação)${NC}"
+    fi
+else
+    echo -e "${GREEN}✓ Link simbólico do storage já existe${NC}"
+fi
+
 # Executar o comando fornecido (normalmente supervisord)
 echo -e "${GREEN}=== Iniciando aplicação ===${NC}"
 exec "$@"

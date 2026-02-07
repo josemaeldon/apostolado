@@ -47,7 +47,7 @@ class PageController extends Controller
         $validated['is_published'] = $request->has('is_published');
 
         if ($request->hasFile('featured_image')) {
-            $validated['featured_image'] = $request->file('featured_image')->store('pages', 'public');
+            $validated['featured_image'] = $request->file('featured_image')->store('pages');
         }
 
         Page::create($validated);
@@ -91,9 +91,9 @@ class PageController extends Controller
 
         if ($request->hasFile('featured_image')) {
             if ($page->featured_image) {
-                Storage::disk('public')->delete($page->featured_image);
+                Storage::delete($page->featured_image);
             }
-            $validated['featured_image'] = $request->file('featured_image')->store('pages', 'public');
+            $validated['featured_image'] = $request->file('featured_image')->store('pages');
         }
 
         $page->update($validated);
@@ -108,7 +108,7 @@ class PageController extends Controller
     public function destroy(Page $page)
     {
         if ($page->featured_image) {
-            Storage::disk('public')->delete($page->featured_image);
+            Storage::delete($page->featured_image);
         }
         
         $page->delete();
