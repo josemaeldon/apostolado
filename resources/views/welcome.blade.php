@@ -20,11 +20,18 @@
                     <a href="{{ route('home') }}" class="text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition">
                         Home
                     </a>
-                    @foreach($categories as $category)
-                        <a href="#{{ $category->slug }}" class="text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition">
-                            {{ $category->name }}
-                        </a>
-                    @endforeach
+                    <a href="{{ route('public.prayer-intentions') }}" class="text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition">
+                        Intenções de Oração
+                    </a>
+                    <a href="{{ route('public.articles') }}" class="text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition">
+                        Artigos
+                    </a>
+                    <a href="{{ route('public.events') }}" class="text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition">
+                        Eventos
+                    </a>
+                    <a href="{{ route('public.media-gallery') }}" class="text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition">
+                        Galeria
+                    </a>
                     <a href="{{ route('member.register') }}" class="bg-gradient-to-r from-primary-600 to-primary-700 text-white hover:from-primary-700 hover:to-primary-800 px-6 py-2 rounded-lg text-sm font-semibold shadow-lg transition transform hover:scale-105">
                         Cadastrar-se
                     </a>
@@ -240,9 +247,10 @@
                     <h4 class="text-xl font-bold mb-4 text-gold-400">Links</h4>
                     <ul class="space-y-2 text-neutral-400">
                         <li><a href="{{ route('home') }}" class="hover:text-gold-400 transition">Home</a></li>
-                        @foreach($categories as $category)
-                            <li><a href="#{{ $category->slug }}" class="hover:text-gold-400 transition">{{ $category->name }}</a></li>
-                        @endforeach
+                        <li><a href="{{ route('public.prayer-intentions') }}" class="hover:text-gold-400 transition">Intenções de Oração</a></li>
+                        <li><a href="{{ route('public.articles') }}" class="hover:text-gold-400 transition">Artigos</a></li>
+                        <li><a href="{{ route('public.events') }}" class="hover:text-gold-400 transition">Eventos</a></li>
+                        <li><a href="{{ route('public.media-gallery') }}" class="hover:text-gold-400 transition">Galeria</a></li>
                         <li><a href="{{ route('member.register') }}" class="hover:text-gold-400 transition">Cadastrar-se</a></li>
                     </ul>
                 </div>
