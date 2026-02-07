@@ -62,7 +62,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('media-gallery', MediaGalleryController::class);
     Route::resource('sliders', SliderController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'update', 'destroy']);
+    Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
     
     // Storage Settings
     Route::get('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'index'])->name('storage-settings.index');

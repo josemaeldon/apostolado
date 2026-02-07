@@ -54,16 +54,34 @@ class MemberRegistrationController extends Controller
         return view('admin.member-registrations.show', compact('memberRegistration'));
     }
 
+    public function edit(MemberRegistration $memberRegistration)
+    {
+        return view('admin.member-registrations.edit', compact('memberRegistration'));
+    }
+
     public function update(Request $request, MemberRegistration $memberRegistration)
     {
         $validated = $request->validate([
             'status' => 'required|in:pending,approved,rejected',
+            'full_name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string|max:255',
+            'birth_date' => 'required|date',
+            'marital_status' => 'required|in:single,married,divorced,widowed',
+            'profession' => 'required|string|max:255',
+            'parish' => 'required|string|max:255',
+            'member_city' => 'required|string|max:255',
+            'member_parish' => 'nullable|string|max:255',
+            'baptism_date' => 'nullable|date',
+            'how_met' => 'nullable|string',
+            'why_join' => 'nullable|string',
         ]);
 
         $memberRegistration->update($validated);
 
-        return redirect()->route('admin.member-registrations.show', $memberRegistration)
-            ->with('success', 'Status atualizado com sucesso!');
+        return redirect()->route('admin.member-registrations.index')
+            ->with('success', 'Cadastro atualizado com sucesso!');
     }
 
     public function destroy(MemberRegistration $memberRegistration)

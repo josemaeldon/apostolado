@@ -129,6 +129,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $registration->created_at->format('d/m/Y') }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                 <a href="{{ route('admin.member-registrations.show', $registration) }}" class="text-blue-600 hover:text-blue-900 mr-3">Ver</a>
+                                                <a href="{{ route('admin.member-registrations.edit', $registration) }}" class="text-green-600 hover:text-green-900 mr-3">Editar</a>
                                                 <form action="{{ route('admin.member-registrations.destroy', $registration) }}" method="POST" class="inline" onsubmit="return confirm('Tem certeza que deseja excluir este cadastro?')">
                                                     @csrf
                                                     @method('DELETE')
