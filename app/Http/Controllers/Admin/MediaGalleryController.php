@@ -124,6 +124,8 @@ class MediaGalleryController extends Controller
         }
         
         // Extract video ID from various YouTube URL formats
+        // Note: YouTube video IDs are currently 11 characters long (alphanumeric, underscore, hyphen)
+        // This is a YouTube implementation detail that could potentially change in the future
         $videoId = null;
         
         // Standard watch URL: https://www.youtube.com/watch?v=VIDEO_ID

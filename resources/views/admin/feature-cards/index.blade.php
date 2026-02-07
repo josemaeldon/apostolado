@@ -28,10 +28,13 @@
                     @if($featureCards->count() > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach($featureCards as $card)
+                                @php
+                                    $classes = $card->getCssClasses();
+                                @endphp
                                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                                    <div class="p-6 bg-gradient-to-br from-{{ $card->color_from }} to-{{ $card->color_to }} border-l-4 border-{{ $card->border_color }}">
+                                    <div class="p-6 {{ $classes['gradient'] }} border-l-4 {{ $classes['border'] }}">
                                         <div class="text-4xl mb-3">{{ $card->icon }}</div>
-                                        <h3 class="text-xl font-bold text-{{ $card->text_color }} mb-2">{{ $card->title }}</h3>
+                                        <h3 class="text-xl font-bold {{ $classes['text'] }} mb-2">{{ $card->title }}</h3>
                                         <p class="text-sm text-neutral-700">{{ Str::limit($card->description, 100) }}</p>
                                     </div>
                                     <div class="p-4 bg-gray-50 border-t flex items-center justify-between">

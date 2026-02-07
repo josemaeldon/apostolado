@@ -159,9 +159,12 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                 @if($featureCards && $featureCards->count() > 0)
                     @foreach($featureCards as $card)
-                    <div class="bg-gradient-to-br from-{{ $card->color_from }} to-{{ $card->color_to }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-{{ $card->border_color }}">
+                    @php
+                        $classes = $card->getCssClasses();
+                    @endphp
+                    <div class="{{ $classes['gradient'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border {{ $classes['border'] }}">
                         <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
-                        <h4 class="text-xl sm:text-2xl font-bold text-{{ $card->text_color }} mb-3">{{ $card->title }}</h4>
+                        <h4 class="text-xl sm:text-2xl font-bold {{ $classes['text'] }} mb-3">{{ $card->title }}</h4>
                         <p class="text-sm sm:text-base text-neutral-700">
                             {{ $card->description }}
                         </p>
