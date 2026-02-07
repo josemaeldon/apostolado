@@ -35,7 +35,8 @@
                             <div>
                                 <label for="type" class="block text-sm font-medium text-gray-700">Tipo *</label>
                                 <select name="type" id="type" required
-                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                                        onchange="toggleMediaFields()">
                                     <option value="">Selecione o tipo</option>
                                     <option value="image" {{ old('type') == 'image' ? 'selected' : '' }}>Imagem</option>
                                     <option value="video" {{ old('type') == 'video' ? 'selected' : '' }}>Vídeo</option>
@@ -43,20 +44,25 @@
                                 @error('type')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                             </div>
 
-                            <div>
+                            <div id="file-upload-field">
                                 <label for="file_path" class="block text-sm font-medium text-gray-700">Arquivo (Imagem/Vídeo)</label>
                                 <input type="file" name="file_path" id="file_path" accept="image/*,video/*"
                                        class="mt-1 block w-full">
                                 @error('file_path')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
-                                <p class="mt-1 text-sm text-gray-500">Para vídeos, você pode fazer upload do arquivo ou fornecer uma URL abaixo</p>
+                                <p class="mt-1 text-sm text-gray-500">Faça upload de uma imagem ou vídeo</p>
                             </div>
 
-                            <div>
-                                <label for="url" class="block text-sm font-medium text-gray-700">URL (alternativa ao arquivo)</label>
+                            <div class="text-center text-sm text-gray-500 font-medium">OU</div>
+
+                            <div id="url-field">
+                                <label for="url" class="block text-sm font-medium text-gray-700">URL do YouTube ou Vídeo</label>
                                 <input type="text" name="url" id="url" value="{{ old('url') }}"
-                                       placeholder="https://www.youtube.com/watch?v=... ou URL direta do arquivo"
+                                       placeholder="https://www.youtube.com/watch?v=... ou https://youtu.be/..."
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 @error('url')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                <p class="mt-1 text-sm text-gray-500">
+                                    📺 Para vídeos do YouTube, cole o link completo (ex: https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+                                </p>
                             </div>
 
                             <div>
@@ -93,4 +99,25 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function toggleMediaFields() {
+            const type = document.getElementById('type').value;
+            const fileField = document.getElementById('file-upload-field');
+            const urlField = document.getElementById('url-field');
+            
+            if (type === 'image') {
+                fileField.querySelector('label').textContent = 'Arquivo (Imagem)';
+                fileField.querySelector('input').accept = 'image/*';
+                fileField.querySelector('p').textContent = 'Faça upload de uma imagem';
+            } else if (type === 'video') {
+                fileField.querySelector('label').textContent = 'Arquivo (Vídeo) - Opcional';
+                fileField.querySelector('input').accept = 'video/*';
+                fileField.querySelector('p').textContent = 'Faça upload de um vídeo ou use o link do YouTube abaixo';
+            }
+        }
+        
+        // Initialize on page load
+        toggleMediaFields();
+    </script>
 </x-app-layout>

@@ -36,9 +36,9 @@ class MediaGalleryController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'type' => 'required|in:image,video',
-            'file_path' => 'nullable|file|max:10240',
-            'url' => 'nullable|string|max:255',
-            'thumbnail' => 'nullable|string|max:255',
+            'file_path' => 'nullable|file|max:51200', // 50MB max
+            'url' => 'nullable|string|max:500',
+            'thumbnail' => 'nullable|string|max:500',
             'is_published' => 'boolean',
             'order' => 'nullable|integer',
         ]);
@@ -48,6 +48,11 @@ class MediaGalleryController extends Controller
 
         if ($request->hasFile('file_path')) {
             $validated['file_path'] = $request->file('file_path')->store('media-gallery');
+        }
+        
+        // Normalize YouTube URL if provided
+        if (!empty($validated['url']) && $validated['type'] === 'video') {
+            $validated['url'] = $this->normalizeYoutubeUrl($validated['url']);
         }
 
         MediaGallery::create($validated);
@@ -81,9 +86,9 @@ class MediaGalleryController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'type' => 'required|in:image,video',
-            'file_path' => 'nullable|file|max:10240',
-            'url' => 'nullable|string|max:255',
-            'thumbnail' => 'nullable|string|max:255',
+            'file_path' => 'nullable|file|max:51200', // 50MB max
+            'url' => 'nullable|string|max:500',
+            'thumbnail' => 'nullable|string|max:500',
             'is_published' => 'boolean',
             'order' => 'nullable|integer',
         ]);
@@ -96,11 +101,51 @@ class MediaGalleryController extends Controller
             }
             $validated['file_path'] = $request->file('file_path')->store('media-gallery');
         }
+        
+        // Normalize YouTube URL if provided
+        if (!empty($validated['url']) && $validated['type'] === 'video') {
+            $validated['url'] = $this->normalizeYoutubeUrl($validated['url']);
+        }
 
         $mediaGallery->update($validated);
 
         return redirect()->route('admin.media-gallery.index')
             ->with('success', 'Item de mídia atualizado com sucesso!');
+    }
+
+    /**
+     * Normalize YouTube URL to standard format
+     */
+    private function normalizeYoutubeUrl($url)
+    {
+        // If it's already in the correct format, return as is
+        if (empty($url)) {
+            return $url;
+        }
+        
+        // Extract video ID from various YouTube URL formats
+        $videoId = null;
+        
+        // Standard watch URL: https://www.youtube.com/watch?v=VIDEO_ID
+        if (preg_match('/[?&]v=([a-zA-Z0-9_-]{11})/', $url, $matches)) {
+            $videoId = $matches[1];
+        }
+        // Short URL: https://youtu.be/VIDEO_ID
+        elseif (preg_match('/youtu\.be\/([a-zA-Z0-9_-]{11})/', $url, $matches)) {
+            $videoId = $matches[1];
+        }
+        // Embed URL: https://www.youtube.com/embed/VIDEO_ID
+        elseif (preg_match('/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/', $url, $matches)) {
+            $videoId = $matches[1];
+        }
+        
+        // If we found a video ID, return standard watch URL
+        if ($videoId) {
+            return 'https://www.youtube.com/watch?v=' . $videoId;
+        }
+        
+        // Return original URL if not a YouTube URL
+        return $url;
     }
 
     /**
