@@ -211,6 +211,9 @@ class InstallerController extends Controller
             // Executar migrations
             Artisan::call('migrate', ['--force' => true]);
 
+            // Criar symlink do storage
+            Artisan::call('storage:link');
+
             // Criar usuário administrador
             User::create([
                 'name' => $request->admin_name,
