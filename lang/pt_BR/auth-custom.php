@@ -52,7 +52,10 @@ return [
     'event_calendar_desc' => 'Gestão de eventos e atividades',
     'media_gallery' => 'Galeria de Mídia',
     'media_gallery_desc' => 'Gerenciamento de imagens e vídeos',
+    'storage_settings' => 'Configurações de Armazenamento',
+    'storage_settings_desc' => 'Configure o MinIO e outros sistemas de armazenamento',
     'manage' => 'Gerenciar',
+    'configure' => 'Configurar',
     
     // Email Verification
     'verify_email' => 'Verificar E-mail',
