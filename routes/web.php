@@ -29,6 +29,16 @@ Route::prefix('install')->name('installer.')->group(function () {
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
+// Public Content Pages
+Route::get('/intencoes-oracao', [App\Http\Controllers\PublicController::class, 'prayerIntentions'])->name('public.prayer-intentions');
+Route::get('/intencoes-oracao/{prayerIntention}', [App\Http\Controllers\PublicController::class, 'showPrayerIntention'])->name('public.prayer-intention.show');
+Route::get('/artigos', [App\Http\Controllers\PublicController::class, 'articles'])->name('public.articles');
+Route::get('/artigos/{article}', [App\Http\Controllers\PublicController::class, 'showArticle'])->name('public.article.show');
+Route::get('/eventos', [App\Http\Controllers\PublicController::class, 'events'])->name('public.events');
+Route::get('/eventos/{event}', [App\Http\Controllers\PublicController::class, 'showEvent'])->name('public.event.show');
+Route::get('/galeria', [App\Http\Controllers\PublicController::class, 'mediaGallery'])->name('public.media-gallery');
+Route::get('/pagina/{page:slug}', [App\Http\Controllers\PublicController::class, 'showPage'])->name('public.page.show');
+
 // Member Registration
 Route::get('/cadastro-membro', [MemberRegistrationController::class, 'create'])->name('member.register');
 Route::post('/cadastro-membro', [MemberRegistrationController::class, 'store'])->name('member.store');
