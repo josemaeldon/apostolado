@@ -96,20 +96,22 @@ class StorageSettingsController extends Controller
         $envFile = base_path('.env');
         
         if (!file_exists($envFile)) {
-            return;
+            \Log::error('Cannot update storage settings: .env file does not exist');
+            throw new \RuntimeException('Configuration file not found. Please create .env file first.');
         }
 
         $envContent = file_get_contents($envFile);
 
         foreach ($data as $key => $value) {
-            // Escape special characters in value
-            $value = str_replace('"', '\"', $value);
+            // Escape special characters in value for .env format
+            $value = addslashes($value);
+            $escapedKey = preg_quote($key, '/');
             
             // Check if key exists
-            if (preg_match("/^{$key}=/m", $envContent)) {
+            if (preg_match("/^{$escapedKey}=/m", $envContent)) {
                 // Update existing key
                 $envContent = preg_replace(
-                    "/^{$key}=.*/m",
+                    "/^{$escapedKey}=.*/m",
                     "{$key}=\"{$value}\"",
                     $envContent
                 );
@@ -119,6 +121,7 @@ class StorageSettingsController extends Controller
             }
         }
 
-        file_put_contents($envFile, $envContent);
+        // Use file locking to prevent race conditions
+        file_put_contents($envFile, $envContent, LOCK_EX);
     }
 }

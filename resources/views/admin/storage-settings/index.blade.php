@@ -86,7 +86,7 @@
                                             Endpoint do MinIO
                                         </label>
                                         <input type="text" name="minio_endpoint" id="minio_endpoint" 
-                                            value="{{ env('MINIO_ENDPOINT', 'http://minio:9000') }}"
+                                            value="{{ config('filesystems.disks.minio.endpoint', 'http://minio:9000') }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="http://minio:9000">
                                         <p class="mt-1 text-xs text-gray-500">URL do servidor MinIO</p>
@@ -98,7 +98,7 @@
                                             Bucket
                                         </label>
                                         <input type="text" name="minio_bucket" id="minio_bucket" 
-                                            value="{{ env('MINIO_BUCKET', 'apostolado') }}"
+                                            value="{{ config('filesystems.disks.minio.bucket', 'apostolado') }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="apostolado">
                                         <p class="mt-1 text-xs text-gray-500">Nome do bucket</p>
@@ -110,7 +110,7 @@
                                             Access Key
                                         </label>
                                         <input type="text" name="minio_access_key" id="minio_access_key" 
-                                            value="{{ env('MINIO_ACCESS_KEY_ID', '') }}"
+                                            value="{{ config('filesystems.disks.minio.key', '') }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="minioadmin">
                                         <p class="mt-1 text-xs text-gray-500">Chave de acesso do MinIO</p>
@@ -122,7 +122,7 @@
                                             Secret Key
                                         </label>
                                         <input type="password" name="minio_secret_key" id="minio_secret_key" 
-                                            value="{{ env('MINIO_SECRET_ACCESS_KEY', '') }}"
+                                            value="{{ config('filesystems.disks.minio.secret', '') }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="••••••••">
                                         <p class="mt-1 text-xs text-gray-500">Chave secreta do MinIO</p>
@@ -134,7 +134,7 @@
                                             Região
                                         </label>
                                         <input type="text" name="minio_region" id="minio_region" 
-                                            value="{{ env('MINIO_REGION', 'us-east-1') }}"
+                                            value="{{ config('filesystems.disks.minio.region', 'us-east-1') }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="us-east-1">
                                         <p class="mt-1 text-xs text-gray-500">Região do MinIO</p>
@@ -146,7 +146,7 @@
                                             URL Pública
                                         </label>
                                         <input type="text" name="minio_url" id="minio_url" 
-                                            value="{{ env('MINIO_URL', 'http://localhost:9000/apostolado') }}"
+                                            value="{{ config('filesystems.disks.minio.url', 'http://localhost:9000/apostolado') }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="http://localhost:9000/apostolado">
                                         <p class="mt-1 text-xs text-gray-500">URL pública para acessar os arquivos</p>
