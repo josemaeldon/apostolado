@@ -3,7 +3,7 @@
         <!-- Page Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900">{{ __('auth-custom.dashboard') }}</h1>
-            <p class="text-gray-600 mt-2">{{ __('auth-custom.welcome_message') }}, {{ Auth::user()->name }}</p>
+            <p class="text-gray-600 mt-2">Bem-vindo, {{ Auth::user()->name }}!</p>
         </div>
 
         <!-- Seções da Página Inicial -->
