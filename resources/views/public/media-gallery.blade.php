@@ -117,13 +117,33 @@
                                     <source src="{{ Storage::url($media->file_path) }}" type="video/mp4">
                                     Seu navegador não suporta a reprodução de vídeo.
                                 </video>
-                            @elseif($media->url && preg_match('/^https:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/', $media->url, $matches))
+                            @elseif($media->url)
                                 @php
-                                    $embedUrl = 'https://www.youtube.com/embed/' . $matches[2];
+                                    // Extract YouTube video ID from various URL formats
+                                    $videoId = null;
+                                    if (preg_match('/[?&]v=([a-zA-Z0-9_-]{11})/', $media->url, $matches)) {
+                                        $videoId = $matches[1];
+                                    } elseif (preg_match('/youtu\.be\/([a-zA-Z0-9_-]{11})/', $media->url, $matches)) {
+                                        $videoId = $matches[1];
+                                    } elseif (preg_match('/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/', $media->url, $matches)) {
+                                        $videoId = $matches[1];
+                                    }
+                                    $embedUrl = $videoId ? 'https://www.youtube.com/embed/' . $videoId : null;
                                 @endphp
-                                <div class="w-full rounded-lg shadow-2xl overflow-hidden" style="aspect-ratio: 16/9;">
-                                    <iframe src="{{ $embedUrl }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
+                                @if($embedUrl)
+                                    <div class="w-full rounded-lg shadow-2xl overflow-hidden" style="aspect-ratio: 16/9;">
+                                        <iframe src="{{ $embedUrl }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                @else
+                                    <div class="w-full h-96 bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center rounded-lg shadow-2xl">
+                                        <div class="text-center">
+                                            <svg class="w-32 h-32 text-white mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                                            </svg>
+                                            <p class="text-white font-medium">Vídeo não disponível</p>
+                                        </div>
+                                    </div>
+                                @endif
                             @else
                                 <div class="w-full h-96 bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center rounded-lg shadow-2xl">
                                     <div class="text-center">
