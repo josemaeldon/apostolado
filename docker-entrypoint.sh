@@ -7,10 +7,15 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 echo -e "${GREEN}=== Apostolado da Oração - Inicialização ===${NC}"
+echo -e "Diretório atual: $(pwd)"
+echo -e "Usuário atual: $(whoami)"
 
 # Verificar se o arquivo .env existe
 if [ ! -f .env ]; then
     echo -e "${YELLOW}Arquivo .env não encontrado. Criando a partir de .env.example...${NC}"
+    
+    # Debug: listar arquivos .env* disponíveis
+    echo -e "Arquivos .env* disponíveis: $(ls -la .env* 2>/dev/null | wc -l) arquivo(s)"
     
     if [ -f .env.example ]; then
         if cp .env.example .env 2>/dev/null; then
