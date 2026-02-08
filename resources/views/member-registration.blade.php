@@ -8,24 +8,7 @@
 </head>
 <body class="font-sans antialiased bg-neutral-50">
     <!-- Header/Navigation -->
-    <nav class="bg-white shadow-md border-b border-neutral-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20">
-                <div class="flex items-center">
-                    <a href="{{ route('home') }}">
-                        <h1 class="text-2xl font-bold bg-gradient-to-r from-primary-700 to-primary-900 bg-clip-text text-transparent">
-                            Apostolado da Oração
-                        </h1>
-                    </a>
-                </div>
-                <div class="flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-neutral-700 hover:text-primary-700 px-3 py-2 rounded-md text-sm font-medium transition">
-                        Voltar ao Início
-                    </a>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <x-public.navigation />
 
     <div class="py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto">
@@ -112,6 +95,29 @@
                                 @enderror
                             </div>
 
+                            <div>
+                                <label for="cpf" class="block text-sm font-medium text-neutral-700 mb-2">
+                                    CPF <span class="text-primary-600">*</span>
+                                </label>
+                                <input type="text" name="cpf" id="cpf" value="{{ old('cpf') }}" required maxlength="14"
+                                       placeholder="000.000.000-00"
+                                       class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                @error('cpf')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="birth_date" class="block text-sm font-medium text-neutral-700 mb-2">
+                                    Data de Nascimento <span class="text-primary-600">*</span>
+                                </label>
+                                <input type="date" name="birth_date" id="birth_date" value="{{ old('birth_date') }}" required
+                                       class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                @error('birth_date')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+
                             <div class="md:col-span-2">
                                 <label for="address" class="block text-sm font-medium text-neutral-700 mb-2">
                                     Endereço <span class="text-primary-600">*</span>
@@ -127,7 +133,8 @@
                                 <label for="phone" class="block text-sm font-medium text-neutral-700 mb-2">
                                     Telefone/WhatsApp <span class="text-primary-600">*</span>
                                 </label>
-                                <input type="text" name="phone" id="phone" value="{{ old('phone') }}" required
+                                <input type="text" name="phone" id="phone" value="{{ old('phone') }}" required maxlength="14"
+                                       placeholder="(00)99999-9999"
                                        class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
                                 @error('phone')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -141,17 +148,6 @@
                                 <input type="email" name="email" id="email" value="{{ old('email') }}" required
                                        class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
                                 @error('email')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="birth_date" class="block text-sm font-medium text-neutral-700 mb-2">
-                                    Data de Nascimento <span class="text-primary-600">*</span>
-                                </label>
-                                <input type="date" name="birth_date" id="birth_date" value="{{ old('birth_date') }}" required
-                                       class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
-                                @error('birth_date')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -186,9 +182,9 @@
                         </div>
                     </div>
 
-                    <!-- Dados Paroquiais -->
+                    <!-- Dados Religiosos -->
                     <div class="border-b border-neutral-200 pb-6">
-                        <h3 class="text-2xl font-bold text-primary-800 mb-6">Dados Paroquiais</h3>
+                        <h3 class="text-2xl font-bold text-primary-800 mb-6">Dados Religiosos</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="member_city" class="block text-sm font-medium text-neutral-700 mb-2">
@@ -361,10 +357,41 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-neutral-900 text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <p class="text-neutral-400">&copy; {{ date('Y') }} Apostolado da Oração. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+    <x-public.footer />
+
+    <script>
+        // CPF Formatting
+        document.getElementById('cpf').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            
+            if (value.length <= 11) {
+                // Format as: 000.000.000-00
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            } else {
+                value = value.substring(0, 11);
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            }
+            
+            e.target.value = value;
+        });
+
+        // Phone Formatting  
+        document.getElementById('phone').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+            
+            if (value.length <= 11) {
+                // Format as: (00)99999-9999
+                value = value.replace(/(\d{2})(\d)/, '($1)$2');
+                value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            } else {
+                value = value.substring(0, 11);
+                value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1)$2-$3');
+            }
+            
+            e.target.value = value;
+        });
+    </script>
 </body>
 </html>
