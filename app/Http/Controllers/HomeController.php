@@ -7,6 +7,7 @@ use App\Models\Article;
 use App\Models\Category;
 use App\Models\Event;
 use App\Models\FeatureCard;
+use App\Models\HomepageSection;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -37,6 +38,8 @@ class HomeController extends Controller
             ->orderBy('order')
             ->get();
         
-        return view('welcome', compact('sliders', 'articles', 'categories', 'events', 'featureCards'));
+        $aboutSection = HomepageSection::getByKey('about_section');
+        
+        return view('welcome', compact('sliders', 'articles', 'categories', 'events', 'featureCards', 'aboutSection'));
     }
 }

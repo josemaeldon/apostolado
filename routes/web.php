@@ -66,6 +66,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
     Route::get('member-registrations-export-pdf', [AdminMemberRegistrationController::class, 'exportPdf'])->name('member-registrations.export-pdf');
     Route::resource('feature-cards', FeatureCardController::class);
+    Route::resource('homepage-sections', App\Http\Controllers\Admin\HomepageSectionController::class)->only(['index', 'edit', 'update']);
     
     // Storage Settings
     Route::get('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'index'])->name('storage-settings.index');

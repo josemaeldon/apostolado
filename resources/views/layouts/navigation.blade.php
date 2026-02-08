@@ -16,6 +16,10 @@
                         {{ __('auth-custom.dashboard') }}
                     </x-nav-link>
                     
+                    <x-nav-link :href="route('admin.homepage-sections.index')" :active="request()->routeIs('admin.homepage-sections.*')">
+                        Seções
+                    </x-nav-link>
+                    
                     <x-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">
                         Páginas
                     </x-nav-link>
@@ -101,6 +105,10 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            
+            <x-responsive-nav-link :href="route('admin.homepage-sections.index')" :active="request()->routeIs('admin.homepage-sections.*')">
+                <span class="mr-2">📝</span> Seções
             </x-responsive-nav-link>
             
             <x-responsive-nav-link :href="route('admin.pages.index')" :active="request()->routeIs('admin.pages.*')">
