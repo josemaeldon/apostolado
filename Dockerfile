@@ -124,6 +124,7 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi \
     && mkdir -p /tmp/supervisor \
     && mkdir -p /var/lib/nginx/logs \
+    && touch /var/lib/nginx/logs/error.log \
     && chown -R laravel:laravel /tmp/nginx /tmp/supervisor /var/lib/nginx \
     && chmod -R 775 /var/lib/nginx/logs
 
