@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('member_registrations', function (Blueprint $table) {
-            $table->string('cpf', 14)->unique()->after('full_name');
+            $table->string('cpf', 14)->nullable()->unique()->after('full_name');
         });
     }
 
