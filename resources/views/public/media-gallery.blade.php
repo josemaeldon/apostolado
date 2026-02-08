@@ -101,8 +101,6 @@
                         @if($media->type === 'image')
                             @if($media->file_path)
                                 <img src="{{ Storage::url($media->file_path) }}" alt="{{ $media->title }}" class="w-full h-auto rounded-lg shadow-2xl">
-                            @elseif($media->url)
-                                <img src="{{ $media->url }}" alt="{{ $media->title }}" class="w-full h-auto rounded-lg shadow-2xl">
                             @else
                                 <div class="w-full h-96 bg-gradient-to-br from-neutral-300 to-neutral-400 flex items-center justify-center rounded-lg shadow-2xl">
                                     <div class="text-center">
@@ -119,9 +117,12 @@
                                     <source src="{{ Storage::url($media->file_path) }}" type="video/mp4">
                                     Seu navegador não suporta a reprodução de vídeo.
                                 </video>
-                            @elseif($media->url)
+                            @elseif($media->url && preg_match('/^https:\/\/(www\.)?youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/', $media->url, $matches))
+                                @php
+                                    $embedUrl = 'https://www.youtube.com/embed/' . $matches[2];
+                                @endphp
                                 <div class="w-full rounded-lg shadow-2xl overflow-hidden" style="aspect-ratio: 16/9;">
-                                    <iframe src="{{ $media->url }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    <iframe src="{{ $embedUrl }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 </div>
                             @else
                                 <div class="w-full h-96 bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center rounded-lg shadow-2xl">
