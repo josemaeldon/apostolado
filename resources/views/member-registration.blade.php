@@ -107,7 +107,16 @@
                                 @enderror
                             </div>
 
-                            <div></div>
+                            <div>
+                                <label for="birth_date" class="block text-sm font-medium text-neutral-700 mb-2">
+                                    Data de Nascimento <span class="text-primary-600">*</span>
+                                </label>
+                                <input type="date" name="birth_date" id="birth_date" value="{{ old('birth_date') }}" required
+                                       class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
+                                @error('birth_date')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
 
                             <div class="md:col-span-2">
                                 <label for="address" class="block text-sm font-medium text-neutral-700 mb-2">
@@ -139,17 +148,6 @@
                                 <input type="email" name="email" id="email" value="{{ old('email') }}" required
                                        class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
                                 @error('email')
-                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                                @enderror
-                            </div>
-
-                            <div>
-                                <label for="birth_date" class="block text-sm font-medium text-neutral-700 mb-2">
-                                    Data de Nascimento <span class="text-primary-600">*</span>
-                                </label>
-                                <input type="date" name="birth_date" id="birth_date" value="{{ old('birth_date') }}" required
-                                       class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
-                                @error('birth_date')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
