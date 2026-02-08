@@ -64,11 +64,12 @@ class MemberRegistrationController extends Controller
         $validated = $request->validate([
             'status' => 'required|in:pending,approved,rejected',
             'full_name' => 'required|string|max:255',
+            'cpf' => 'required|string|size:14|regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/|unique:member_registrations,cpf,' . $memberRegistration->id,
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
-            'address' => 'required|string|max:255',
+            'address' => 'required|string',
             'birth_date' => 'required|date',
-            'marital_status' => 'required|in:single,married,divorced,widowed',
+            'marital_status' => 'required|in:Solteiro(a),Casado(a),Divorciado(a),Viúvo(a)',
             'profession' => 'required|string|max:255',
             'parish' => 'required|string|max:255',
             'member_city' => 'required|string|max:255',
@@ -76,6 +77,10 @@ class MemberRegistrationController extends Controller
             'baptism_date' => 'nullable|date',
             'how_met' => 'nullable|string',
             'why_join' => 'nullable|string',
+        ], [
+            'cpf.regex' => 'O CPF deve estar no formato 000.000.000-00',
+            'cpf.size' => 'O CPF deve estar no formato 000.000.000-00',
+            'cpf.unique' => 'Este CPF já está cadastrado em nosso sistema.',
         ]);
 
         $memberRegistration->update($validated);
