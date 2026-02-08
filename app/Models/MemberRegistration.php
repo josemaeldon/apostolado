@@ -9,6 +9,7 @@ class MemberRegistration extends Model
     protected $fillable = [
         'parish',
         'full_name',
+        'cpf',
         'address',
         'phone',
         'email',

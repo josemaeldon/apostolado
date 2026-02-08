@@ -23,8 +23,9 @@ class MemberRegistrationController extends Controller
         $validated = $request->validate([
             'parish' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
+            'cpf' => 'required|string|size:14|unique:member_registrations,cpf|regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/',
             'address' => 'required|string',
-            'phone' => 'required|string|max:255',
+            'phone' => 'required|string|size:14|regex:/^\(\d{2}\)\d{5}-\d{4}$/',
             'email' => 'required|email|max:255',
             'birth_date' => 'required|date',
             'marital_status' => 'required|string|max:255',
@@ -39,6 +40,12 @@ class MemberRegistrationController extends Controller
             'commitment_5' => 'boolean',
             'how_met' => 'nullable|string',
             'why_join' => 'nullable|string',
+        ], [
+            'cpf.unique' => 'Este CPF já está cadastrado em nosso sistema.',
+            'cpf.regex' => 'O CPF deve estar no formato 000.000.000-00',
+            'cpf.size' => 'O CPF deve estar no formato 000.000.000-00',
+            'phone.regex' => 'O telefone deve estar no formato (00)99999-9999',
+            'phone.size' => 'O telefone deve estar no formato (00)99999-9999',
         ]);
 
         MemberRegistration::create($validated);
