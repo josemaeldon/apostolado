@@ -124,7 +124,8 @@ RUN mkdir -p storage/framework/{sessions,views,cache} \
     && mkdir -p /tmp/nginx/client_body /tmp/nginx/proxy /tmp/nginx/fastcgi /tmp/nginx/uwsgi /tmp/nginx/scgi \
     && mkdir -p /tmp/supervisor \
     && mkdir -p /var/lib/nginx/logs \
-    && chown -R laravel:laravel /tmp/nginx /tmp/supervisor /var/lib/nginx
+    && chown -R laravel:laravel /tmp/nginx /tmp/supervisor /var/lib/nginx \
+    && chmod -R 775 /var/lib/nginx/logs
 
 # Garantir que .env.example existe e criar .env inicial
 RUN if [ -f .env.example ]; then \

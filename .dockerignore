@@ -7,6 +7,8 @@ node_modules
 vendor
 .env
 .env.backup
+!.env.example
+!.env.swarm.example
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
