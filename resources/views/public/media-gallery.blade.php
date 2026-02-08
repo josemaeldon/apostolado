@@ -47,7 +47,15 @@
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden border border-neutral-200 transform hover:-translate-y-1 duration-300 cursor-pointer" onclick="openModal('{{ $media->id }}')">
                     <div class="relative h-64">
                         @if($media->type === 'image')
-                            <div class="h-full bg-cover bg-center" style="background-image: url('{{ Storage::url($media->file_path) }}');"></div>
+                            @if($media->file_path)
+                                <div class="h-full bg-cover bg-center" style="background-image: url('{{ Storage::url($media->file_path) }}');"></div>
+                            @else
+                                <div class="h-full bg-gradient-to-br from-neutral-300 to-neutral-400 flex items-center justify-center">
+                                    <svg class="w-20 h-20 text-neutral-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                            @endif
                             <span class="absolute top-3 right-3 px-3 py-1 bg-primary-600 text-white text-xs font-bold rounded-full shadow-lg">
                                 Imagem
                             </span>
@@ -91,12 +99,61 @@
                             </button>
                         </div>
                         @if($media->type === 'image')
-                            <img src="{{ Storage::url($media->file_path) }}" alt="{{ $media->title }}" class="w-full h-auto rounded-lg shadow-2xl">
+                            @if($media->file_path)
+                                <img src="{{ Storage::url($media->file_path) }}" alt="{{ $media->title }}" class="w-full h-auto rounded-lg shadow-2xl">
+                            @else
+                                <div class="w-full h-96 bg-gradient-to-br from-neutral-300 to-neutral-400 flex items-center justify-center rounded-lg shadow-2xl">
+                                    <div class="text-center">
+                                        <svg class="w-32 h-32 text-neutral-600 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <p class="text-neutral-600 font-medium">Imagem não disponível</p>
+                                    </div>
+                                </div>
+                            @endif
                         @elseif($media->type === 'video')
-                            <video controls class="w-full h-auto rounded-lg shadow-2xl">
-                                <source src="{{ Storage::url($media->file_path) }}" type="video/mp4">
-                                Seu navegador não suporta a reprodução de vídeo.
-                            </video>
+                            @if($media->file_path)
+                                <video controls class="w-full h-auto rounded-lg shadow-2xl">
+                                    <source src="{{ Storage::url($media->file_path) }}" type="video/mp4">
+                                    Seu navegador não suporta a reprodução de vídeo.
+                                </video>
+                            @elseif($media->url)
+                                @php
+                                    // Extract YouTube video ID from various URL formats
+                                    $videoId = null;
+                                    if (preg_match('/[?&]v=([a-zA-Z0-9_-]{11})/', $media->url, $matches)) {
+                                        $videoId = $matches[1];
+                                    } elseif (preg_match('/youtu\.be\/([a-zA-Z0-9_-]{11})/', $media->url, $matches)) {
+                                        $videoId = $matches[1];
+                                    } elseif (preg_match('/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/', $media->url, $matches)) {
+                                        $videoId = $matches[1];
+                                    }
+                                    $embedUrl = $videoId ? 'https://www.youtube.com/embed/' . $videoId : null;
+                                @endphp
+                                @if($embedUrl)
+                                    <div class="w-full rounded-lg shadow-2xl overflow-hidden" style="aspect-ratio: 16/9;">
+                                        <iframe src="{{ $embedUrl }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                @else
+                                    <div class="w-full h-96 bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center rounded-lg shadow-2xl">
+                                        <div class="text-center">
+                                            <svg class="w-32 h-32 text-white mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                                            </svg>
+                                            <p class="text-white font-medium">Vídeo não disponível</p>
+                                        </div>
+                                    </div>
+                                @endif
+                            @else
+                                <div class="w-full h-96 bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center rounded-lg shadow-2xl">
+                                    <div class="text-center">
+                                        <svg class="w-32 h-32 text-white mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"/>
+                                        </svg>
+                                        <p class="text-white font-medium">Vídeo não disponível</p>
+                                    </div>
+                                </div>
+                            @endif
                         @endif
                         <div class="bg-white rounded-lg p-6 mt-4">
                             <h3 class="text-2xl font-bold text-neutral-900 mb-2">{{ $media->title }}</h3>

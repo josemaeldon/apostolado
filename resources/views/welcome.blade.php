@@ -150,10 +150,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12 sm:mb-16">
                 <h3 class="text-3xl sm:text-4xl font-extrabold text-neutral-900 mb-4">
-                    O que é o Apostolado da Oração?
+                    {{ $aboutSection?->title ?? 'O que é o Apostolado da Oração?' }}
                 </h3>
                 <p class="text-base sm:text-lg text-neutral-600">
-                    Uma rede mundial de oração unida ao Coração de Jesus
+                    {{ $aboutSection?->subtitle ?? 'Uma rede mundial de oração unida ao Coração de Jesus' }}
                 </p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
