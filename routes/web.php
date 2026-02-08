@@ -45,7 +45,9 @@ Route::get('/cadastro-membro', [MemberRegistrationController::class, 'create'])-
 Route::post('/cadastro-membro', [MemberRegistrationController::class, 'store'])->name('member.store');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $homepageSections = \App\Models\HomepageSection::all();
+    $featureCards = \App\Models\FeatureCard::orderBy('order')->get();
+    return view('dashboard', compact('homepageSections', 'featureCards'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

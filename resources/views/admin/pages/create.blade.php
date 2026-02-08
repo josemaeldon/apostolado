@@ -1,16 +1,6 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                📄 Nova Página
-            </h2>
-            <a href="{{ route('admin.pages.index') }}" class="text-sm text-blue-600 hover:text-blue-800">
-                ← Voltar
-            </a>
-        </div>
-    </x-slot>
+<x-admin-layout>
 
-    <div class="py-12">
+    <div class="p-4 lg:p-8">
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
@@ -73,4 +63,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-admin-layout>
