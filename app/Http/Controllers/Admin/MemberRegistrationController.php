@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\MemberRegistration;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MemberRegistrationController extends Controller
 {
@@ -95,5 +96,46 @@ class MemberRegistrationController extends Controller
 
         return redirect()->route('admin.member-registrations.index')
             ->with('success', 'Cadastro excluído com sucesso!');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        $query = MemberRegistration::query();
+
+        // Apply same filters as index method
+        if ($request->filled('search')) {
+            $query->where('full_name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('parish')) {
+            $query->where('parish', $request->parish);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('city')) {
+            $query->where('member_city', $request->city);
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->date_from);
+        }
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->date_to);
+        }
+
+        // Get all registrations matching the filters (no pagination)
+        $registrations = $query->latest()->get();
+
+        // Generate PDF
+        $pdf = Pdf::loadView('admin.member-registrations.pdf', compact('registrations'));
+        $pdf->setPaper('a4', 'portrait');
+
+        // Generate filename with timestamp
+        $filename = 'cadastros_' . now()->format('Y-m-d_His') . '.pdf';
+
+        return $pdf->download($filename);
     }
 }

@@ -89,6 +89,31 @@
                             </a>
                         </div>
                     </form>
+                    
+                    <!-- Export PDF Button -->
+                    @if($registrations->total() > 0)
+                    <div class="mt-4 pt-4 border-t border-gray-200">
+                        <form method="GET" action="{{ route('admin.member-registrations.export-pdf') }}" class="flex items-center gap-3">
+                            <!-- Pass all current filter parameters -->
+                            <input type="hidden" name="search" value="{{ request('search') }}">
+                            <input type="hidden" name="parish" value="{{ request('parish') }}">
+                            <input type="hidden" name="status" value="{{ request('status') }}">
+                            <input type="hidden" name="city" value="{{ request('city') }}">
+                            <input type="hidden" name="date_from" value="{{ request('date_from') }}">
+                            <input type="hidden" name="date_to" value="{{ request('date_to') }}">
+                            
+                            <button type="submit" class="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg font-medium transition">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clip-rule="evenodd" />
+                                </svg>
+                                Exportar PDF
+                            </button>
+                            <span class="text-sm text-gray-600">
+                                ({{ $registrations->total() }} cadastro{{ $registrations->total() != 1 ? 's' : '' }} será{{ $registrations->total() != 1 ? 'ão' : '' }} exportado{{ $registrations->total() != 1 ? 's' : '' }})
+                            </span>
+                        </form>
+                    </div>
+                    @endif
                 </div>
             </div>
 

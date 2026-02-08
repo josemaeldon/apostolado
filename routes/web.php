@@ -64,6 +64,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('sliders', SliderController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+    Route::get('member-registrations-export-pdf', [AdminMemberRegistrationController::class, 'exportPdf'])->name('member-registrations.export-pdf');
     Route::resource('feature-cards', FeatureCardController::class);
     
     // Storage Settings
