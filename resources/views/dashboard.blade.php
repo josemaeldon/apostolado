@@ -8,15 +8,8 @@
 
         <!-- Seções da Página Inicial -->
         <div class="mb-8">
-            <div class="flex justify-between items-center mb-4">
+            <div class="mb-4">
                 <h2 class="text-2xl font-bold text-gray-900">Seções da Página Inicial</h2>
-                <a href="{{ route('admin.homepage-sections.create') }}" 
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-colors duration-150">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Adicionar Nova Seção
-                </a>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
