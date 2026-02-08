@@ -45,6 +45,15 @@
                                 @error('full_name')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                             </div>
 
+                            <!-- CPF -->
+                            <div>
+                                <label for="cpf" class="block text-sm font-medium text-gray-700">CPF *</label>
+                                <input type="text" name="cpf" id="cpf" value="{{ old('cpf', $memberRegistration->cpf) }}" required maxlength="14"
+                                       placeholder="000.000.000-00"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                @error('cpf')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                            </div>
+
                             <!-- Email -->
                             <div>
                                 <label for="email" class="block text-sm font-medium text-gray-700">Email *</label>
@@ -83,10 +92,10 @@
                                 <select name="marital_status" id="marital_status" required
                                         class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="">Selecione</option>
-                                    <option value="single" {{ old('marital_status', $memberRegistration->marital_status) == 'single' ? 'selected' : '' }}>Solteiro(a)</option>
-                                    <option value="married" {{ old('marital_status', $memberRegistration->marital_status) == 'married' ? 'selected' : '' }}>Casado(a)</option>
-                                    <option value="divorced" {{ old('marital_status', $memberRegistration->marital_status) == 'divorced' ? 'selected' : '' }}>Divorciado(a)</option>
-                                    <option value="widowed" {{ old('marital_status', $memberRegistration->marital_status) == 'widowed' ? 'selected' : '' }}>Viúvo(a)</option>
+                                    <option value="Solteiro(a)" {{ old('marital_status', $memberRegistration->marital_status) == 'Solteiro(a)' ? 'selected' : '' }}>Solteiro(a)</option>
+                                    <option value="Casado(a)" {{ old('marital_status', $memberRegistration->marital_status) == 'Casado(a)' ? 'selected' : '' }}>Casado(a)</option>
+                                    <option value="Divorciado(a)" {{ old('marital_status', $memberRegistration->marital_status) == 'Divorciado(a)' ? 'selected' : '' }}>Divorciado(a)</option>
+                                    <option value="Viúvo(a)" {{ old('marital_status', $memberRegistration->marital_status) == 'Viúvo(a)' ? 'selected' : '' }}>Viúvo(a)</option>
                                 </select>
                                 @error('marital_status')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                             </div>

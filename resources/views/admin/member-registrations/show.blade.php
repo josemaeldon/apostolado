@@ -52,6 +52,10 @@
                                     <dd class="mt-1 text-sm text-gray-900">{{ $memberRegistration->full_name }}</dd>
                                 </div>
                                 <div>
+                                    <dt class="text-sm font-medium text-gray-500">CPF</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $memberRegistration->cpf ?? 'Não informado' }}</dd>
+                                </div>
+                                <div>
                                     <dt class="text-sm font-medium text-gray-500">Email</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $memberRegistration->email }}</dd>
                                 </div>
