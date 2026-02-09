@@ -2,10 +2,20 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-20">
             <div class="flex items-center">
-                <a href="{{ route('home') }}">
-                    <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-700 to-primary-900 bg-clip-text text-transparent">
-                        Apostolado da Oração
-                    </h1>
+                @php
+                    $siteName = \App\Models\SiteSetting::get('site_name', 'Apostolado da Oração');
+                    $siteLogo = \App\Models\SiteSetting::get('site_logo');
+                    $useLogo = \App\Models\SiteSetting::get('use_logo', '0');
+                @endphp
+                
+                <a href="{{ route('home') }}" class="flex items-center">
+                    @if($useLogo == '1' && $siteLogo)
+                        <img src="{{ Storage::url($siteLogo) }}" alt="{{ $siteName }}" class="h-12 object-contain">
+                    @else
+                        <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-700 to-primary-900 bg-clip-text text-transparent">
+                            {{ $siteName }}
+                        </h1>
+                    @endif
                 </a>
             </div>
             
