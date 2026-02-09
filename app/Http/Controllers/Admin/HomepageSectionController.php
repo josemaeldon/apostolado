@@ -33,10 +33,12 @@ class HomepageSectionController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'key' => 'required|string|max:255|unique:homepage_sections,key',
+            'key' => 'required|string|max:255|unique:homepage_sections,key|regex:/^[a-z0-9_-]+$/',
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:500',
             'is_active' => 'boolean',
+        ], [
+            'key.regex' => 'A chave deve conter apenas letras minúsculas, números, underscores (_) e hífens (-).',
         ]);
 
         $validated['is_active'] = $request->has('is_active');

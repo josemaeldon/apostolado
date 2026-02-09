@@ -15,6 +15,8 @@
                                    value="{{ old('key') }}" 
                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500" 
                                    placeholder="ex: hero_section, about_us"
+                                   pattern="[a-z0-9_-]+"
+                                   title="Use apenas letras minúsculas, números, underscores (_) e hífens (-)"
                                    required>
                             @error('key')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
