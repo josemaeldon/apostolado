@@ -151,6 +151,39 @@
             color: #6b7280;
         }
 
+        .profile-photo-section {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f9fafb;
+            border-radius: 4px;
+        }
+
+        .profile-photo {
+            max-width: 120px;
+            max-height: 150px;
+            border: 2px solid #2563eb;
+            border-radius: 4px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .photo-placeholder {
+            width: 120px;
+            height: 150px;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            background-color: #ffffff;
+            color: #6b7280;
+            font-size: 10px;
+            text-align: center;
+            padding: 10px;
+        }
+
         .additional-info {
             background-color: #f9fafb;
             padding: 8px;
@@ -182,6 +215,21 @@
                         @endif
                     </span>
                 </div>
+            </div>
+
+            <!-- Profile Photo -->
+            <div class="profile-photo-section">
+                @if($registration->profile_image && Storage::disk('public')->exists($registration->profile_image))
+                    <img src="{{ public_path('storage/' . $registration->profile_image) }}" alt="Foto de Perfil" class="profile-photo">
+                @else
+                    <div class="photo-placeholder">
+                        <div>
+                            <div style="font-size: 12px; margin-bottom: 5px;">📷</div>
+                            <div>Espaço para foto</div>
+                            <div style="font-size: 8px; margin-top: 3px;">(Cole a foto aqui)</div>
+                        </div>
+                    </div>
+                @endif
             </div>
 
             <div class="section">

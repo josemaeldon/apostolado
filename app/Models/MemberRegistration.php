@@ -29,6 +29,7 @@ class MemberRegistration extends Model
         'how_met',
         'why_join',
         'status',
+        'profile_image',
     ];
 
     protected $casts = [

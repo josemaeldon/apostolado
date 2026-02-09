@@ -82,7 +82,7 @@
             </div>
 
             <!-- Form -->
-            <form method="POST" action="{{ route('member.store') }}" class="bg-white shadow-xl rounded-2xl overflow-hidden">
+            <form method="POST" action="{{ route('member.store') }}" enctype="multipart/form-data" class="bg-white shadow-xl rounded-2xl overflow-hidden">
                 @csrf
 
                 <div class="p-8 space-y-8">
@@ -221,6 +221,40 @@
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Foto de Perfil -->
+                    <div class="border-b border-neutral-200 pb-6">
+                        <h3 class="text-2xl font-bold text-primary-800 mb-6">Foto de Perfil</h3>
+                        <div>
+                            <label for="profile_image" class="block text-sm font-medium text-neutral-700 mb-2">
+                                Foto de Perfil (Opcional)
+                            </label>
+                            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-neutral-300 border-dashed rounded-lg hover:border-primary-400 transition">
+                                <div class="space-y-1 text-center">
+                                    <svg class="mx-auto h-12 w-12 text-neutral-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                    <div class="flex text-sm text-neutral-600">
+                                        <label for="profile_image" class="relative cursor-pointer bg-white rounded-md font-medium text-primary-600 hover:text-primary-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                                            <span>Escolher arquivo</span>
+                                            <input id="profile_image" name="profile_image" type="file" accept="image/*" class="sr-only" onchange="previewImage(event)">
+                                        </label>
+                                        <p class="pl-1">ou arrastar e soltar</p>
+                                    </div>
+                                    <p class="text-xs text-neutral-500">
+                                        PNG, JPG, GIF até 2MB
+                                    </p>
+                                </div>
+                            </div>
+                            <div id="image-preview" class="mt-4 hidden">
+                                <p class="text-sm font-medium text-neutral-700 mb-2">Pré-visualização:</p>
+                                <img id="preview-img" src="" alt="Preview" class="max-w-xs rounded-lg border border-neutral-300 shadow-sm">
+                            </div>
+                            @error('profile_image')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -606,6 +640,19 @@
                 `;
             });
         });
+
+        // Image preview function
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-img').src = e.target.result;
+                    document.getElementById('image-preview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
     </script>
 </body>
 </html>

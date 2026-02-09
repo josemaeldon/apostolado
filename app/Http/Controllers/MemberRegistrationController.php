@@ -41,6 +41,7 @@ class MemberRegistrationController extends Controller
             'commitment_5' => 'required|accepted',
             'how_met' => 'nullable|string',
             'why_join' => 'nullable|string',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'cpf.unique' => 'Este CPF já está cadastrado em nosso sistema.',
             'cpf.regex' => 'O CPF deve estar no formato 000.000.000-00',
@@ -57,7 +58,15 @@ class MemberRegistrationController extends Controller
             'commitment_4.accepted' => 'Você deve aceitar todos os compromissos para se tornar membro.',
             'commitment_5.required' => 'Todos os compromissos são obrigatórios.',
             'commitment_5.accepted' => 'Você deve aceitar todos os compromissos para se tornar membro.',
+            'profile_image.image' => 'O arquivo deve ser uma imagem.',
+            'profile_image.mimes' => 'A imagem deve ser do tipo: jpeg, png, jpg ou gif.',
+            'profile_image.max' => 'A imagem não pode ser maior que 2MB.',
         ]);
+
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            $validated['profile_image'] = $request->file('profile_image')->store('member-profiles', 'public');
+        }
 
         $registration = MemberRegistration::create($validated);
 

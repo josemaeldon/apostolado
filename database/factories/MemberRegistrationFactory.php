@@ -40,6 +40,7 @@ class MemberRegistrationFactory extends Factory
             'how_met' => fake()->optional()->sentence(),
             'why_join' => fake()->optional()->paragraph(),
             'status' => fake()->randomElement(['pending', 'approved', 'rejected']),
+            'profile_image' => null, // Will be null by default in tests
         ];
     }
 
