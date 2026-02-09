@@ -43,6 +43,9 @@ Route::get('/pagina/{page:slug}', [App\Http\Controllers\PublicController::class,
 // Member Registration
 Route::get('/cadastro-membro', [MemberRegistrationController::class, 'create'])->name('member.register');
 Route::post('/cadastro-membro', [MemberRegistrationController::class, 'store'])->name('member.store');
+Route::get('/cadastro-membro/sucesso/{id}', [MemberRegistrationController::class, 'success'])->name('member.success');
+Route::get('/cadastro-membro/download-pdf/{id}', [MemberRegistrationController::class, 'downloadPdf'])->name('member.download-pdf');
+Route::post('/cadastro-membro/check-cpf', [MemberRegistrationController::class, 'checkCpf'])->name('member.check-cpf');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

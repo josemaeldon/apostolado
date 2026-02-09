@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MemberRegistration;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MemberRegistrationController extends Controller
 {
@@ -48,9 +49,67 @@ class MemberRegistrationController extends Controller
             'phone.size' => 'O telefone deve estar no formato (00)99999-9999',
         ]);
 
-        MemberRegistration::create($validated);
+        $registration = MemberRegistration::create($validated);
 
-        return redirect()->route('member.register')
-            ->with('success', 'Cadastro realizado com sucesso! Entraremos em contato em breve.');
+        return redirect()->route('member.success', ['id' => $registration->id])
+            ->with('success', 'Cadastro realizado com sucesso! Você pode baixar o comprovante em PDF.');
+    }
+
+    public function success($id)
+    {
+        $registration = MemberRegistration::findOrFail($id);
+        
+        $categories = Category::where('is_active', true)
+            ->where('show_in_menu', true)
+            ->orderBy('order')
+            ->get();
+            
+        return view('member-registration-success', compact('registration', 'categories'));
+    }
+
+    public function checkCpf(Request $request)
+    {
+        $request->validate([
+            'cpf' => 'required|string|size:14|regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/',
+        ], [
+            'cpf.regex' => 'O CPF deve estar no formato 000.000.000-00',
+            'cpf.size' => 'O CPF deve estar no formato 000.000.000-00',
+        ]);
+
+        $registration = MemberRegistration::where('cpf', $request->cpf)->first();
+
+        if ($registration) {
+            return response()->json([
+                'exists' => true,
+                'data' => [
+                    'id' => $registration->id,
+                    'full_name' => $registration->full_name,
+                    'email' => $registration->email,
+                    'parish' => $registration->parish,
+                    'status' => $registration->status,
+                    'created_at' => $registration->created_at->format('d/m/Y'),
+                ],
+            ]);
+        }
+
+        return response()->json([
+            'exists' => false,
+            'message' => 'CPF não encontrado em nosso sistema.',
+        ]);
+    }
+
+    public function downloadPdf($id)
+    {
+        $registration = MemberRegistration::findOrFail($id);
+        
+        // Generate PDF with single registration
+        $registrations = collect([$registration]);
+        $pdf = Pdf::loadView('admin.member-registrations.pdf', compact('registrations'));
+        $pdf->setPaper('a4', 'portrait');
+
+        // Generate filename
+        $filename = 'cadastro_' . $registration->id . '_' . now()->format('Y-m-d') . '.pdf';
+
+        return $pdf->download($filename);
     }
 }
