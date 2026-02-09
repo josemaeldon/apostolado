@@ -76,6 +76,9 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::put('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'update'])->name('storage-settings.update');
     Route::post('storage-settings/test', [App\Http\Controllers\Admin\StorageSettingsController::class, 'test'])->name('storage-settings.test');
     
+    // API Settings
+    Route::get('api-settings', [App\Http\Controllers\Admin\ApiSettingsController::class, 'index'])->name('api-settings.index');
+    
     // Site Settings
     Route::get('site-settings', [App\Http\Controllers\Admin\SiteSettingsController::class, 'index'])->name('site-settings.index');
     Route::post('site-settings', [App\Http\Controllers\Admin\SiteSettingsController::class, 'update'])->name('site-settings.update');
