@@ -14,8 +14,8 @@ class HomepageSectionController extends Controller
      */
     public function index()
     {
-        $sections = HomepageSection::all();
-        $featureCards = FeatureCard::orderBy('order')->get();
+        $sections = HomepageSection::with('featureCards')->get();
+        $featureCards = FeatureCard::whereNull('homepage_section_id')->orderBy('order')->get();
         return view('admin.homepage-sections.index', compact('sections', 'featureCards'));
     }
 

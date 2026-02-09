@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\FeatureCard;
+use App\Models\HomepageSection;
 use Illuminate\Http\Request;
 
 class FeatureCardController extends Controller
@@ -16,14 +17,17 @@ class FeatureCardController extends Controller
 
     public function create()
     {
-        return view('admin.feature-cards.create');
+        $sections = HomepageSection::where('is_active', true)->orderBy('title')->get();
+        return view('admin.feature-cards.create', compact('sections'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'homepage_section_id' => 'nullable|exists:homepage_sections,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'icon' => 'required|string|max:10',
             'color_from' => 'required|string|max:50',
             'color_to' => 'required|string|max:50',
@@ -34,6 +38,11 @@ class FeatureCardController extends Controller
             'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('featured_image')) {
+            $validated['featured_image'] = $request->file('featured_image')->store('feature-cards', 'public');
+        }
 
         $validated['is_active'] = $request->has('is_active');
         $validated['display_order'] = $validated['display_order'] ?? 0;
@@ -46,14 +55,17 @@ class FeatureCardController extends Controller
 
     public function edit(FeatureCard $featureCard)
     {
-        return view('admin.feature-cards.edit', compact('featureCard'));
+        $sections = HomepageSection::where('is_active', true)->orderBy('title')->get();
+        return view('admin.feature-cards.edit', compact('featureCard', 'sections'));
     }
 
     public function update(Request $request, FeatureCard $featureCard)
     {
         $validated = $request->validate([
+            'homepage_section_id' => 'nullable|exists:homepage_sections,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'icon' => 'required|string|max:10',
             'color_from' => 'required|string|max:50',
             'color_to' => 'required|string|max:50',
@@ -64,6 +76,15 @@ class FeatureCardController extends Controller
             'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('featured_image')) {
+            // Delete old image if exists
+            if ($featureCard->featured_image && \Storage::disk('public')->exists($featureCard->featured_image)) {
+                \Storage::disk('public')->delete($featureCard->featured_image);
+            }
+            $validated['featured_image'] = $request->file('featured_image')->store('feature-cards', 'public');
+        }
 
         $validated['is_active'] = $request->has('is_active');
         $validated['display_order'] = $validated['display_order'] ?? 0;

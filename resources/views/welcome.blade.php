@@ -178,6 +178,13 @@
                         $classes = $card->getCssClasses();
                     @endphp
                     <div class="{{ $classes['gradient'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border {{ $classes['border'] }}">
+                        @if($card->featured_image)
+                            <div class="mb-4 rounded-lg overflow-hidden">
+                                <img src="{{ asset('storage/' . $card->featured_image) }}" 
+                                     alt="{{ $card->title }}" 
+                                     class="w-full h-48 object-cover">
+                            </div>
+                        @endif
                         <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
                         <h4 class="text-xl sm:text-2xl font-bold {{ $classes['text'] }} mb-3">{{ $card->title }}</h4>
                         <p class="text-sm sm:text-base text-neutral-700">

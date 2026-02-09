@@ -39,6 +39,48 @@
             </div>
             @endif
 
+            <!-- CPF Search Box -->
+            <div class="mb-8 bg-blue-50 border border-blue-200 rounded-2xl overflow-hidden shadow-md">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-4">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <svg class="h-6 w-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        Verificar Cadastro Existente
+                    </h2>
+                    <p class="text-blue-100 text-sm mt-1">
+                        Pesquise seu CPF para verificar se você já possui cadastro
+                    </p>
+                </div>
+                <div class="p-6">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="flex-1">
+                            <label for="search_cpf" class="block text-sm font-medium text-neutral-700 mb-2">
+                                CPF
+                            </label>
+                            <input type="text" 
+                                   id="search_cpf" 
+                                   placeholder="000.000.000-00"
+                                   maxlength="14"
+                                   class="w-full rounded-lg border-neutral-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                        </div>
+                        <div class="sm:pt-7">
+                            <button type="button" 
+                                    id="check_cpf_btn"
+                                    class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-md hover:shadow-lg flex items-center justify-center">
+                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                </svg>
+                                Verificar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Result -->
+                    <div id="cpf_search_result" class="mt-4 hidden"></div>
+                </div>
+            </div>
+
             <!-- Form -->
             <form method="POST" action="{{ route('member.store') }}" class="bg-white shadow-xl rounded-2xl overflow-hidden">
                 @csrf
@@ -169,7 +211,7 @@
                                 @enderror
                             </div>
 
-                            <div class="md:col-span-2">
+                            <div>
                                 <label for="profession" class="block text-sm font-medium text-neutral-700 mb-2">
                                     Profissão <span class="text-primary-600">*</span>
                                 </label>
@@ -266,49 +308,70 @@
 
                     <!-- Compromissos do Membro -->
                     <div class="border-b border-neutral-200 pb-6">
-                        <h3 class="text-2xl font-bold text-primary-800 mb-4">Compromissos do Membro</h3>
-                        <p class="text-neutral-600 mb-6">Marque os compromissos que você assume como membro do Apostolado da Oração:</p>
+                        <h3 class="text-2xl font-bold text-primary-800 mb-2">Compromissos do Membro *</h3>
+                        <p class="text-sm text-red-600 font-semibold mb-2">⚠️ Todos os compromissos são obrigatórios</p>
+                        <p class="text-neutral-600 mb-6">Para se tornar membro do Apostolado da Oração, você deve aceitar e assumir todos os compromissos abaixo:</p>
                         
                         <div class="space-y-4">
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_1" id="commitment_1" value="1" {{ old('commitment_1') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_1" class="ml-3 text-neutral-700">
-                                    Oferecer diariamente a vida, as orações, as obras e os sofrimentos em união com o Coração de Jesus.
+                                    <span class="font-semibold">*</span> Oferecer diariamente a vida, as orações, as obras e os sofrimentos em união com o Coração de Jesus.
                                 </label>
                             </div>
+                            @error('commitment_1')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
 
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_2" id="commitment_2" value="1" {{ old('commitment_2') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_2" class="ml-3 text-neutral-700">
-                                    Rezar pelas intenções de oração mensais do Papa.
+                                    <span class="font-semibold">*</span> Rezar pelas intenções de oração mensais do Papa.
                                 </label>
                             </div>
+                            @error('commitment_2')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
 
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_3" id="commitment_3" value="1" {{ old('commitment_3') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_3" class="ml-3 text-neutral-700">
-                                    Participar das reuniões mensais do Apostolado da Oração.
+                                    <span class="font-semibold">*</span> Participar das reuniões mensais do Apostolado da Oração.
                                 </label>
                             </div>
+                            @error('commitment_3')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
 
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_4" id="commitment_4" value="1" {{ old('commitment_4') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_4" class="ml-3 text-neutral-700">
-                                    Dedicar-se à adoração ao Santíssimo Sacramento, especialmente nas primeiras sextas-feiras do mês, sempre que possível.
+                                    <span class="font-semibold">*</span> Dedicar-se à adoração ao Santíssimo Sacramento, especialmente nas primeiras sextas-feiras do mês, sempre que possível.
                                 </label>
                             </div>
+                            @error('commitment_4')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
 
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_5" id="commitment_5" value="1" {{ old('commitment_5') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_5" class="ml-3 text-neutral-700">
-                                    Participar ativamente das missas do Sagrado Coração de Jesus.
+                                    <span class="font-semibold">*</span> Participar ativamente das missas do Sagrado Coração de Jesus.
                                 </label>
                             </div>
+                            @error('commitment_5')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
@@ -391,6 +454,157 @@
             }
             
             e.target.value = value;
+        });
+
+        // CPF Search Formatting
+        document.getElementById('search_cpf').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 11) {
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            } else {
+                value = value.substring(0, 11);
+                value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+            }
+            e.target.value = value;
+        });
+
+        // CPF Search
+        document.getElementById('check_cpf_btn').addEventListener('click', function() {
+            const cpf = document.getElementById('search_cpf').value;
+            const resultDiv = document.getElementById('cpf_search_result');
+            const btn = this;
+            
+            if (!cpf || cpf.length !== 14) {
+                resultDiv.innerHTML = `
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                        <p class="text-sm font-medium text-red-800">
+                            Por favor, insira um CPF válido no formato 000.000.000-00
+                        </p>
+                    </div>
+                `;
+                resultDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Show loading
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Verificando...
+            `;
+
+            // Make AJAX request
+            fetch('{{ route('member.check-cpf') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ cpf: cpf })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    const statusText = data.data.status === 'pending' ? 'Pendente' : 
+                                     data.data.status === 'approved' ? 'Aprovado' : 'Rejeitado';
+                    
+                    let bgColor, borderColor, textColor, btnColor, btnHoverColor;
+                    if (data.data.status === 'pending') {
+                        bgColor = 'bg-yellow-50';
+                        borderColor = 'border-yellow-500';
+                        textColor = 'text-yellow-800';
+                        btnColor = 'bg-yellow-600';
+                        btnHoverColor = 'hover:bg-yellow-700';
+                    } else if (data.data.status === 'approved') {
+                        bgColor = 'bg-green-50';
+                        borderColor = 'border-green-500';
+                        textColor = 'text-green-800';
+                        btnColor = 'bg-green-600';
+                        btnHoverColor = 'hover:bg-green-700';
+                    } else {
+                        bgColor = 'bg-red-50';
+                        borderColor = 'border-red-500';
+                        textColor = 'text-red-800';
+                        btnColor = 'bg-red-600';
+                        btnHoverColor = 'hover:bg-red-700';
+                    }
+                    
+                    resultDiv.innerHTML = `
+                        <div class="${bgColor} border-l-4 ${borderColor} p-4 rounded">
+                            <div class="flex items-start">
+                                <svg class="h-6 w-6 ${textColor.replace('800', '600')} mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <div class="flex-1">
+                                    <h3 class="text-sm font-bold ${textColor.replace('800', '900')} mb-2">
+                                        Cadastro Encontrado!
+                                    </h3>
+                                    <div class="text-sm ${textColor} space-y-1">
+                                        <p><strong>Nome:</strong> ${data.data.full_name}</p>
+                                        <p><strong>Email:</strong> ${data.data.email}</p>
+                                        <p><strong>Paróquia:</strong> ${data.data.parish}</p>
+                                        <p><strong>Status:</strong> <span class="font-semibold">${statusText}</span></p>
+                                        <p><strong>Data do Cadastro:</strong> ${data.data.created_at}</p>
+                                    </div>
+                                    <div class="mt-3">
+                                        <a href="{{ route('member.download-pdf', '') }}/${data.data.id}" 
+                                           class="inline-flex items-center px-4 py-2 ${btnColor} ${btnHoverColor} text-white text-sm font-semibold rounded transition">
+                                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                            Baixar Comprovante
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                            <div class="flex items-start">
+                                <svg class="h-6 w-6 text-blue-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium text-blue-800">
+                                        ${data.message}
+                                    </p>
+                                    <p class="text-sm text-blue-700 mt-1">
+                                        Você pode preencher o formulário abaixo para realizar o cadastro.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                resultDiv.classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                        <p class="text-sm font-medium text-red-800">
+                            Ocorreu um erro ao verificar o CPF. Por favor, tente novamente.
+                        </p>
+                    </div>
+                `;
+                resultDiv.classList.remove('hidden');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.innerHTML = `
+                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    Verificar
+                `;
+            });
         });
     </script>
 </body>

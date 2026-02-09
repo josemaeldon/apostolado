@@ -4,10 +4,25 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <form action="{{ route('admin.feature-cards.store') }}" method="POST">
+                    <form action="{{ route('admin.feature-cards.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         
                         <div class="space-y-6">
+                            <div>
+                                <label for="homepage_section_id" class="block text-sm font-medium text-gray-700">Seção da Página Inicial</label>
+                                <select name="homepage_section_id" id="homepage_section_id"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">-- Nenhuma (posição independente) --</option>
+                                    @foreach($sections as $section)
+                                        <option value="{{ $section->id }}" {{ old('homepage_section_id') == $section->id ? 'selected' : '' }}>
+                                            {{ $section->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('homepage_section_id')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                <p class="mt-1 text-sm text-gray-500">Selecione uma seção para associar este card. Ele aparecerá abaixo da seção escolhida.</p>
+                            </div>
+
                             <div>
                                 <label for="title" class="block text-sm font-medium text-gray-700">Título *</label>
                                 <input type="text" name="title" id="title" value="{{ old('title') }}" required
@@ -22,6 +37,14 @@
                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                           placeholder="Descreva o propósito ou significado deste card">{{ old('description') }}</textarea>
                                 @error('description')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                            </div>
+
+                            <div>
+                                <label for="featured_image" class="block text-sm font-medium text-gray-700">Imagem em Destaque</label>
+                                <input type="file" name="featured_image" id="featured_image" accept="image/*"
+                                       class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                @error('featured_image')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                <p class="mt-1 text-sm text-gray-500">Imagem opcional para melhorar o visual do card (JPEG, PNG, GIF, WebP - máx. 2MB)</p>
                             </div>
 
                             <div>

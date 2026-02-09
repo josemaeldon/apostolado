@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class FeatureCard extends Model
 {
     protected $fillable = [
+        'homepage_section_id',
         'title',
         'description',
+        'featured_image',
         'icon',
         'color_from',
         'color_to',
@@ -23,6 +25,14 @@ class FeatureCard extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get the homepage section that owns the feature card.
+     */
+    public function homepageSection()
+    {
+        return $this->belongsTo(HomepageSection::class);
+    }
 
     /**
      * Get predefined CSS class combinations to ensure Tailwind purge works
