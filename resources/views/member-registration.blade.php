@@ -491,20 +491,39 @@
                 if (data.exists) {
                     const statusText = data.data.status === 'pending' ? 'Pendente' : 
                                      data.data.status === 'approved' ? 'Aprovado' : 'Rejeitado';
-                    const statusColor = data.data.status === 'pending' ? 'yellow' : 
-                                      data.data.status === 'approved' ? 'green' : 'red';
+                    
+                    let bgColor, borderColor, textColor, btnColor, btnHoverColor;
+                    if (data.data.status === 'pending') {
+                        bgColor = 'bg-yellow-50';
+                        borderColor = 'border-yellow-500';
+                        textColor = 'text-yellow-800';
+                        btnColor = 'bg-yellow-600';
+                        btnHoverColor = 'hover:bg-yellow-700';
+                    } else if (data.data.status === 'approved') {
+                        bgColor = 'bg-green-50';
+                        borderColor = 'border-green-500';
+                        textColor = 'text-green-800';
+                        btnColor = 'bg-green-600';
+                        btnHoverColor = 'hover:bg-green-700';
+                    } else {
+                        bgColor = 'bg-red-50';
+                        borderColor = 'border-red-500';
+                        textColor = 'text-red-800';
+                        btnColor = 'bg-red-600';
+                        btnHoverColor = 'hover:bg-red-700';
+                    }
                     
                     resultDiv.innerHTML = `
-                        <div class="bg-${statusColor}-50 border-l-4 border-${statusColor}-500 p-4 rounded">
+                        <div class="${bgColor} border-l-4 ${borderColor} p-4 rounded">
                             <div class="flex items-start">
-                                <svg class="h-6 w-6 text-${statusColor}-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="h-6 w-6 ${textColor.replace('800', '600')} mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                                 </svg>
                                 <div class="flex-1">
-                                    <h3 class="text-sm font-bold text-${statusColor}-900 mb-2">
+                                    <h3 class="text-sm font-bold ${textColor.replace('800', '900')} mb-2">
                                         Cadastro Encontrado!
                                     </h3>
-                                    <div class="text-sm text-${statusColor}-800 space-y-1">
+                                    <div class="text-sm ${textColor} space-y-1">
                                         <p><strong>Nome:</strong> ${data.data.full_name}</p>
                                         <p><strong>Email:</strong> ${data.data.email}</p>
                                         <p><strong>Paróquia:</strong> ${data.data.parish}</p>
@@ -513,7 +532,7 @@
                                     </div>
                                     <div class="mt-3">
                                         <a href="{{ route('member.download-pdf', '') }}/${data.data.id}" 
-                                           class="inline-flex items-center px-4 py-2 bg-${statusColor}-600 hover:bg-${statusColor}-700 text-white text-sm font-semibold rounded transition">
+                                           class="inline-flex items-center px-4 py-2 ${btnColor} ${btnHoverColor} text-white text-sm font-semibold rounded transition">
                                             <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                                             </svg>

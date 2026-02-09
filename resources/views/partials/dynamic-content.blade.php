@@ -21,7 +21,11 @@
                 
                 {{-- Render associated cards if any --}}
                 @if($sectionCards->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-{{ min($sectionCards->count(), 3) }} gap-6 sm:gap-8">
+                    @php
+                        $gridCols = $sectionCards->count() === 1 ? 'md:grid-cols-1' : 
+                                   ($sectionCards->count() === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3');
+                    @endphp
+                <div class="grid grid-cols-1 {{ $gridCols }} gap-6 sm:gap-8">
                     @foreach($sectionCards as $card)
                         @php
                             $classes = $card->getCssClasses();
