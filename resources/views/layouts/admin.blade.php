@@ -26,9 +26,23 @@
                     
                     <!-- Toggle Button -->
                     <div class="p-4 border-b border-gray-200 flex justify-between items-center">
-                        <h2 x-show="sidebarOpen" class="font-semibold text-xl text-gray-800 transition-opacity duration-300">
-                            {{ config('app.name', 'Apostolado') }}
-                        </h2>
+                        @php
+                            $settings = \App\Models\SiteSetting::getMultiple(
+                                ['site_name', 'site_logo', 'use_logo'],
+                                ['site_name' => config('app.name', 'Apostolado'), 'use_logo' => '0']
+                            );
+                        @endphp
+                        
+                        @if($settings['use_logo'] == '1' && $settings['site_logo'])
+                            <div x-show="sidebarOpen" class="transition-opacity duration-300">
+                                <img src="{{ Storage::url($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-8 object-contain">
+                            </div>
+                        @else
+                            <h2 x-show="sidebarOpen" class="font-semibold text-xl text-gray-800 transition-opacity duration-300">
+                                {{ $settings['site_name'] }}
+                            </h2>
+                        @endif
+                        
                         <button @click="sidebarOpen = !sidebarOpen" 
                                 class="p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 :class="sidebarOpen ? '' : 'mx-auto'"
@@ -41,7 +55,7 @@
                         </button>
                     </div>
                     
-                    <div class="p-4 space-y-2">
+                    <div class="p-4 space-y-2" x-data="{ homepageOpen: {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'true' : 'false' }} }">
                         <!-- Sidebar Items -->
                         <a href="{{ route('dashboard') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -51,13 +65,32 @@
                             <span x-show="sidebarOpen" class="font-medium">Dashboard</span>
                         </a>
                         
-                        <a href="{{ route('admin.homepage-sections.index') }}" 
-                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'bg-blue-50 text-blue-700' : '' }}"
-                           aria-label="Página Inicial"
-                           :title="!sidebarOpen ? 'Página Inicial' : ''">
-                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🎨</span>
-                            <span x-show="sidebarOpen" class="font-medium">Página Inicial</span>
-                        </a>
+                        <!-- Página Inicial with submenu -->
+                        <div>
+                            <button @click="homepageOpen = !homepageOpen" 
+                               class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                               :aria-label="!sidebarOpen ? 'Página Inicial' : ''"
+                               :title="!sidebarOpen ? 'Página Inicial' : ''">
+                                <div class="flex items-center">
+                                    <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🎨</span>
+                                    <span x-show="sidebarOpen" class="font-medium">Página Inicial</span>
+                                </div>
+                                <svg x-show="sidebarOpen" :class="homepageOpen ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <!-- Submenu -->
+                            <div x-show="homepageOpen && sidebarOpen" x-collapse class="ml-8 mt-1 space-y-1">
+                                <a href="{{ route('admin.homepage-sections.index') }}" 
+                                   class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') && !request()->routeIs('admin.feature-cards.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Seções
+                                </a>
+                                <a href="{{ route('admin.feature-cards.index') }}" 
+                                   class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.feature-cards.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Cartões de Recurso
+                                </a>
+                            </div>
+                        </div>
                         
                         <a href="{{ route('admin.pages.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.pages.*') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -138,6 +171,14 @@
                            :title="!sidebarOpen ? 'Perfil' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">👤</span>
                             <span x-show="sidebarOpen" class="font-medium">Perfil</span>
+                        </a>
+                        
+                        <a href="{{ route('admin.site-settings.index') }}" 
+                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.site-settings.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                           aria-label="Configurações do Site"
+                           :title="!sidebarOpen ? 'Site' : ''">
+                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">⚙️</span>
+                            <span x-show="sidebarOpen" class="font-medium">Site</span>
                         </a>
                         
                         <a href="{{ route('admin.storage-settings.index') }}" 

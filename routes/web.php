@@ -75,6 +75,11 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::get('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'index'])->name('storage-settings.index');
     Route::put('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'update'])->name('storage-settings.update');
     Route::post('storage-settings/test', [App\Http\Controllers\Admin\StorageSettingsController::class, 'test'])->name('storage-settings.test');
+    
+    // Site Settings
+    Route::get('site-settings', [App\Http\Controllers\Admin\SiteSettingsController::class, 'index'])->name('site-settings.index');
+    Route::post('site-settings', [App\Http\Controllers\Admin\SiteSettingsController::class, 'update'])->name('site-settings.update');
+    Route::delete('site-settings/logo', [App\Http\Controllers\Admin\SiteSettingsController::class, 'deleteLogo'])->name('site-settings.delete-logo');
 });
 
 require __DIR__.'/auth.php';
