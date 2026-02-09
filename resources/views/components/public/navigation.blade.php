@@ -3,17 +3,18 @@
         <div class="flex justify-between h-20">
             <div class="flex items-center">
                 @php
-                    $siteName = \App\Models\SiteSetting::get('site_name', 'Apostolado da Oração');
-                    $siteLogo = \App\Models\SiteSetting::get('site_logo');
-                    $useLogo = \App\Models\SiteSetting::get('use_logo', '0');
+                    $settings = \App\Models\SiteSetting::getMultiple(
+                        ['site_name', 'site_logo', 'use_logo'],
+                        ['site_name' => 'Apostolado da Oração', 'use_logo' => '0']
+                    );
                 @endphp
                 
                 <a href="{{ route('home') }}" class="flex items-center">
-                    @if($useLogo == '1' && $siteLogo)
-                        <img src="{{ Storage::url($siteLogo) }}" alt="{{ $siteName }}" class="h-12 object-contain">
+                    @if($settings['use_logo'] == '1' && $settings['site_logo'])
+                        <img src="{{ Storage::url($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-12 object-contain">
                     @else
                         <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-700 to-primary-900 bg-clip-text text-transparent">
-                            {{ $siteName }}
+                            {{ $settings['site_name'] }}
                         </h1>
                     @endif
                 </a>

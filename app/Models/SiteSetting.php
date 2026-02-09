@@ -24,6 +24,25 @@ class SiteSetting extends Model
     }
 
     /**
+     * Get multiple settings at once
+     */
+    public static function getMultiple(array $keys, array $defaults = []): array
+    {
+        $cacheKey = 'site_settings_' . md5(implode(',', $keys));
+        
+        return Cache::remember($cacheKey, 3600, function () use ($keys, $defaults) {
+            $settings = self::whereIn('key', $keys)->pluck('value', 'key')->toArray();
+            
+            $result = [];
+            foreach ($keys as $key) {
+                $result[$key] = $settings[$key] ?? ($defaults[$key] ?? null);
+            }
+            
+            return $result;
+        });
+    }
+
+    /**
      * Set a setting value by key
      */
     public static function set(string $key, $value): void

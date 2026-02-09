@@ -27,18 +27,19 @@
                     <!-- Toggle Button -->
                     <div class="p-4 border-b border-gray-200 flex justify-between items-center">
                         @php
-                            $siteName = \App\Models\SiteSetting::get('site_name', config('app.name', 'Apostolado'));
-                            $siteLogo = \App\Models\SiteSetting::get('site_logo');
-                            $useLogo = \App\Models\SiteSetting::get('use_logo', '0');
+                            $settings = \App\Models\SiteSetting::getMultiple(
+                                ['site_name', 'site_logo', 'use_logo'],
+                                ['site_name' => config('app.name', 'Apostolado'), 'use_logo' => '0']
+                            );
                         @endphp
                         
-                        @if($useLogo == '1' && $siteLogo)
+                        @if($settings['use_logo'] == '1' && $settings['site_logo'])
                             <div x-show="sidebarOpen" class="transition-opacity duration-300">
-                                <img src="{{ Storage::url($siteLogo) }}" alt="{{ $siteName }}" class="h-8 object-contain">
+                                <img src="{{ Storage::url($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-8 object-contain">
                             </div>
                         @else
                             <h2 x-show="sidebarOpen" class="font-semibold text-xl text-gray-800 transition-opacity duration-300">
-                                {{ $siteName }}
+                                {{ $settings['site_name'] }}
                             </h2>
                         @endif
                         

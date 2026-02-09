@@ -29,7 +29,7 @@ class SiteSettingsController extends Controller
         $request->validate([
             'site_name' => 'required|string|max:255',
             'use_logo' => 'required|in:0,1',
-            'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'site_logo' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // Update site name
