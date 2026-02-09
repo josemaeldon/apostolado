@@ -34,8 +34,8 @@
                             {{ $slider->description }}
                         </p>
                         @endif
-                        @if($slider->button_text && $slider->button_link)
-                        <a href="{{ $slider->button_link }}" class="inline-block bg-gradient-to-r from-gold-500 to-gold-600 text-white hover:from-gold-600 hover:to-gold-700 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-bold shadow-2xl transition transform hover:scale-105">
+                        @if($slider->button_text && ($slider->button_link || $slider->linkable))
+                        <a href="{{ $slider->effective_link }}" class="inline-block bg-gradient-to-r from-gold-500 to-gold-600 text-white hover:from-gold-600 hover:to-gold-700 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-bold shadow-2xl transition transform hover:scale-105">
                             {{ $slider->button_text }}
                         </a>
                         @endif
