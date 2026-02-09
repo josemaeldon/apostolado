@@ -51,20 +51,12 @@
                             <span x-show="sidebarOpen" class="font-medium">Dashboard</span>
                         </a>
                         
-                        <a href="{{ route('profile.edit') }}" 
-                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') ? 'bg-blue-50 text-blue-700' : '' }}"
-                           aria-label="Perfil"
-                           :title="!sidebarOpen ? 'Perfil' : ''">
-                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🔐</span>
-                            <span x-show="sidebarOpen" class="font-medium">Perfil</span>
-                        </a>
-                        
                         <a href="{{ route('admin.homepage-sections.index') }}" 
-                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') ? 'bg-blue-50 text-blue-700' : '' }}"
-                           aria-label="Seções"
-                           :title="!sidebarOpen ? 'Seções' : ''">
-                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">📝</span>
-                            <span x-show="sidebarOpen" class="font-medium">Seções</span>
+                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                           aria-label="Página Inicial"
+                           :title="!sidebarOpen ? 'Página Inicial' : ''">
+                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🎨</span>
+                            <span x-show="sidebarOpen" class="font-medium">Página Inicial</span>
                         </a>
                         
                         <a href="{{ route('admin.pages.index') }}" 
@@ -131,15 +123,35 @@
                             <span x-show="sidebarOpen" class="font-medium">Cadastros</span>
                         </a>
                         
+                        <!-- Settings Section Divider -->
+                        <div x-show="sidebarOpen" class="pt-4 pb-2">
+                            <div class="border-t border-gray-200 mb-2"></div>
+                            <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Configurações</p>
+                        </div>
+                        <div x-show="!sidebarOpen" class="pt-2">
+                            <div class="border-t border-gray-200"></div>
+                        </div>
+                        
+                        <a href="{{ route('profile.edit') }}" 
+                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') ? 'bg-blue-50 text-blue-700' : '' }}"
+                           aria-label="Perfil"
+                           :title="!sidebarOpen ? 'Perfil' : ''">
+                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">👤</span>
+                            <span x-show="sidebarOpen" class="font-medium">Perfil</span>
+                        </a>
+                        
                         <a href="{{ route('admin.storage-settings.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.storage-settings.*') ? 'bg-blue-50 text-blue-700' : '' }}"
-                           aria-label="Configurações de Armazenamento"
+                           aria-label="Armazenamento"
                            :title="!sidebarOpen ? 'Armazenamento' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🗄️</span>
                             <span x-show="sidebarOpen" class="font-medium">Armazenamento</span>
                         </a>
                         
                         <!-- Logout -->
+                        <div class="pt-2">
+                            <div class="border-t border-gray-200 mb-2"></div>
+                        </div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" 
