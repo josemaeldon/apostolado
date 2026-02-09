@@ -552,7 +552,7 @@
                                         <p><strong>Data do Cadastro:</strong> ${data.data.created_at}</p>
                                     </div>
                                     <div class="mt-3">
-                                        <a href="{{ route('member.download-pdf', '') }}/${data.data.id}" 
+                                        <a href="${window.location.origin}/cadastro-membro/download-pdf/${data.data.id}" 
                                            class="inline-flex items-center px-4 py-2 ${btnColor} ${btnHoverColor} text-white text-sm font-semibold rounded transition">
                                             <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
