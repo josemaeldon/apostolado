@@ -62,6 +62,22 @@ class MemberRegistrationController extends Controller
 
     public function update(Request $request, MemberRegistration $memberRegistration)
     {
+        // Check if this is a status-only update (from show page)
+        $isStatusOnlyUpdate = $request->has('status') && count($request->all()) <= 2; // status + _token + _method
+        
+        if ($isStatusOnlyUpdate) {
+            // Validate only the status field
+            $validated = $request->validate([
+                'status' => 'required|in:pending,approved,rejected',
+            ]);
+            
+            $memberRegistration->update($validated);
+            
+            return redirect()->route('admin.member-registrations.show', $memberRegistration)
+                ->with('success', 'Status atualizado com sucesso!');
+        }
+        
+        // Full validation for complete update (from edit page)
         $validated = $request->validate([
             'status' => 'required|in:pending,approved,rejected',
             'full_name' => 'required|string|max:255',
