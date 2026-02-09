@@ -34,11 +34,11 @@ class MemberRegistrationController extends Controller
             'member_city' => 'required|string|max:255',
             'member_parish' => 'required|string|max:255',
             'baptism_date' => 'nullable|date',
-            'commitment_1' => 'boolean',
-            'commitment_2' => 'boolean',
-            'commitment_3' => 'boolean',
-            'commitment_4' => 'boolean',
-            'commitment_5' => 'boolean',
+            'commitment_1' => 'required|accepted',
+            'commitment_2' => 'required|accepted',
+            'commitment_3' => 'required|accepted',
+            'commitment_4' => 'required|accepted',
+            'commitment_5' => 'required|accepted',
             'how_met' => 'nullable|string',
             'why_join' => 'nullable|string',
         ], [
@@ -47,6 +47,16 @@ class MemberRegistrationController extends Controller
             'cpf.size' => 'O CPF deve estar no formato 000.000.000-00',
             'phone.regex' => 'O telefone deve estar no formato (00)99999-9999',
             'phone.size' => 'O telefone deve estar no formato (00)99999-9999',
+            'commitment_1.required' => 'Todos os compromissos são obrigatórios.',
+            'commitment_1.accepted' => 'Você deve aceitar todos os compromissos para se tornar membro.',
+            'commitment_2.required' => 'Todos os compromissos são obrigatórios.',
+            'commitment_2.accepted' => 'Você deve aceitar todos os compromissos para se tornar membro.',
+            'commitment_3.required' => 'Todos os compromissos são obrigatórios.',
+            'commitment_3.accepted' => 'Você deve aceitar todos os compromissos para se tornar membro.',
+            'commitment_4.required' => 'Todos os compromissos são obrigatórios.',
+            'commitment_4.accepted' => 'Você deve aceitar todos os compromissos para se tornar membro.',
+            'commitment_5.required' => 'Todos os compromissos são obrigatórios.',
+            'commitment_5.accepted' => 'Você deve aceitar todos os compromissos para se tornar membro.',
         ]);
 
         $registration = MemberRegistration::create($validated);

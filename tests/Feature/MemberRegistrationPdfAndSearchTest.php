@@ -24,6 +24,11 @@ class MemberRegistrationPdfAndSearchTest extends TestCase
             'profession' => 'Developer',
             'member_city' => 'São Paulo',
             'member_parish' => 'Test Parish',
+            'commitment_1' => '1',
+            'commitment_2' => '1',
+            'commitment_3' => '1',
+            'commitment_4' => '1',
+            'commitment_5' => '1',
         ];
 
         $response = $this->post(route('member.store'), $data);
@@ -173,8 +178,55 @@ class MemberRegistrationPdfAndSearchTest extends TestCase
             'profession' => 'Designer',
             'member_city' => 'Rio de Janeiro',
             'member_parish' => 'Another Parish',
+            'commitment_1' => '1',
+            'commitment_2' => '1',
+            'commitment_3' => '1',
+            'commitment_4' => '1',
+            'commitment_5' => '1',
         ]);
 
         $response->assertSessionHasErrors('cpf');
+    }
+
+    public function test_all_commitments_are_required(): void
+    {
+        $baseData = [
+            'parish' => 'Test Parish',
+            'full_name' => 'John Doe',
+            'cpf' => '123.456.789-00',
+            'address' => 'Test Address',
+            'phone' => '(11)98765-4321',
+            'email' => 'john@example.com',
+            'birth_date' => '1990-01-01',
+            'marital_status' => 'Solteiro(a)',
+            'profession' => 'Developer',
+            'member_city' => 'São Paulo',
+            'member_parish' => 'Test Parish',
+        ];
+
+        // Test without any commitments
+        $response = $this->post(route('member.store'), $baseData);
+        $response->assertSessionHasErrors(['commitment_1', 'commitment_2', 'commitment_3', 'commitment_4', 'commitment_5']);
+
+        // Test with only some commitments
+        $response = $this->post(route('member.store'), array_merge($baseData, [
+            'commitment_1' => '1',
+            'commitment_2' => '1',
+            // Missing 3, 4, 5
+        ]));
+        $response->assertSessionHasErrors(['commitment_3', 'commitment_4', 'commitment_5']);
+
+        // Test with all commitments - should succeed
+        $response = $this->post(route('member.store'), array_merge($baseData, [
+            'commitment_1' => '1',
+            'commitment_2' => '1',
+            'commitment_3' => '1',
+            'commitment_4' => '1',
+            'commitment_5' => '1',
+        ]));
+        $response->assertRedirect();
+        $this->assertDatabaseHas('member_registrations', [
+            'cpf' => '123.456.789-00',
+        ]);
     }
 }

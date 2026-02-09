@@ -211,7 +211,7 @@
                                 @enderror
                             </div>
 
-                            <div class="md:col-span-2">
+                            <div>
                                 <label for="profession" class="block text-sm font-medium text-neutral-700 mb-2">
                                     Profissão <span class="text-primary-600">*</span>
                                 </label>
@@ -308,49 +308,70 @@
 
                     <!-- Compromissos do Membro -->
                     <div class="border-b border-neutral-200 pb-6">
-                        <h3 class="text-2xl font-bold text-primary-800 mb-4">Compromissos do Membro</h3>
-                        <p class="text-neutral-600 mb-6">Marque os compromissos que você assume como membro do Apostolado da Oração:</p>
+                        <h3 class="text-2xl font-bold text-primary-800 mb-2">Compromissos do Membro *</h3>
+                        <p class="text-sm text-red-600 font-semibold mb-2">⚠️ Todos os compromissos são obrigatórios</p>
+                        <p class="text-neutral-600 mb-6">Para se tornar membro do Apostolado da Oração, você deve aceitar e assumir todos os compromissos abaixo:</p>
                         
                         <div class="space-y-4">
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_1" id="commitment_1" value="1" {{ old('commitment_1') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_1" class="ml-3 text-neutral-700">
-                                    Oferecer diariamente a vida, as orações, as obras e os sofrimentos em união com o Coração de Jesus.
+                                    <span class="font-semibold">*</span> Oferecer diariamente a vida, as orações, as obras e os sofrimentos em união com o Coração de Jesus.
                                 </label>
                             </div>
+                            @error('commitment_1')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
 
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_2" id="commitment_2" value="1" {{ old('commitment_2') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_2" class="ml-3 text-neutral-700">
-                                    Rezar pelas intenções de oração mensais do Papa.
+                                    <span class="font-semibold">*</span> Rezar pelas intenções de oração mensais do Papa.
                                 </label>
                             </div>
+                            @error('commitment_2')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
 
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_3" id="commitment_3" value="1" {{ old('commitment_3') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_3" class="ml-3 text-neutral-700">
-                                    Participar das reuniões mensais do Apostolado da Oração.
+                                    <span class="font-semibold">*</span> Participar das reuniões mensais do Apostolado da Oração.
                                 </label>
                             </div>
+                            @error('commitment_3')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
 
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_4" id="commitment_4" value="1" {{ old('commitment_4') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_4" class="ml-3 text-neutral-700">
-                                    Dedicar-se à adoração ao Santíssimo Sacramento, especialmente nas primeiras sextas-feiras do mês, sempre que possível.
+                                    <span class="font-semibold">*</span> Dedicar-se à adoração ao Santíssimo Sacramento, especialmente nas primeiras sextas-feiras do mês, sempre que possível.
                                 </label>
                             </div>
+                            @error('commitment_4')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
 
                             <div class="flex items-start">
                                 <input type="checkbox" name="commitment_5" id="commitment_5" value="1" {{ old('commitment_5') ? 'checked' : '' }}
+                                       required
                                        class="mt-1 h-5 w-5 text-primary-600 border-neutral-300 rounded focus:ring-primary-500">
                                 <label for="commitment_5" class="ml-3 text-neutral-700">
-                                    Participar ativamente das missas do Sagrado Coração de Jesus.
+                                    <span class="font-semibold">*</span> Participar ativamente das missas do Sagrado Coração de Jesus.
                                 </label>
                             </div>
+                            @error('commitment_5')
+                                <p class="ml-8 mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
 
