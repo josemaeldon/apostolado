@@ -30,10 +30,13 @@ class FeatureCardController extends Controller
             'border_color' => 'required|string|max:50',
             'text_color' => 'required|string|max:50',
             'order' => 'required|integer',
+            'display_position' => 'nullable|string|max:255',
+            'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
+        $validated['display_order'] = $validated['display_order'] ?? 0;
 
         FeatureCard::create($validated);
 
@@ -57,10 +60,13 @@ class FeatureCardController extends Controller
             'border_color' => 'required|string|max:50',
             'text_color' => 'required|string|max:50',
             'order' => 'required|integer',
+            'display_position' => 'nullable|string|max:255',
+            'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
+        $validated['display_order'] = $validated['display_order'] ?? 0;
 
         $featureCard->update($validated);
 

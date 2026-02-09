@@ -15,6 +15,8 @@ class FeatureCard extends Model
         'border_color',
         'text_color',
         'order',
+        'display_position',
+        'display_order',
         'is_active',
     ];
 
@@ -66,6 +68,69 @@ class FeatureCard extends Model
             'gradient' => $preset['gradient'],
             'border' => 'border ' . $preset['border'],
             'text' => $preset['text'],
+        ];
+    }
+    
+    /**
+     * Get available position options for display
+     */
+    public static function getPositionOptions(): array
+    {
+        return [
+            'above_slider' => 'Acima do Slider',
+            'below_slider' => 'Abaixo do Slider',
+            'above_features' => 'Acima dos Cards de Recursos',
+            'below_features' => 'Abaixo dos Cards de Recursos',
+            'above_events' => 'Acima dos Eventos',
+            'below_events' => 'Abaixo dos Eventos',
+            'above_articles' => 'Acima dos Artigos',
+            'below_articles' => 'Abaixo dos Artigos',
+            'above_cta' => 'Acima da Chamada para Ação',
+            'below_cta' => 'Abaixo da Chamada para Ação',
+        ];
+    }
+    
+    /**
+     * Get extended color presets with more options
+     */
+    public static function getExtendedColorPresets(): array
+    {
+        return [
+            'primary' => [
+                'name' => 'Primary (Azul)',
+                'from' => 'primary-50',
+                'to' => 'white',
+                'border' => 'primary-100',
+                'text' => 'primary-800',
+            ],
+            'gold' => [
+                'name' => 'Dourado',
+                'from' => 'gold-50',
+                'to' => 'white',
+                'border' => 'gold-100',
+                'text' => 'gold-800',
+            ],
+            'neutral' => [
+                'name' => 'Neutro (Cinza)',
+                'from' => 'neutral-50',
+                'to' => 'white',
+                'border' => 'neutral-200',
+                'text' => 'neutral-900',
+            ],
+            'blue' => [
+                'name' => 'Azul Claro',
+                'from' => 'blue-50',
+                'to' => 'white',
+                'border' => 'blue-100',
+                'text' => 'blue-800',
+            ],
+            'green' => [
+                'name' => 'Verde',
+                'from' => 'green-50',
+                'to' => 'white',
+                'border' => 'green-100',
+                'text' => 'green-800',
+            ],
         ];
     }
 }

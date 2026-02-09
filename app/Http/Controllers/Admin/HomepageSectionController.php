@@ -36,12 +36,15 @@ class HomepageSectionController extends Controller
             'key' => 'required|string|max:255|unique:homepage_sections,key|regex:/^[a-z0-9_-]+$/',
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:500',
+            'display_position' => 'nullable|string|max:255',
+            'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ], [
             'key.regex' => 'A chave deve conter apenas letras minúsculas, números, underscores (_) e hífens (-).',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
+        $validated['display_order'] = $validated['display_order'] ?? 0;
 
         HomepageSection::create($validated);
 
@@ -65,10 +68,13 @@ class HomepageSectionController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:500',
+            'display_position' => 'nullable|string|max:255',
+            'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
+        $validated['display_order'] = $validated['display_order'] ?? 0;
 
         $homepageSection->update($validated);
 
