@@ -45,9 +45,7 @@ Route::get('/cadastro-membro', [MemberRegistrationController::class, 'create'])-
 Route::post('/cadastro-membro', [MemberRegistrationController::class, 'store'])->name('member.store');
 
 Route::get('/dashboard', function () {
-    $homepageSections = \App\Models\HomepageSection::all();
-    $featureCards = \App\Models\FeatureCard::orderBy('order')->get();
-    return view('dashboard', compact('homepageSections', 'featureCards'));
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -68,7 +66,7 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
     Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
     Route::get('member-registrations-export-pdf', [AdminMemberRegistrationController::class, 'exportPdf'])->name('member-registrations.export-pdf');
     Route::resource('feature-cards', FeatureCardController::class);
-    Route::resource('homepage-sections', App\Http\Controllers\Admin\HomepageSectionController::class)->only(['index', 'edit', 'update']);
+    Route::resource('homepage-sections', App\Http\Controllers\Admin\HomepageSectionController::class);
     
     // Storage Settings
     Route::get('storage-settings', [App\Http\Controllers\Admin\StorageSettingsController::class, 'index'])->name('storage-settings.index');
