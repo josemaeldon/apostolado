@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\MemberRegistration;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Storage;
 
 class MemberRegistrationController extends Controller
 {
@@ -62,6 +63,22 @@ class MemberRegistrationController extends Controller
 
     public function update(Request $request, MemberRegistration $memberRegistration)
     {
+        // Check if this is a status-only update (from show page)
+        $isStatusOnlyUpdate = $request->has('status') && count($request->all()) <= 2; // status + _token + _method
+        
+        if ($isStatusOnlyUpdate) {
+            // Validate only the status field
+            $validated = $request->validate([
+                'status' => 'required|in:pending,approved,rejected',
+            ]);
+            
+            $memberRegistration->update($validated);
+            
+            return redirect()->route('admin.member-registrations.show', $memberRegistration)
+                ->with('success', 'Status atualizado com sucesso!');
+        }
+        
+        // Full validation for complete update (from edit page)
         $validated = $request->validate([
             'status' => 'required|in:pending,approved,rejected',
             'full_name' => 'required|string|max:255',
@@ -78,11 +95,24 @@ class MemberRegistrationController extends Controller
             'baptism_date' => 'nullable|date',
             'how_met' => 'nullable|string',
             'why_join' => 'nullable|string',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'cpf.regex' => 'O CPF deve estar no formato 000.000.000-00',
             'cpf.size' => 'O CPF deve estar no formato 000.000.000-00',
             'cpf.unique' => 'Este CPF já está cadastrado em nosso sistema.',
+            'profile_image.image' => 'O arquivo deve ser uma imagem.',
+            'profile_image.mimes' => 'A imagem deve ser do tipo: jpeg, png, jpg ou gif.',
+            'profile_image.max' => 'A imagem não pode ser maior que 2MB.',
         ]);
+
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            // Delete old image if exists
+            if ($memberRegistration->profile_image) {
+                Storage::disk('public')->delete($memberRegistration->profile_image);
+            }
+            $validated['profile_image'] = $request->file('profile_image')->store('member-profiles', 'public');
+        }
 
         $memberRegistration->update($validated);
 

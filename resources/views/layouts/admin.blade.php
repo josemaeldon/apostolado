@@ -189,6 +189,14 @@
                             <span x-show="sidebarOpen" class="font-medium">Armazenamento</span>
                         </a>
                         
+                        <a href="{{ route('admin.api-settings.index') }}" 
+                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.api-settings.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                           aria-label="API REST"
+                           :title="!sidebarOpen ? 'API REST' : ''">
+                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🔌</span>
+                            <span x-show="sidebarOpen" class="font-medium">API REST</span>
+                        </a>
+                        
                         <!-- Logout -->
                         <div class="pt-2">
                             <div class="border-t border-gray-200 mb-2"></div>

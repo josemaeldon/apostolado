@@ -10,7 +10,7 @@
 
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <form action="{{ route('admin.member-registrations.update', $memberRegistration) }}" method="POST">
+                    <form action="{{ route('admin.member-registrations.update', $memberRegistration) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -136,6 +136,26 @@
                                 <textarea name="how_met" id="how_met" rows="3"
                                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">{{ old('how_met', $memberRegistration->how_met) }}</textarea>
                                 @error('how_met')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                            </div>
+
+                            <!-- Profile Image -->
+                            <div>
+                                <label for="profile_image" class="block text-sm font-medium text-gray-700">Foto de Perfil</label>
+                                @if($memberRegistration->profile_image)
+                                    <div class="mt-2 mb-3">
+                                        <img src="{{ Storage::url($memberRegistration->profile_image) }}" alt="Foto atual" class="h-32 w-32 object-cover rounded-lg border border-gray-300">
+                                        <p class="text-xs text-gray-500 mt-1">Foto atual</p>
+                                    </div>
+                                @endif
+                                <input type="file" name="profile_image" id="profile_image" accept="image/*"
+                                       class="mt-1 block w-full text-sm text-gray-500
+                                              file:mr-4 file:py-2 file:px-4
+                                              file:rounded-md file:border-0
+                                              file:text-sm file:font-semibold
+                                              file:bg-blue-50 file:text-blue-700
+                                              hover:file:bg-blue-100">
+                                <p class="mt-1 text-xs text-gray-500">PNG, JPG, GIF até 2MB</p>
+                                @error('profile_image')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                             </div>
 
                             <!-- Why Join -->

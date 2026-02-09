@@ -80,6 +80,16 @@
                     </div>
                 </div>
             </a>
+
+            <a href="{{ route('admin.api-settings.index') }}" class="bg-white rounded-xl shadow p-6 hover:shadow-lg transition-shadow duration-300 block">
+                <div class="flex items-start">
+                    <div class="text-4xl mr-4">🔌</div>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">API REST</h3>
+                        <p class="text-gray-600">Documentação e configurações da API de cadastros</p>
+                    </div>
+                </div>
+            </a>
         </div>
 
         <!-- Help Section -->
