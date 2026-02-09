@@ -29,6 +29,33 @@
                         </div>
 
                         <div class="mb-6">
+                            <label for="display_position" class="block text-sm font-medium text-gray-700 mb-2">Posição de Exibição</label>
+                            <select name="display_position" id="display_position" 
+                                    class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                <option value="">Não exibir na página inicial</option>
+                                @foreach(\App\Models\HomepageSection::getPositionOptions() as $key => $label)
+                                    <option value="{{ $key }}" {{ old('display_position', $homepageSection->display_position) == $key ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                            @error('display_position')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-1 text-sm text-gray-500">Escolha onde esta seção será exibida na página inicial</p>
+                        </div>
+
+                        <div class="mb-6">
+                            <label for="display_order" class="block text-sm font-medium text-gray-700 mb-2">Ordem de Exibição</label>
+                            <input type="number" name="display_order" id="display_order" 
+                                   value="{{ old('display_order', $homepageSection->display_order) }}" 
+                                   min="0"
+                                   class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                            @error('display_order')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-1 text-sm text-gray-500">Ordem de exibição na posição selecionada (menor número aparece primeiro)</p>
+                        </div>
+
+                        <div class="mb-6">
                             <label class="flex items-center">
                                 <input type="checkbox" name="is_active" value="1" 
                                        {{ old('is_active', $homepageSection->is_active) ? 'checked' : '' }}

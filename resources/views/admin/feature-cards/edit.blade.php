@@ -34,6 +34,27 @@
                                 <p class="mt-1 text-sm text-gray-500">Use um emoji para representar este card (ex: 🙏, 🌍, ❤️)</p>
                             </div>
 
+                            <!-- Color Preset Template Selector -->
+                            <div class="border-t border-gray-200 pt-6">
+                                <label class="block text-sm font-medium text-gray-700 mb-3">Paleta de Cores</label>
+                                <div class="mb-4">
+                                    <label for="color_preset" class="block text-sm font-medium text-gray-600 mb-2">Escolha um modelo pronto:</label>
+                                    <select id="color_preset" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="">-- Selecione um modelo --</option>
+                                        @foreach(\App\Models\FeatureCard::getExtendedColorPresets() as $key => $preset)
+                                            <option value="{{ $key }}" 
+                                                    data-from="{{ $preset['from'] }}" 
+                                                    data-to="{{ $preset['to'] }}" 
+                                                    data-border="{{ $preset['border'] }}" 
+                                                    data-text="{{ $preset['text'] }}">
+                                                {{ $preset['name'] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <p class="mt-1 text-sm text-gray-500">Ou personalize as cores manualmente abaixo</p>
+                                </div>
+                            </div>
+
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="color_from" class="block text-sm font-medium text-gray-700">Cor Inicial do Gradiente *</label>
@@ -92,6 +113,27 @@
                                 <p class="mt-1 text-sm text-gray-500">Ordem de exibição (menor número aparece primeiro)</p>
                             </div>
 
+                            <div>
+                                <label for="display_position" class="block text-sm font-medium text-gray-700">Posição de Exibição</label>
+                                <select name="display_position" id="display_position" 
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    <option value="">Exibir na posição padrão (seção de recursos)</option>
+                                    @foreach(\App\Models\FeatureCard::getPositionOptions() as $key => $label)
+                                        <option value="{{ $key }}" {{ old('display_position', $featureCard->display_position) == $key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                                @error('display_position')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                <p class="mt-1 text-sm text-gray-500">Escolha onde este card será exibido na página inicial</p>
+                            </div>
+
+                            <div>
+                                <label for="display_order" class="block text-sm font-medium text-gray-700">Ordem na Posição</label>
+                                <input type="number" name="display_order" id="display_order" value="{{ old('display_order', $featureCard->display_order) }}" min="0"
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                @error('display_order')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                <p class="mt-1 text-sm text-gray-500">Ordem de exibição na posição selecionada</p>
+                            </div>
+
                             <div class="flex items-center">
                                 <input type="checkbox" name="is_active" id="is_active" value="1" {{ old('is_active', $featureCard->is_active) ? 'checked' : '' }}
                                        class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
@@ -112,4 +154,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Color preset selector functionality
+        document.getElementById('color_preset').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                document.getElementById('color_from').value = selectedOption.dataset.from;
+                document.getElementById('color_to').value = selectedOption.dataset.to;
+                document.getElementById('border_color').value = selectedOption.dataset.border;
+                document.getElementById('text_color').value = selectedOption.dataset.text;
+            }
+        });
+    </script>
 </x-admin-layout>

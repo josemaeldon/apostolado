@@ -94,6 +94,11 @@
         </div>
     </nav>
 
+    <!-- Dynamic Content: Above Slider -->
+    @if(isset($positions['above_slider']) && count($positions['above_slider']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['above_slider']])
+    @endif
+
     <!-- Hero Slider Section -->
     @if($sliders->count() > 0)
     <div class="relative overflow-hidden bg-neutral-900 h-[400px] sm:h-[500px] lg:h-[600px]">
@@ -143,6 +148,16 @@
         </button>
         @endif
     </div>
+    @endif
+
+    <!-- Dynamic Content: Below Slider -->
+    @if(isset($positions['below_slider']) && count($positions['below_slider']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['below_slider']])
+    @endif
+
+    <!-- Dynamic Content: Above Features -->
+    @if(isset($positions['above_features']) && count($positions['above_features']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['above_features']])
     @endif
 
     <!-- Features Section -->
@@ -197,6 +212,16 @@
             </div>
         </div>
     </div>
+
+    <!-- Dynamic Content: Below Features -->
+    @if(isset($positions['below_features']) && count($positions['below_features']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['below_features']])
+    @endif
+
+    <!-- Dynamic Content: Above Events -->
+    @if(isset($positions['above_events']) && count($positions['above_events']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['above_events']])
+    @endif
 
     <!-- Upcoming Events Section -->
     @if($events->count() > 0)
@@ -265,6 +290,16 @@
             </div>
         </div>
     </div>
+    @endif
+
+    <!-- Dynamic Content: Below Events -->
+    @if(isset($positions['below_events']) && count($positions['below_events']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['below_events']])
+    @endif
+
+    <!-- Dynamic Content: Above Articles -->
+    @if(isset($positions['above_articles']) && count($positions['above_articles']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['above_articles']])
     @endif
 
     <!-- News/Articles Section -->
@@ -343,6 +378,16 @@
     </div>
     @endif
 
+    <!-- Dynamic Content: Below Articles -->
+    @if(isset($positions['below_articles']) && count($positions['below_articles']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['below_articles']])
+    @endif
+
+    <!-- Dynamic Content: Above CTA -->
+    @if(isset($positions['above_cta']) && count($positions['above_cta']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['above_cta']])
+    @endif
+
     <!-- Call to Action -->
     <div class="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -368,6 +413,11 @@
             </div>
         </div>
     </div>
+
+    <!-- Dynamic Content: Below CTA -->
+    @if(isset($positions['below_cta']) && count($positions['below_cta']) > 0)
+        @include('partials.dynamic-content', ['items' => $positions['below_cta']])
+    @endif
 
     <!-- Footer -->
     <footer class="bg-neutral-900 text-white py-12">
