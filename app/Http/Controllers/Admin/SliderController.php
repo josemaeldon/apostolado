@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Slider;
+use App\Models\Page;
+use App\Models\Article;
+use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,7 +20,10 @@ class SliderController extends Controller
 
     public function create()
     {
-        return view('admin.sliders.create');
+        $pages = Page::where('is_published', true)->orderBy('title')->get();
+        $articles = Article::where('is_published', true)->orderBy('title')->get();
+        $events = Event::where('is_published', true)->orderBy('title')->get();
+        return view('admin.sliders.create', compact('pages', 'articles', 'events'));
     }
 
     public function store(Request $request)
@@ -28,6 +34,8 @@ class SliderController extends Controller
             'image' => 'required|image|max:2048',
             'button_text' => 'nullable|string|max:255',
             'button_link' => 'nullable|string|max:255',
+            'link_type' => 'nullable|in:page,article,event,custom',
+            'link_id' => 'nullable|integer',
             'order' => 'required|integer',
             'is_active' => 'boolean',
         ]);
@@ -35,6 +43,20 @@ class SliderController extends Controller
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('sliders');
         }
+
+        // Handle linkable relationship
+        if ($request->link_type && $request->link_type !== 'custom' && $request->link_id) {
+            $validated['linkable_type'] = match($request->link_type) {
+                'page' => \App\Models\Page::class,
+                'article' => \App\Models\Article::class,
+                'event' => \App\Models\Event::class,
+                default => null,
+            };
+            $validated['linkable_id'] = $request->link_id;
+        }
+
+        // Remove helper fields
+        unset($validated['link_type'], $validated['link_id']);
 
         Slider::create($validated);
 
@@ -44,7 +66,10 @@ class SliderController extends Controller
 
     public function edit(Slider $slider)
     {
-        return view('admin.sliders.edit', compact('slider'));
+        $pages = Page::where('is_published', true)->orderBy('title')->get();
+        $articles = Article::where('is_published', true)->orderBy('title')->get();
+        $events = Event::where('is_published', true)->orderBy('title')->get();
+        return view('admin.sliders.edit', compact('slider', 'pages', 'articles', 'events'));
     }
 
     public function update(Request $request, Slider $slider)
@@ -55,6 +80,8 @@ class SliderController extends Controller
             'image' => 'nullable|image|max:2048',
             'button_text' => 'nullable|string|max:255',
             'button_link' => 'nullable|string|max:255',
+            'link_type' => 'nullable|in:page,article,event,custom',
+            'link_id' => 'nullable|integer',
             'order' => 'required|integer',
             'is_active' => 'boolean',
         ]);
@@ -65,6 +92,24 @@ class SliderController extends Controller
             }
             $validated['image'] = $request->file('image')->store('sliders');
         }
+
+        // Handle linkable relationship
+        if ($request->link_type && $request->link_type !== 'custom' && $request->link_id) {
+            $validated['linkable_type'] = match($request->link_type) {
+                'page' => \App\Models\Page::class,
+                'article' => \App\Models\Article::class,
+                'event' => \App\Models\Event::class,
+                default => null,
+            };
+            $validated['linkable_id'] = $request->link_id;
+        } else {
+            // Clear linkable if custom link is selected
+            $validated['linkable_type'] = null;
+            $validated['linkable_id'] = null;
+        }
+
+        // Remove helper fields
+        unset($validated['link_type'], $validated['link_id']);
 
         $slider->update($validated);
 
