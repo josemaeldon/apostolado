@@ -34,10 +34,19 @@ class HomeController extends Controller
             ->take(3)
             ->get();
         
-        // Get feature cards for default position
+        // Get feature cards for default position (not associated with any section)
         $featureCards = FeatureCard::where('is_active', true)
             ->whereNull('display_position')
+            ->whereNull('homepage_section_id')
             ->orderBy('order')
+            ->get();
+        
+        // Get all homepage sections with their associated cards
+        $homepageSections = HomepageSection::where('is_active', true)
+            ->with(['featureCards' => function($query) {
+                $query->where('is_active', true)->orderBy('order');
+            }])
+            ->orderBy('display_order')
             ->get();
         
         $aboutSection = HomepageSection::getByKey('about_section');
@@ -59,6 +68,9 @@ class HomeController extends Controller
         // Get custom positioned sections
         $customSections = HomepageSection::where('is_active', true)
             ->whereNotNull('display_position')
+            ->with(['featureCards' => function($query) {
+                $query->where('is_active', true)->orderBy('order');
+            }])
             ->orderBy('display_order')
             ->get();
         
@@ -86,6 +98,6 @@ class HomeController extends Controller
             }
         }
         
-        return view('welcome', compact('sliders', 'articles', 'categories', 'events', 'featureCards', 'aboutSection', 'positions'));
+        return view('welcome', compact('sliders', 'articles', 'categories', 'events', 'featureCards', 'aboutSection', 'homepageSections', 'positions'));
     }
 }

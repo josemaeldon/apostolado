@@ -18,6 +18,14 @@ class HomepageSection extends Model
     protected $casts = [
         'is_active' => 'boolean',
     ];
+
+    /**
+     * Get the feature cards for the homepage section.
+     */
+    public function featureCards()
+    {
+        return $this->hasMany(FeatureCard::class)->orderBy('order');
+    }
     
     /**
      * Get a section by its key
