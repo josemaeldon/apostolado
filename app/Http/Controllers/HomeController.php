@@ -34,12 +34,58 @@ class HomeController extends Controller
             ->take(3)
             ->get();
         
+        // Get feature cards for default position
         $featureCards = FeatureCard::where('is_active', true)
+            ->whereNull('display_position')
             ->orderBy('order')
             ->get();
         
         $aboutSection = HomepageSection::getByKey('about_section');
         
-        return view('welcome', compact('sliders', 'articles', 'categories', 'events', 'featureCards', 'aboutSection'));
+        // Group sections and cards by position
+        $positions = [
+            'above_slider' => [],
+            'below_slider' => [],
+            'above_features' => [],
+            'below_features' => [],
+            'above_events' => [],
+            'below_events' => [],
+            'above_articles' => [],
+            'below_articles' => [],
+            'above_cta' => [],
+            'below_cta' => [],
+        ];
+        
+        // Get custom positioned sections
+        $customSections = HomepageSection::where('is_active', true)
+            ->whereNotNull('display_position')
+            ->orderBy('display_order')
+            ->get();
+        
+        foreach ($customSections as $section) {
+            if (isset($positions[$section->display_position])) {
+                $positions[$section->display_position][] = [
+                    'type' => 'section',
+                    'data' => $section,
+                ];
+            }
+        }
+        
+        // Get custom positioned feature cards
+        $customCards = FeatureCard::where('is_active', true)
+            ->whereNotNull('display_position')
+            ->orderBy('display_order')
+            ->get();
+        
+        foreach ($customCards as $card) {
+            if (isset($positions[$card->display_position])) {
+                $positions[$card->display_position][] = [
+                    'type' => 'card',
+                    'data' => $card,
+                ];
+            }
+        }
+        
+        return view('welcome', compact('sliders', 'articles', 'categories', 'events', 'featureCards', 'aboutSection', 'positions'));
     }
 }
