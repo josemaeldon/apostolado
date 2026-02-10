@@ -41,8 +41,10 @@ Route::get('/galeria', [App\Http\Controllers\PublicController::class, 'mediaGall
 Route::get('/pagina/{page:slug}', [App\Http\Controllers\PublicController::class, 'showPage'])->name('public.page.show');
 
 // Member Registration
-Route::get('/cadastro-membro', [MemberRegistrationController::class, 'create'])->name('member.register');
-Route::post('/cadastro-membro', [MemberRegistrationController::class, 'store'])->name('member.store');
+Route::get('/cadastro-membro', [MemberRegistrationController::class, 'showTokenForm'])->name('member.token-form');
+Route::post('/cadastro-membro/validar-token', [MemberRegistrationController::class, 'validateToken'])->name('member.validate-token');
+Route::get('/cadastro-membro/formulario', [MemberRegistrationController::class, 'create'])->name('member.register');
+Route::post('/cadastro-membro/formulario', [MemberRegistrationController::class, 'store'])->name('member.store');
 Route::get('/cadastro-membro/sucesso/{id}', [MemberRegistrationController::class, 'success'])->name('member.success');
 Route::get('/cadastro-membro/download-pdf/{id}', [MemberRegistrationController::class, 'downloadPdf'])->name('member.download-pdf');
 Route::post('/cadastro-membro/check-cpf', [MemberRegistrationController::class, 'checkCpf'])->name('member.check-cpf');
@@ -57,17 +59,45 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin Routes
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
-    Route::resource('pages', PageController::class);
-    Route::resource('articles', ArticleController::class);
-    Route::resource('prayer-intentions', PrayerIntentionController::class);
-    Route::resource('events', EventController::class);
-    Route::resource('media-gallery', MediaGalleryController::class);
+// Admin Routes - Editor and Admin can access these
+Route::middleware(['auth', 'verified', 'editor'])->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('editor:pages')->group(function () {
+        Route::resource('pages', PageController::class);
+    });
+    
+    Route::middleware('editor:articles')->group(function () {
+        Route::resource('articles', ArticleController::class);
+    });
+    
+    Route::middleware('editor:prayer-intentions')->group(function () {
+        Route::resource('prayer-intentions', PrayerIntentionController::class);
+    });
+    
+    Route::middleware('editor:events')->group(function () {
+        Route::resource('events', EventController::class);
+    });
+    
+    Route::middleware('editor:media-gallery')->group(function () {
+        Route::resource('media-gallery', MediaGalleryController::class);
+    });
+    
+    Route::middleware('editor:categories')->group(function () {
+        Route::resource('categories', CategoryController::class);
+    });
+    
+    Route::middleware('editor:member-registrations')->group(function () {
+        Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+        Route::get('member-registrations-export-pdf', [AdminMemberRegistrationController::class, 'exportPdf'])->name('member-registrations.export-pdf');
+    });
+    
+    Route::middleware('editor:registration-tokens')->group(function () {
+        Route::resource('registration-tokens', App\Http\Controllers\Admin\RegistrationTokenController::class);
+    });
+});
+
+// Admin-only routes
+Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('sliders', SliderController::class);
-    Route::resource('categories', CategoryController::class);
-    Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
-    Route::get('member-registrations-export-pdf', [AdminMemberRegistrationController::class, 'exportPdf'])->name('member-registrations.export-pdf');
     Route::resource('feature-cards', FeatureCardController::class);
     Route::resource('homepage-sections', App\Http\Controllers\Admin\HomepageSectionController::class);
     

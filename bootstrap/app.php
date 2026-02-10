@@ -15,6 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\CheckInstallation::class,
         ]);
         
+        // Register middleware aliases
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\CheckAdminRole::class,
+            'editor' => \App\Http\Middleware\CheckEditorRole::class,
+        ]);
+        
         // Trust proxies for handling X-Forwarded-* headers
         // Configure specific proxy IPs via TRUSTED_PROXIES env variable
         $proxies = env('TRUSTED_PROXIES', '*');

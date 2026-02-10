@@ -378,18 +378,6 @@
     </footer>
 
     <script>
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const menuIconOpen = document.getElementById('menu-icon-open');
-        const menuIconClose = document.getElementById('menu-icon-close');
-
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
-            menuIconOpen.classList.toggle('hidden');
-            menuIconClose.classList.toggle('hidden');
-        });
-
         // Hero Slider
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slider-item');
@@ -397,6 +385,8 @@
         const totalSlides = slides.length;
         let sliderInterval;
         let isSliderPaused = false;
+        let touchStartX = 0;
+        let touchEndX = 0;
 
         function showSlide(n) {
             slides.forEach((slide, index) => {
@@ -458,6 +448,28 @@
                     isSliderPaused = false;
                     startSlider();
                 });
+
+                // Touch/swipe support for mobile
+                sliderContainer.addEventListener('touchstart', function(e) {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, false);
+
+                sliderContainer.addEventListener('touchend', function(e) {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                }, false);
+            }
+        }
+
+        function handleSwipe() {
+            const swipeThreshold = 50; // Minimum distance for swipe
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Swipe left - next slide
+                nextSlide();
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Swipe right - previous slide
+                prevSlide();
             }
         }
 
@@ -467,6 +479,8 @@
         const newsSlides = document.querySelectorAll('.news-slide');
         const totalNewsSlides = newsSlides.length;
         let slidesToShow = window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+        let newsTouchStartX = 0;
+        let newsTouchEndX = 0;
 
         function updateNewsSlider() {
             const slideWidth = 100 / slidesToShow;
@@ -493,6 +507,31 @@
             currentNewsSlide = Math.min(currentNewsSlide, Math.max(0, totalNewsSlides - slidesToShow));
             updateNewsSlider();
         });
+
+        // Touch/swipe support for news slider
+        const newsSliderContainer = document.querySelector('.news-slider-container');
+        if (newsSliderContainer && totalNewsSlides > 1) {
+            newsSliderContainer.addEventListener('touchstart', function(e) {
+                newsTouchStartX = e.changedTouches[0].screenX;
+            }, false);
+
+            newsSliderContainer.addEventListener('touchend', function(e) {
+                newsTouchEndX = e.changedTouches[0].screenX;
+                handleNewsSwipe();
+            }, false);
+        }
+
+        function handleNewsSwipe() {
+            const swipeThreshold = 50; // Minimum distance for swipe
+            if (newsTouchEndX < newsTouchStartX - swipeThreshold) {
+                // Swipe left - next
+                nextNews();
+            }
+            if (newsTouchEndX > newsTouchStartX + swipeThreshold) {
+                // Swipe right - previous
+                prevNews();
+            }
+        }
     </script>
 </body>
 </html>
