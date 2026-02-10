@@ -63,7 +63,7 @@ class RegistrationTokenController extends Controller
             'description' => 'nullable|string|max:255',
             'is_active' => 'boolean',
             'max_uses' => 'nullable|integer|min:1',
-            'expires_at' => 'nullable|date',
+            'expires_at' => 'nullable|date|after_or_equal:now',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
