@@ -55,7 +55,7 @@
                         </button>
                     </div>
                     
-                    <div class="p-4 space-y-2" x-data="{ homepageOpen: {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'true' : 'false' }} }">
+                    <div class="p-4 space-y-2" x-data="{ homepageOpen: {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'true' : 'false' }}, cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }} }">
                         <!-- Sidebar Items -->
                         <a href="{{ route('dashboard') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -148,13 +148,32 @@
                             <span x-show="sidebarOpen" class="font-medium">Categorias</span>
                         </a>
                         
-                        <a href="{{ route('admin.member-registrations.index') }}" 
-                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') ? 'bg-blue-50 text-blue-700' : '' }}"
-                           aria-label="Cadastros de Membros"
-                           :title="!sidebarOpen ? 'Cadastros' : ''">
-                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">👥</span>
-                            <span x-show="sidebarOpen" class="font-medium">Cadastros</span>
-                        </a>
+                        <!-- Cadastros with submenu -->
+                        <div>
+                            <button @click="cadastrosOpen = !cadastrosOpen" 
+                               class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                               :aria-label="!sidebarOpen ? 'Cadastros' : ''"
+                               :title="!sidebarOpen ? 'Cadastros' : ''">
+                                <div class="flex items-center">
+                                    <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">👥</span>
+                                    <span x-show="sidebarOpen" class="font-medium">Cadastros</span>
+                                </div>
+                                <svg x-show="sidebarOpen" :class="cadastrosOpen ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <!-- Submenu -->
+                            <div x-show="cadastrosOpen && sidebarOpen" x-collapse class="ml-8 mt-1 space-y-1">
+                                <a href="{{ route('admin.member-registrations.index') }}" 
+                                   class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Membros
+                                </a>
+                                <a href="{{ route('admin.registration-tokens.index') }}" 
+                                   class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.registration-tokens.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Tokens de Cadastro
+                                </a>
+                            </div>
+                        </div>
                         
                         <!-- Settings Section Divider -->
                         <div x-show="sidebarOpen" class="pt-4 pb-2">

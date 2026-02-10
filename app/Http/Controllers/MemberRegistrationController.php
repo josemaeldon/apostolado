@@ -9,18 +9,75 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class MemberRegistrationController extends Controller
 {
-    public function create()
+    public function showTokenForm()
     {
+        return view('member-token-form');
+    }
+
+    public function validateToken(Request $request)
+    {
+        $request->validate([
+            'token' => 'required|string|size:5|regex:/^[A-Z]{3}\d{2}$/',
+        ], [
+            'token.required' => 'Por favor, insira o token.',
+            'token.size' => 'O token deve ter 5 caracteres (3 letras e 2 números).',
+            'token.regex' => 'O token deve conter 3 letras maiúsculas seguidas de 2 números (ex: ABC12).',
+        ]);
+
+        $token = strtoupper($request->token);
+        $registrationToken = \App\Models\RegistrationToken::where('token', $token)->first();
+
+        if (!$registrationToken || !$registrationToken->isValid()) {
+            return back()->withErrors(['token' => 'Token inválido, expirado ou sem usos disponíveis.']);
+        }
+
+        return redirect()->route('member.register', ['token' => $token]);
+    }
+
+    public function create(Request $request)
+    {
+        // Check for token in query string or session
+        $token = $request->query('token') ?? session('registration_token');
+        
+        if (!$token) {
+            return redirect()->route('member.token-form')
+                ->with('error', 'É necessário um token válido para acessar o cadastro de membros.');
+        }
+
+        // Validate token
+        $registrationToken = \App\Models\RegistrationToken::where('token', strtoupper($token))->first();
+        
+        if (!$registrationToken || !$registrationToken->isValid()) {
+            return redirect()->route('member.token-form')
+                ->with('error', 'Token inválido ou expirado.');
+        }
+
+        // Store token in session for form submission
+        session(['registration_token' => $registrationToken->token]);
+        
         $categories = Category::where('is_active', true)
             ->where('show_in_menu', true)
             ->orderBy('order')
             ->get();
             
-        return view('member-registration', compact('categories'));
+        return view('member-registration', compact('categories', 'registrationToken'));
     }
 
     public function store(Request $request)
     {
+        // Validate token from session
+        $token = session('registration_token');
+        if (!$token) {
+            return redirect()->route('member.token-form')
+                ->with('error', 'Token de sessão ausente. Por favor, tente novamente.');
+        }
+
+        $registrationToken = \App\Models\RegistrationToken::where('token', $token)->first();
+        if (!$registrationToken || !$registrationToken->isValid()) {
+            return redirect()->route('member.token-form')
+                ->with('error', 'Token inválido ou expirado.');
+        }
+
         $validated = $request->validate([
             'parish' => 'required|string|max:255',
             'full_name' => 'required|string|max:255',
@@ -69,6 +126,12 @@ class MemberRegistrationController extends Controller
         }
 
         $registration = MemberRegistration::create($validated);
+
+        // Increment token usage count
+        $registrationToken->incrementUsedCount();
+
+        // Clear token from session
+        session()->forget('registration_token');
 
         return redirect()->route('member.success', ['id' => $registration->id])
             ->with('success', 'Cadastro realizado com sucesso! Você pode baixar o comprovante em PDF.');
