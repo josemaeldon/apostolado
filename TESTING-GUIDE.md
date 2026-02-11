@@ -129,14 +129,15 @@ Test token: `ABC12`
    - Eventos
    - Galeria
    - Categorias
-   - Cadastros (Membros, Tokens de Cadastro)
+   - Cadastros (Membros only)
 4. **Expected**: Cannot see:
    - Página Inicial (Seções, Cartões de Recurso) - admin only
    - Sliders - admin only
+   - Tokens de Cadastro - admin only
    - Configurações section - admin only
 5. Try accessing an editor-allowed resource (e.g., `/admin/pages`)
 6. **Expected**: Access granted
-7. Try accessing an admin-only resource (e.g., `/admin/sliders`)
+7. Try accessing an admin-only resource (e.g., `/admin/sliders` or `/admin/registration-tokens`)
 8. **Expected**: 403 Forbidden error
 
 #### C. Regular User Access:
@@ -154,8 +155,9 @@ Test token: `ABC12`
   - Media Gallery (Galeria)
   - Categories (Categorias)
   - Member Registrations (Cadastros de Membros)
-  - Registration Tokens (Tokens de Cadastro)
 - **User**: No admin panel access (regular website visitor)
+
+**Note**: Registration Tokens (Tokens de Cadastro) are **admin-only** and not accessible to editors.
 
 ### Technical Implementation:
 - Middleware: `admin` and `editor` middleware aliases
