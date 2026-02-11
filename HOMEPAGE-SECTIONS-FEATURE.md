@@ -122,20 +122,34 @@ Quando você cria, edita ou exclui um card através da página de edição da se
 - ✅ Uma mensagem de sucesso é exibida
 - ✅ Você pode continuar gerenciando outros cards sem sair da página
 
-## Arquivos Modificados
+## Detalhes Técnicos da Implementação
 
-- `app/Http/Controllers/Admin/HomepageSectionController.php`
-  - Adicionado carregamento de feature cards no método `edit()`
+### Arquivos Modificados
+
+- **`app/Http/Controllers/Admin/HomepageSectionController.php`**
+  - Adicionado carregamento eager de feature cards no método `edit()`
+  - Incluídas rotas de atualização para cada card para uso no JavaScript
   
-- `app/Http/Controllers/Admin/FeatureCardController.php`
+- **`app/Http/Controllers/Admin/FeatureCardController.php`**
   - Modificado `store()` para redirecionar para a página de edição da seção quando o card é associado
   - Modificado `update()` para redirecionar para a página de edição da seção quando o card é associado
   - Modificado `destroy()` para redirecionar para a página de edição da seção quando o card era associado
+  - Utiliza `!empty()` de forma consistente para verificar a existência de homepage_section_id
 
-- `resources/views/admin/homepage-sections/edit.blade.php`
+- **`resources/views/admin/homepage-sections/edit.blade.php`**
   - Adicionada seção de gerenciamento de feature cards
-  - Adicionado modal para adicionar/editar cards
-  - Adicionada funcionalidade JavaScript para gerenciar o modal
+  - Adicionado modal responsivo para adicionar/editar cards
+  - JavaScript encapsulado em IIFE para prevenir conflitos e múltiplos event listeners
+  - Adicionado tratamento de erros com feedback ao usuário
+  - Rotas de atualização geradas server-side para garantir URLs corretas
+
+### Melhorias de Qualidade de Código
+
+1. **Consistência**: Uso de `!empty()` em todas as verificações de homepage_section_id
+2. **Encapsulamento**: JavaScript em IIFE para evitar poluição do escopo global
+3. **Tratamento de Erros**: Mensagens de erro amigáveis quando um card não é encontrado
+4. **URLs Seguros**: Rotas geradas server-side ao invés de construção manual de URLs
+5. **UX Melhorada**: Redirecionamento inteligente mantém o usuário no contexto correto
 
 ## Testes
 
@@ -146,3 +160,20 @@ Os testes já existentes em `tests/Feature/HomepageSectionFeatureCardTest.php` c
 - Criação de cards independentes (sem seção)
 - Upload de imagens em destaque
 - Exclusão em cascata (quando uma seção é excluída, seus cards também são)
+
+## Compatibilidade e Requisitos
+
+- Laravel 11
+- PHP 8.2+
+- PostgreSQL/SQLite (via migrações existentes)
+- Blade Templates
+- Tailwind CSS
+- JavaScript Vanilla (sem dependências externas)
+
+## Segurança
+
+- Validação server-side de todos os inputs
+- Proteção CSRF em todos os formulários
+- Middleware de autenticação e autorização (admin)
+- Relações de banco de dados com cascade delete configurado
+- Verificado pelo CodeQL sem vulnerabilidades identificadas
