@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         // Migrate existing is_admin values to role column
-        DB::statement("UPDATE users SET role = 'admin' WHERE is_admin = 1");
+        DB::statement("UPDATE users SET role = 'admin' WHERE is_admin = true");
         
         // Drop is_admin column
         Schema::table('users', function (Blueprint $table) {
@@ -32,6 +32,6 @@ return new class extends Migration
         });
         
         // Migrate role back to is_admin
-        DB::statement("UPDATE users SET is_admin = 1 WHERE role = 'admin'");
+        DB::statement("UPDATE users SET is_admin = true WHERE role = 'admin'");
     }
 };
