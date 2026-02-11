@@ -64,7 +64,8 @@ class MemberRegistrationController extends Controller
     public function update(Request $request, MemberRegistration $memberRegistration)
     {
         // Check if this is a status-only update (from show page)
-        $isStatusOnlyUpdate = $request->has('status') && count($request->all()) <= 2; // status + _token + _method
+        // It will have: _token, _method, and status
+        $isStatusOnlyUpdate = $request->has('status') && !$request->has('full_name');
         
         if ($isStatusOnlyUpdate) {
             // Validate only the status field
