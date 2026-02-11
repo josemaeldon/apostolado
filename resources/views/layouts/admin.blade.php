@@ -172,10 +172,12 @@
                                    class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
                                     Membros
                                 </a>
+                                @if(auth()->user()->isAdmin())
                                 <a href="{{ route('admin.registration-tokens.index') }}" 
                                    class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.registration-tokens.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
                                     Tokens de Cadastro
                                 </a>
+                                @endif
                             </div>
                         </div>
                         
