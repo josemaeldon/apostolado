@@ -278,69 +278,75 @@
     </div>
 
     <script>
-        const cardsData = @json($homepageSection->featureCards);
-        
-        function openAddCardModal() {
-            document.getElementById('modalTitle').textContent = 'Adicionar Card';
-            document.getElementById('cardForm').action = '{{ route('admin.feature-cards.store') }}';
-            document.getElementById('cardMethod').value = 'POST';
+        (function() {
+            const cardsData = @json($homepageSection->featureCards);
             
-            // Reset form
-            document.getElementById('cardForm').reset();
-            document.getElementById('card_is_active').checked = true;
+            window.openAddCardModal = function() {
+                document.getElementById('modalTitle').textContent = 'Adicionar Card';
+                document.getElementById('cardForm').action = '{{ route('admin.feature-cards.store') }}';
+                document.getElementById('cardMethod').value = 'POST';
+                
+                // Reset form
+                document.getElementById('cardForm').reset();
+                document.getElementById('card_is_active').checked = true;
+                
+                // Set default colors
+                document.getElementById('card_color_from').value = 'primary-50';
+                document.getElementById('card_color_to').value = 'white';
+                document.getElementById('card_border_color').value = 'primary-100';
+                document.getElementById('card_text_color').value = 'primary-800';
+                
+                document.getElementById('cardModal').classList.remove('hidden');
+            };
             
-            // Set default colors
-            document.getElementById('card_color_from').value = 'primary-50';
-            document.getElementById('card_color_to').value = 'white';
-            document.getElementById('card_border_color').value = 'primary-100';
-            document.getElementById('card_text_color').value = 'primary-800';
+            window.openEditCardModal = function(cardId) {
+                const card = cardsData.find(c => c.id === cardId);
+                if (!card) {
+                    console.error('Card not found:', cardId);
+                    alert('Erro: Card não encontrado. Por favor, recarregue a página e tente novamente.');
+                    return;
+                }
+                
+                document.getElementById('modalTitle').textContent = 'Editar Card';
+                // Use the update route passed from the controller
+                document.getElementById('cardForm').action = card.update_route;
+                document.getElementById('cardMethod').value = 'PUT';
+                
+                // Fill form with card data
+                document.getElementById('card_title').value = card.title;
+                document.getElementById('card_description').value = card.description;
+                document.getElementById('card_icon').value = card.icon;
+                document.getElementById('card_color_from').value = card.color_from;
+                document.getElementById('card_color_to').value = card.color_to;
+                document.getElementById('card_border_color').value = card.border_color;
+                document.getElementById('card_text_color').value = card.text_color;
+                document.getElementById('card_order').value = card.order;
+                document.getElementById('card_is_active').checked = card.is_active;
+                
+                document.getElementById('cardModal').classList.remove('hidden');
+            };
             
-            document.getElementById('cardModal').classList.remove('hidden');
-        }
-        
-        function openEditCardModal(cardId) {
-            const card = cardsData.find(c => c.id === cardId);
-            if (!card) return;
+            window.closeCardModal = function() {
+                document.getElementById('cardModal').classList.add('hidden');
+            };
             
-            document.getElementById('modalTitle').textContent = 'Editar Card';
-            // Use the update route passed from the controller
-            document.getElementById('cardForm').action = card.update_route;
-            document.getElementById('cardMethod').value = 'PUT';
+            // Color preset selector functionality
+            document.getElementById('card_color_preset').addEventListener('change', function() {
+                const selectedOption = this.options[this.selectedIndex];
+                if (selectedOption.value) {
+                    document.getElementById('card_color_from').value = selectedOption.dataset.from;
+                    document.getElementById('card_color_to').value = selectedOption.dataset.to;
+                    document.getElementById('card_border_color').value = selectedOption.dataset.border;
+                    document.getElementById('card_text_color').value = selectedOption.dataset.text;
+                }
+            });
             
-            // Fill form with card data
-            document.getElementById('card_title').value = card.title;
-            document.getElementById('card_description').value = card.description;
-            document.getElementById('card_icon').value = card.icon;
-            document.getElementById('card_color_from').value = card.color_from;
-            document.getElementById('card_color_to').value = card.color_to;
-            document.getElementById('card_border_color').value = card.border_color;
-            document.getElementById('card_text_color').value = card.text_color;
-            document.getElementById('card_order').value = card.order;
-            document.getElementById('card_is_active').checked = card.is_active;
-            
-            document.getElementById('cardModal').classList.remove('hidden');
-        }
-        
-        function closeCardModal() {
-            document.getElementById('cardModal').classList.add('hidden');
-        }
-        
-        // Color preset selector functionality
-        document.getElementById('card_color_preset').addEventListener('change', function() {
-            const selectedOption = this.options[this.selectedIndex];
-            if (selectedOption.value) {
-                document.getElementById('card_color_from').value = selectedOption.dataset.from;
-                document.getElementById('card_color_to').value = selectedOption.dataset.to;
-                document.getElementById('card_border_color').value = selectedOption.dataset.border;
-                document.getElementById('card_text_color').value = selectedOption.dataset.text;
-            }
-        });
-        
-        // Close modal on outside click
-        document.getElementById('cardModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeCardModal();
-            }
-        });
+            // Close modal on outside click
+            document.getElementById('cardModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    window.closeCardModal();
+                }
+            });
+        })();
     </script>
 </x-admin-layout>
