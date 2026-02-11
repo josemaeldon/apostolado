@@ -33,7 +33,7 @@ class SiteSettingsController extends Controller
             'use_logo' => 'required|in:0,1',
             'logo_position' => 'required|in:left,center,right',
             'site_logo' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'favicon' => 'nullable|file|mimes:ico,png,jpg,gif,svg|max:1024',
+            'favicon' => 'nullable|file|mimes:ico,png,jpg,gif|max:1024',
         ]);
 
         // Update site name

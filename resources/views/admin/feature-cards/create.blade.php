@@ -224,6 +224,9 @@
     </div>
 
     <script>
+        // Regex pattern for hex color validation
+        const hexColorPattern = /^#[0-9A-Fa-f]{6}$/;
+        
         // Sync color pickers with text inputs
         function syncColorPicker(pickerId, textId) {
             const picker = document.getElementById(pickerId);
@@ -236,7 +239,7 @@
             
             // Update picker when text changes
             text.addEventListener('input', function() {
-                if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+                if (hexColorPattern.test(this.value)) {
                     picker.value = this.value;
                 }
             });
