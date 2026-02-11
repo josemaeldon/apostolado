@@ -76,66 +76,6 @@
         @include('partials.dynamic-content', ['items' => $positions['above_features']])
     @endif
 
-    <!-- Features Section -->
-    <div class="py-12 sm:py-16 lg:py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12 sm:mb-16">
-                <h3 class="text-3xl sm:text-4xl font-extrabold text-neutral-900 mb-4">
-                    {{ $aboutSection?->title ?? 'O que é o Apostolado da Oração?' }}
-                </h3>
-                <p class="text-base sm:text-lg text-neutral-600">
-                    {{ $aboutSection?->subtitle ?? 'Uma rede mundial de oração unida ao Coração de Jesus' }}
-                </p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-                @if($featureCards && $featureCards->count() > 0)
-                    @foreach($featureCards as $card)
-                    @php
-                        $classes = $card->getCssClasses();
-                    @endphp
-                    <div class="{{ $classes['gradient'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border {{ $classes['border'] }}">
-                        @if($card->featured_image)
-                            <div class="mb-4 rounded-lg overflow-hidden">
-                                <img src="{{ asset('storage/' . $card->featured_image) }}" 
-                                     alt="{{ $card->title }}" 
-                                     class="w-full h-48 object-cover">
-                            </div>
-                        @endif
-                        <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
-                        <h4 class="text-xl sm:text-2xl font-bold {{ $classes['text'] }} mb-3">{{ $card->title }}</h4>
-                        <p class="text-sm sm:text-base text-neutral-700">
-                            {{ $card->description }}
-                        </p>
-                    </div>
-                    @endforeach
-                @else
-                    <!-- Default cards if none are configured -->
-                    <div class="bg-gradient-to-br from-primary-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-primary-100">
-                        <div class="text-4xl sm:text-5xl mb-4">🙏</div>
-                        <h4 class="text-xl sm:text-2xl font-bold text-primary-800 mb-3">Oração</h4>
-                        <p class="text-sm sm:text-base text-neutral-700">
-                            Rezamos mensalmente pelas intenções do Papa Francisco, unindo nossos corações em oração.
-                        </p>
-                    </div>
-                    <div class="bg-gradient-to-br from-gold-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-gold-100">
-                        <div class="text-4xl sm:text-5xl mb-4">🌍</div>
-                        <h4 class="text-xl sm:text-2xl font-bold text-gold-800 mb-3">Missão</h4>
-                        <p class="text-sm sm:text-base text-neutral-700">
-                            Colaboramos na missão evangelizadora da Igreja, levando o amor de Cristo ao mundo.
-                        </p>
-                    </div>
-                    <div class="bg-gradient-to-br from-primary-50 to-white p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition border border-primary-100">
-                        <div class="text-4xl sm:text-5xl mb-4">❤️</div>
-                        <h4 class="text-xl sm:text-2xl font-bold text-primary-800 mb-3">Coração de Jesus</h4>
-                        <p class="text-sm sm:text-base text-neutral-700">
-                            Vivemos nossa espiritualidade centrada no Sagrado Coração de Jesus.
-                        </p>
-                    </div>
-                @endif
-            </div>
-        </div>
-    </div>
-
     <!-- Dynamic Content: Below Features -->
     @if(isset($positions['below_features']) && count($positions['below_features']) > 0)
         @include('partials.dynamic-content', ['items' => $positions['below_features']])
