@@ -40,10 +40,14 @@
                                             <td class="px-6 py-4 whitespace-nowrap">{{ $user->name }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $user->email }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                                    {{ $user->role === 'admin' ? 'bg-red-100 text-red-800' : '' }}
-                                                    {{ $user->role === 'editor' ? 'bg-blue-100 text-blue-800' : '' }}
-                                                    {{ $user->role === 'user' ? 'bg-gray-100 text-gray-800' : '' }}">
+                                                @php
+                                                    $roleBadgeClass = match($user->role) {
+                                                        'admin' => 'bg-red-100 text-red-800',
+                                                        'editor' => 'bg-blue-100 text-blue-800',
+                                                        default => 'bg-gray-100 text-gray-800'
+                                                    };
+                                                @endphp
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $roleBadgeClass }}">
                                                     {{ ucfirst($user->role) }}
                                                 </span>
                                             </td>
