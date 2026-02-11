@@ -65,7 +65,7 @@ class User extends Authenticatable
         }
 
         if ($this->isEditor()) {
-            // Editor can access: Pages, Articles, Intentions, Events, Gallery, Cadastros
+            // Editor can access: Pages, Articles, Intentions, Events, Gallery, Member Registrations
             $editorResources = [
                 'pages',
                 'articles',
@@ -73,7 +73,6 @@ class User extends Authenticatable
                 'events',
                 'media-gallery',
                 'member-registrations',
-                'registration-tokens',
                 'categories',
             ];
             
