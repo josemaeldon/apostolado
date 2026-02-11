@@ -231,12 +231,12 @@
                 </form>
                 
                 <!-- Separate delete forms (outside main form to avoid nesting) -->
-                <form id="delete-logo-form" action="{{ route('admin.site-settings.delete-logo') }}" method="POST" style="display: none;">
+                <form id="delete-logo-form" action="{{ route('admin.site-settings.delete-logo') }}" method="POST" class="hidden">
                     @csrf
                     @method('DELETE')
                 </form>
                 
-                <form id="delete-favicon-form" action="{{ route('admin.site-settings.delete-favicon') }}" method="POST" style="display: none;">
+                <form id="delete-favicon-form" action="{{ route('admin.site-settings.delete-favicon') }}" method="POST" class="hidden">
                     @csrf
                     @method('DELETE')
                 </form>
