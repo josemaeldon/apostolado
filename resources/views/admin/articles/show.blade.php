@@ -38,7 +38,7 @@
 
                         <div class="border-t pt-6">
                             <dt class="text-sm font-medium text-gray-500">Conteúdo</dt>
-                            <dd class="mt-1 text-sm text-gray-900 whitespace-pre-wrap">{{ $article->content }}</dd>
+                            <dd class="mt-1 text-sm text-gray-900 prose max-w-none">{!! $article->content !!}</dd>
                         </div>
 
                         @if($article->featured_image)
