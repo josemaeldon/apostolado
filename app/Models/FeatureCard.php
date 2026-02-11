@@ -69,9 +69,9 @@ class FeatureCard extends Model
             // Colors are validated by controller but we escape them for extra security
             return [
                 'gradient' => '',
-                'border' => 'border',
+                'border' => '',
                 'text' => '',
-                'style' => "background: linear-gradient(to bottom right, " . e($this->color_from) . ", " . e($this->color_to) . "); border-color: " . e($this->border_color) . "; ",
+                'style' => "background: linear-gradient(to bottom right, " . e($this->color_from) . ", " . e($this->color_to) . "); border: 1px solid " . e($this->border_color) . "; ",
                 'text_style' => "color: " . e($this->text_color) . ";"
             ];
         }
