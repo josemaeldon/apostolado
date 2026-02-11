@@ -17,8 +17,10 @@ class SiteSettingsController extends Controller
         $siteName = SiteSetting::get('site_name', 'Apostolado da Oração');
         $siteLogo = SiteSetting::get('site_logo');
         $useLogo = SiteSetting::get('use_logo', '0');
+        $logoPosition = SiteSetting::get('logo_position', 'left');
+        $favicon = SiteSetting::get('favicon');
 
-        return view('admin.site-settings.index', compact('siteName', 'siteLogo', 'useLogo'));
+        return view('admin.site-settings.index', compact('siteName', 'siteLogo', 'useLogo', 'logoPosition', 'favicon'));
     }
 
     /**
@@ -29,7 +31,9 @@ class SiteSettingsController extends Controller
         $request->validate([
             'site_name' => 'required|string|max:255',
             'use_logo' => 'required|in:0,1',
+            'logo_position' => 'required|in:left,center,right',
             'site_logo' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'favicon' => 'nullable|file|mimes:ico,png,jpg,gif|max:1024',
         ]);
 
         // Update site name
@@ -37,6 +41,9 @@ class SiteSettingsController extends Controller
         
         // Update use_logo setting
         SiteSetting::set('use_logo', $request->use_logo);
+        
+        // Update logo position
+        SiteSetting::set('logo_position', $request->logo_position);
 
         // Handle logo upload
         if ($request->hasFile('site_logo')) {
@@ -49,6 +56,19 @@ class SiteSettingsController extends Controller
             // Store new logo
             $logoPath = $request->file('site_logo')->store('logos', 'public');
             SiteSetting::set('site_logo', $logoPath);
+        }
+        
+        // Handle favicon upload
+        if ($request->hasFile('favicon')) {
+            // Delete old favicon if exists
+            $oldFavicon = SiteSetting::get('favicon');
+            if ($oldFavicon && Storage::disk('public')->exists($oldFavicon)) {
+                Storage::disk('public')->delete($oldFavicon);
+            }
+
+            // Store new favicon
+            $faviconPath = $request->file('favicon')->store('favicons', 'public');
+            SiteSetting::set('favicon', $faviconPath);
         }
 
         // Clear all cache
@@ -75,5 +95,23 @@ class SiteSettingsController extends Controller
 
         return redirect()->route('admin.site-settings.index')
             ->with('success', 'Logo removida com sucesso!');
+    }
+    
+    /**
+     * Delete the favicon.
+     */
+    public function deleteFavicon()
+    {
+        $favicon = SiteSetting::get('favicon');
+        
+        if ($favicon && Storage::disk('public')->exists($favicon)) {
+            Storage::disk('public')->delete($favicon);
+        }
+
+        SiteSetting::set('favicon', null);
+        SiteSetting::clearCache();
+
+        return redirect()->route('admin.site-settings.index')
+            ->with('success', 'Favicon removido com sucesso!');
     }
 }

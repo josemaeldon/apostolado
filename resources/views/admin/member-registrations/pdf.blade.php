@@ -28,6 +28,53 @@
             border-radius: 8px;
             margin: 0 auto;
             background-color: #ffffff;
+            position: relative;
+        }
+        
+        .profile-section {
+            position: relative;
+            min-height: 160px;
+            margin-bottom: 15px;
+        }
+        
+        .profile-photo-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 120px;
+            text-align: center;
+            background-color: #f9fafb;
+            border-radius: 4px;
+            padding: 8px;
+            border: 2px solid #2563eb;
+        }
+        
+        .profile-photo {
+            max-width: 104px;
+            max-height: 130px;
+            border-radius: 4px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .photo-placeholder {
+            width: 104px;
+            height: 130px;
+            border: 2px dashed #9ca3af;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            background-color: #ffffff;
+            color: #6b7280;
+            font-size: 9px;
+            text-align: center;
+            padding: 8px;
+        }
+        
+        .content-with-photo {
+            margin-right: 135px;
         }
 
         .header {
@@ -216,26 +263,31 @@
                     </span>
                 </div>
             </div>
-
-            <!-- Profile Photo -->
-            <div class="profile-photo-section">
-                @if($registration->profile_image && Storage::disk('public')->exists($registration->profile_image))
-                    <img src="{{ public_path('storage/' . $registration->profile_image) }}" alt="Foto de Perfil" class="profile-photo">
-                @else
-                    <div class="photo-placeholder">
-                        <div>
-                            <div style="font-size: 12px; margin-bottom: 5px;">📷</div>
-                            <div>Espaço para foto</div>
-                            <div style="font-size: 8px; margin-top: 3px;">(Cole a foto aqui)</div>
+            
+            <!-- Profile section with photo on right -->
+            <div class="profile-section">
+                <!-- Profile Photo in upper right -->
+                <div class="profile-photo-container">
+                    @if($registration->profile_image && Storage::disk('public')->exists($registration->profile_image))
+                        <img src="{{ public_path('storage/' . $registration->profile_image) }}" alt="Foto" class="profile-photo">
+                    @else
+                        <div class="photo-placeholder">
+                            <div>
+                                <div style="font-size: 12px; margin-bottom: 5px;">📷</div>
+                                <div>Espaço para foto</div>
+                            </div>
+                        </div>
+                    @endif
+                </div>
+                
+                <!-- Content with photo margin -->
+                <div class="content-with-photo">
+                    <div class="section">
+                        <div class="section-title">Paróquia de Origem</div>
+                        <div class="data-cell-full">
+                            <span class="value">{{ $registration->parish }}</span>
                         </div>
                     </div>
-                @endif
-            </div>
-
-            <div class="section">
-                <div class="section-title">Paróquia de Origem</div>
-                <div class="data-cell-full">
-                    <span class="value">{{ $registration->parish }}</span>
                 </div>
             </div>
 

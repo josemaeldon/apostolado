@@ -77,6 +77,48 @@
                             @enderror
                         </div>
 
+                        <!-- Logo Position -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Posição do Logo
+                            </label>
+                            <div class="flex items-center space-x-4">
+                                <label class="inline-flex items-center">
+                                    <input 
+                                        type="radio" 
+                                        name="logo_position" 
+                                        value="left" 
+                                        {{ old('logo_position', $logoPosition) == 'left' ? 'checked' : '' }}
+                                        class="form-radio text-blue-600"
+                                    >
+                                    <span class="ml-2">Esquerda</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input 
+                                        type="radio" 
+                                        name="logo_position" 
+                                        value="center" 
+                                        {{ old('logo_position', $logoPosition) == 'center' ? 'checked' : '' }}
+                                        class="form-radio text-blue-600"
+                                    >
+                                    <span class="ml-2">Centro</span>
+                                </label>
+                                <label class="inline-flex items-center">
+                                    <input 
+                                        type="radio" 
+                                        name="logo_position" 
+                                        value="right" 
+                                        {{ old('logo_position', $logoPosition) == 'right' ? 'checked' : '' }}
+                                        class="form-radio text-blue-600"
+                                    >
+                                    <span class="ml-2">Direita</span>
+                                </label>
+                            </div>
+                            @error('logo_position')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
                         <!-- Current Logo -->
                         @if($siteLogo)
                             <div>
@@ -121,6 +163,54 @@
                                 Formatos aceitos: JPEG, PNG, JPG, GIF, SVG. Tamanho máximo: 2MB. Recomendado: altura de 40-60px para melhor visualização.
                             </p>
                             @error('site_logo')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+
+                        <!-- Current Favicon -->
+                        @if($favicon)
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Favicon Atual
+                                </label>
+                                <div class="flex items-center space-x-4">
+                                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                                        <img 
+                                            src="{{ Storage::url($favicon) }}" 
+                                            alt="Favicon Atual" 
+                                            class="h-8 w-8 object-contain"
+                                        >
+                                    </div>
+                                    <form action="{{ route('admin.site-settings.delete-favicon') }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover o favicon?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button 
+                                            type="submit" 
+                                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium"
+                                        >
+                                            Remover Favicon
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endif
+
+                        <!-- Upload New Favicon -->
+                        <div>
+                            <label for="favicon" class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ $favicon ? 'Substituir Favicon' : 'Upload Favicon' }}
+                            </label>
+                            <input 
+                                type="file" 
+                                name="favicon" 
+                                id="favicon" 
+                                accept=".ico,.png,.jpg,.jpeg,.gif"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                            >
+                            <p class="mt-1 text-sm text-gray-500">
+                                Formatos aceitos: ICO, PNG, JPG, GIF. Tamanho máximo: 1MB. Recomendado: 32x32px ou 16x16px.
+                            </p>
+                            @error('favicon')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>

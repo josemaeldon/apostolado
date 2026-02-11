@@ -112,6 +112,7 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::get('site-settings', [App\Http\Controllers\Admin\SiteSettingsController::class, 'index'])->name('site-settings.index');
     Route::post('site-settings', [App\Http\Controllers\Admin\SiteSettingsController::class, 'update'])->name('site-settings.update');
     Route::delete('site-settings/logo', [App\Http\Controllers\Admin\SiteSettingsController::class, 'deleteLogo'])->name('site-settings.delete-logo');
+    Route::delete('site-settings/favicon', [App\Http\Controllers\Admin\SiteSettingsController::class, 'deleteFavicon'])->name('site-settings.delete-favicon');
     
     // User Management
     Route::resource('users', App\Http\Controllers\Admin\UserController::class);
