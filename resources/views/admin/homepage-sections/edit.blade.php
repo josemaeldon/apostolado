@@ -263,10 +263,6 @@
                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                         <label for="card_is_active" class="ml-2 block text-sm text-gray-900">Ativo</label>
                     </div>
-
-                    <!-- Hidden fields for position -->
-                    <input type="hidden" name="display_position" value="">
-                    <input type="hidden" name="display_order" value="0">
                 </div>
 
                 <div class="mt-6 flex justify-end gap-3">
@@ -283,6 +279,7 @@
 
     <script>
         const cardsData = @json($homepageSection->featureCards);
+        const featureCardsUpdateRoute = '{{ route('admin.feature-cards.index') }}';
         
         function openAddCardModal() {
             document.getElementById('modalTitle').textContent = 'Adicionar Card';
@@ -307,7 +304,8 @@
             if (!card) return;
             
             document.getElementById('modalTitle').textContent = 'Editar Card';
-            document.getElementById('cardForm').action = `/admin/feature-cards/${cardId}`;
+            // Use Laravel route helper to build the update URL
+            document.getElementById('cardForm').action = featureCardsUpdateRoute.replace('/feature-cards', `/feature-cards/${cardId}`);
             document.getElementById('cardMethod').value = 'PUT';
             
             // Fill form with card data

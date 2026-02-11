@@ -50,7 +50,7 @@ class FeatureCardController extends Controller
         FeatureCard::create($validated);
 
         // Redirect back to homepage section edit if card is associated with a section
-        if ($validated['homepage_section_id']) {
+        if (!empty($validated['homepage_section_id'])) {
             return redirect()->route('admin.homepage-sections.edit', $validated['homepage_section_id'])
                 ->with('success', 'Card criado com sucesso!');
         }
@@ -98,7 +98,7 @@ class FeatureCardController extends Controller
         $featureCard->update($validated);
 
         // Redirect back to homepage section edit if card is associated with a section
-        if ($validated['homepage_section_id']) {
+        if (!empty($validated['homepage_section_id'])) {
             return redirect()->route('admin.homepage-sections.edit', $validated['homepage_section_id'])
                 ->with('success', 'Card atualizado com sucesso!');
         }
