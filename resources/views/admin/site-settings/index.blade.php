@@ -23,7 +23,7 @@
 
             <!-- Settings Form -->
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                <form action="{{ route('admin.site-settings.update') }}" method="POST" enctype="multipart/form-data">
+                <form id="settings-form" action="{{ route('admin.site-settings.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     
@@ -134,16 +134,14 @@
                                             class="h-16 object-contain"
                                         >
                                     </div>
-                                    <form action="{{ route('admin.site-settings.delete-logo') }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover a logo?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button 
-                                            type="submit" 
-                                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium"
-                                        >
-                                            Remover Logo
-                                        </button>
-                                    </form>
+                                    <button 
+                                        type="submit" 
+                                        form="delete-logo-form"
+                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium"
+                                        onclick="return confirm('Tem certeza que deseja remover a logo?');"
+                                    >
+                                        Remover Logo
+                                    </button>
                                 </div>
                             </div>
                         @endif
@@ -182,16 +180,14 @@
                                             class="h-8 w-8 object-contain"
                                         >
                                     </div>
-                                    <form action="{{ route('admin.site-settings.delete-favicon') }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover o favicon?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button 
-                                            type="submit" 
-                                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium"
-                                        >
-                                            Remover Favicon
-                                        </button>
-                                    </form>
+                                    <button 
+                                        type="submit" 
+                                        form="delete-favicon-form"
+                                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition text-sm font-medium"
+                                        onclick="return confirm('Tem certeza que deseja remover o favicon?');"
+                                    >
+                                        Remover Favicon
+                                    </button>
                                 </div>
                             </div>
                         @endif
@@ -232,6 +228,17 @@
                             Salvar Configurações
                         </button>
                     </div>
+                </form>
+                
+                <!-- Separate delete forms (outside main form to avoid nesting) -->
+                <form id="delete-logo-form" action="{{ route('admin.site-settings.delete-logo') }}" method="POST" class="hidden">
+                    @csrf
+                    @method('DELETE')
+                </form>
+                
+                <form id="delete-favicon-form" action="{{ route('admin.site-settings.delete-favicon') }}" method="POST" class="hidden">
+                    @csrf
+                    @method('DELETE')
                 </form>
             </div>
         </div>
