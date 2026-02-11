@@ -113,7 +113,7 @@ class FeatureCardController extends Controller
         $featureCard->delete();
 
         // Redirect back to homepage section edit if card was associated with a section
-        if ($homepageSectionId) {
+        if (!empty($homepageSectionId)) {
             return redirect()->route('admin.homepage-sections.edit', $homepageSectionId)
                 ->with('success', 'Card excluído com sucesso!');
         }

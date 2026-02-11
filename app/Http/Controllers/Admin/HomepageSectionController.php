@@ -60,6 +60,12 @@ class HomepageSectionController extends Controller
         $homepageSection->load(['featureCards' => function($query) {
             $query->orderBy('order');
         }]);
+        
+        // Add update route to each card for the JavaScript
+        $homepageSection->featureCards->each(function($card) {
+            $card->update_route = route('admin.feature-cards.update', $card);
+        });
+        
         return view('admin.homepage-sections.edit', compact('homepageSection'));
     }
 

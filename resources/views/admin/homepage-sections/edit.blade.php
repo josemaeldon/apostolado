@@ -279,7 +279,6 @@
 
     <script>
         const cardsData = @json($homepageSection->featureCards);
-        const featureCardsUpdateRoute = '{{ route('admin.feature-cards.index') }}';
         
         function openAddCardModal() {
             document.getElementById('modalTitle').textContent = 'Adicionar Card';
@@ -304,8 +303,8 @@
             if (!card) return;
             
             document.getElementById('modalTitle').textContent = 'Editar Card';
-            // Use Laravel route helper to build the update URL
-            document.getElementById('cardForm').action = featureCardsUpdateRoute.replace('/feature-cards', `/feature-cards/${cardId}`);
+            // Use the update route passed from the controller
+            document.getElementById('cardForm').action = card.update_route;
             document.getElementById('cardMethod').value = 'PUT';
             
             // Fill form with card data
