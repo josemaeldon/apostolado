@@ -45,6 +45,25 @@
                         </div>
 
                         <div class="mb-6">
+                            <label for="background_color" class="block text-sm font-medium text-gray-700 mb-2">Cor de Fundo</label>
+                            <div class="flex items-center gap-3">
+                                <input type="color" name="background_color" id="background_color" 
+                                       value="{{ old('background_color', '#f0f5ff') }}" 
+                                       class="h-10 w-20 rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500 cursor-pointer">
+                                <input type="text" id="background_color_hex" 
+                                       value="{{ old('background_color', '#f0f5ff') }}" 
+                                       class="w-32 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 font-mono text-sm"
+                                       placeholder="#FFFFFF"
+                                       pattern="^#[0-9A-Fa-f]{6}$"
+                                       maxlength="7">
+                            </div>
+                            @error('background_color')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-1 text-sm text-gray-500">Escolha a cor de fundo para a seção na página inicial</p>
+                        </div>
+
+                        <div class="mb-6">
                             <label for="display_position" class="block text-sm font-medium text-gray-700 mb-2">Posição de Exibição</label>
                             <select name="display_position" id="display_position" 
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
@@ -89,6 +108,23 @@
                             </a>
                         </div>
                     </form>
+
+                    <script>
+                        // Synchronize color picker and hex input
+                        const colorInput = document.getElementById('background_color');
+                        const hexInput = document.getElementById('background_color_hex');
+                        
+                        colorInput.addEventListener('input', function() {
+                            hexInput.value = this.value.toUpperCase();
+                        });
+                        
+                        hexInput.addEventListener('input', function() {
+                            const value = this.value;
+                            if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                                colorInput.value = value;
+                            }
+                        });
+                    </script>
                 </div>
             </div>
         </div>

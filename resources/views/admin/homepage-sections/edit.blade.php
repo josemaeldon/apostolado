@@ -37,6 +37,25 @@
                         </div>
 
                         <div class="mb-6">
+                            <label for="background_color" class="block text-sm font-medium text-gray-700 mb-2">Cor de Fundo</label>
+                            <div class="flex items-center gap-3">
+                                <input type="color" name="background_color" id="background_color" 
+                                       value="{{ old('background_color', $homepageSection->background_color ?? '#f0f5ff') }}" 
+                                       class="h-10 w-20 rounded border-gray-300 focus:border-blue-500 focus:ring-blue-500 cursor-pointer">
+                                <input type="text" id="background_color_hex" 
+                                       value="{{ old('background_color', $homepageSection->background_color ?? '#f0f5ff') }}" 
+                                       class="w-32 rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500 font-mono text-sm"
+                                       placeholder="#FFFFFF"
+                                       pattern="^#[0-9A-Fa-f]{6}$"
+                                       maxlength="7">
+                            </div>
+                            @error('background_color')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-1 text-sm text-gray-500">Escolha a cor de fundo para a seção na página inicial</p>
+                        </div>
+
+                        <div class="mb-6">
                             <label for="display_position" class="block text-sm font-medium text-gray-700 mb-2">Posição de Exibição</label>
                             <select name="display_position" id="display_position" 
                                     class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
@@ -105,9 +124,9 @@
                                     $classes = $card->getCssClasses();
                                 @endphp
                                 <div class="border border-gray-200 rounded-lg overflow-hidden">
-                                    <div class="p-6 {{ $classes['gradient'] }} border-l-4 {{ $classes['border'] }}">
+                                    <div class="p-6 {{ $classes['gradient'] }} {{ $classes['border'] }}" style="{{ $classes['style'] ?? '' }}">
                                         <div class="text-4xl mb-3">{{ $card->icon }}</div>
-                                        <h3 class="text-xl font-bold {{ $classes['text'] }} mb-2">{{ $card->title }}</h3>
+                                        <h3 class="text-xl font-bold {{ $classes['text'] }} mb-2" style="{{ $classes['text_style'] ?? '' }}">{{ $card->title }}</h3>
                                         <p class="text-sm text-neutral-700">{{ Str::limit($card->description, 100) }}</p>
                                     </div>
                                     <div class="p-4 bg-gray-50 border-t flex items-center justify-between">
@@ -189,65 +208,63 @@
                         <p class="mt-1 text-sm text-gray-500">Use um emoji para representar este card (ex: 🙏, 🌍, ❤️)</p>
                     </div>
 
-                    <div>
-                        <label for="card_color_preset" class="block text-sm font-medium text-gray-700 mb-2">Paleta de Cores</label>
-                        <select id="card_color_preset" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                            <option value="">-- Selecione um modelo --</option>
-                            @foreach(\App\Models\FeatureCard::getExtendedColorPresets() as $key => $preset)
-                                <option value="{{ $key }}" 
-                                        data-from="{{ $preset['from'] }}" 
-                                        data-to="{{ $preset['to'] }}" 
-                                        data-border="{{ $preset['border'] }}" 
-                                        data-text="{{ $preset['text'] }}">
-                                    {{ $preset['name'] }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label for="card_color_from" class="block text-sm font-medium text-gray-700">Cor Inicial *</label>
-                            <select name="color_from" id="card_color_from" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="primary-50">Primary 50</option>
-                                <option value="gold-50">Gold 50</option>
-                                <option value="neutral-50">Neutral 50</option>
-                                <option value="blue-50">Blue 50</option>
-                                <option value="green-50">Green 50</option>
-                            </select>
+                            <label for="card_color_from" class="block text-sm font-medium text-gray-700">Cor Inicial do Gradiente *</label>
+                            <div class="mt-1 flex items-center gap-2">
+                                <input type="color" id="card_color_from_picker" value="#f0f5ff"
+                                       class="h-10 w-16 rounded border-gray-300 cursor-pointer">
+                                <input type="text" name="color_from" id="card_color_from" required
+                                       value="#f0f5ff"
+                                       class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 font-mono text-sm"
+                                       placeholder="#F0F5FF"
+                                       pattern="^#[0-9A-Fa-f]{6}$"
+                                       maxlength="7">
+                            </div>
                         </div>
 
                         <div>
-                            <label for="card_color_to" class="block text-sm font-medium text-gray-700">Cor Final *</label>
-                            <select name="color_to" id="card_color_to" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="white">Branco</option>
-                                <option value="primary-100">Primary 100</option>
-                                <option value="gold-100">Gold 100</option>
-                            </select>
+                            <label for="card_color_to" class="block text-sm font-medium text-gray-700">Cor Final do Gradiente *</label>
+                            <div class="mt-1 flex items-center gap-2">
+                                <input type="color" id="card_color_to_picker" value="#ffffff"
+                                       class="h-10 w-16 rounded border-gray-300 cursor-pointer">
+                                <input type="text" name="color_to" id="card_color_to" required
+                                       value="#ffffff"
+                                       class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 font-mono text-sm"
+                                       placeholder="#FFFFFF"
+                                       pattern="^#[0-9A-Fa-f]{6}$"
+                                       maxlength="7">
+                            </div>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label for="card_border_color" class="block text-sm font-medium text-gray-700">Cor da Borda *</label>
-                            <select name="border_color" id="card_border_color" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="primary-100">Primary 100</option>
-                                <option value="gold-100">Gold 100</option>
-                                <option value="neutral-200">Neutral 200</option>
-                            </select>
+                            <div class="mt-1 flex items-center gap-2">
+                                <input type="color" id="card_border_color_picker" value="#dbeafe"
+                                       class="h-10 w-16 rounded border-gray-300 cursor-pointer">
+                                <input type="text" name="border_color" id="card_border_color" required
+                                       value="#dbeafe"
+                                       class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 font-mono text-sm"
+                                       placeholder="#DBEAFE"
+                                       pattern="^#[0-9A-Fa-f]{6}$"
+                                       maxlength="7">
+                            </div>
                         </div>
 
                         <div>
                             <label for="card_text_color" class="block text-sm font-medium text-gray-700">Cor do Texto *</label>
-                            <select name="text_color" id="card_text_color" required
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                <option value="primary-800">Primary 800</option>
-                                <option value="gold-800">Gold 800</option>
-                                <option value="neutral-900">Neutral 900</option>
-                            </select>
+                            <div class="mt-1 flex items-center gap-2">
+                                <input type="color" id="card_text_color_picker" value="#1e40af"
+                                       class="h-10 w-16 rounded border-gray-300 cursor-pointer">
+                                <input type="text" name="text_color" id="card_text_color" required
+                                       value="#1e40af"
+                                       class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 font-mono text-sm"
+                                       placeholder="#1E40AF"
+                                       pattern="^#[0-9A-Fa-f]{6}$"
+                                       maxlength="7">
+                            </div>
                         </div>
                     </div>
 
@@ -281,6 +298,23 @@
         (function() {
             const cardsData = @json($homepageSection->featureCards);
             
+            // Synchronize background color picker and hex input
+            const colorInput = document.getElementById('background_color');
+            const hexInput = document.getElementById('background_color_hex');
+            
+            if (colorInput && hexInput) {
+                colorInput.addEventListener('input', function() {
+                    hexInput.value = this.value.toUpperCase();
+                });
+                
+                hexInput.addEventListener('input', function() {
+                    const value = this.value;
+                    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                        colorInput.value = value;
+                    }
+                });
+            }
+            
             window.openAddCardModal = function() {
                 document.getElementById('modalTitle').textContent = 'Adicionar Card';
                 document.getElementById('cardForm').action = '{{ route('admin.feature-cards.store') }}';
@@ -291,10 +325,14 @@
                 document.getElementById('card_is_active').checked = true;
                 
                 // Set default colors
-                document.getElementById('card_color_from').value = 'primary-50';
-                document.getElementById('card_color_to').value = 'white';
-                document.getElementById('card_border_color').value = 'primary-100';
-                document.getElementById('card_text_color').value = 'primary-800';
+                document.getElementById('card_color_from').value = '#f0f5ff';
+                document.getElementById('card_color_from_picker').value = '#f0f5ff';
+                document.getElementById('card_color_to').value = '#ffffff';
+                document.getElementById('card_color_to_picker').value = '#ffffff';
+                document.getElementById('card_border_color').value = '#dbeafe';
+                document.getElementById('card_border_color_picker').value = '#dbeafe';
+                document.getElementById('card_text_color').value = '#1e40af';
+                document.getElementById('card_text_color_picker').value = '#1e40af';
                 
                 document.getElementById('cardModal').classList.remove('hidden');
             };
@@ -317,9 +355,13 @@
                 document.getElementById('card_description').value = card.description;
                 document.getElementById('card_icon').value = card.icon;
                 document.getElementById('card_color_from').value = card.color_from;
+                document.getElementById('card_color_from_picker').value = card.color_from;
                 document.getElementById('card_color_to').value = card.color_to;
+                document.getElementById('card_color_to_picker').value = card.color_to;
                 document.getElementById('card_border_color').value = card.border_color;
+                document.getElementById('card_border_color_picker').value = card.border_color;
                 document.getElementById('card_text_color').value = card.text_color;
+                document.getElementById('card_text_color_picker').value = card.text_color;
                 document.getElementById('card_order').value = card.order;
                 document.getElementById('card_is_active').checked = card.is_active;
                 
@@ -330,14 +372,29 @@
                 document.getElementById('cardModal').classList.add('hidden');
             };
             
-            // Color preset selector functionality
-            document.getElementById('card_color_preset').addEventListener('change', function() {
-                const selectedOption = this.options[this.selectedIndex];
-                if (selectedOption.value) {
-                    document.getElementById('card_color_from').value = selectedOption.dataset.from;
-                    document.getElementById('card_color_to').value = selectedOption.dataset.to;
-                    document.getElementById('card_border_color').value = selectedOption.dataset.border;
-                    document.getElementById('card_text_color').value = selectedOption.dataset.text;
+            // Synchronize card color pickers with text inputs
+            const cardColorPairs = [
+                ['card_color_from_picker', 'card_color_from'],
+                ['card_color_to_picker', 'card_color_to'],
+                ['card_border_color_picker', 'card_border_color'],
+                ['card_text_color_picker', 'card_text_color']
+            ];
+            
+            cardColorPairs.forEach(([pickerId, inputId]) => {
+                const picker = document.getElementById(pickerId);
+                const input = document.getElementById(inputId);
+                
+                if (picker && input) {
+                    picker.addEventListener('input', function() {
+                        input.value = this.value.toUpperCase();
+                    });
+                    
+                    input.addEventListener('input', function() {
+                        const value = this.value;
+                        if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+                            picker.value = value;
+                        }
+                    });
                 }
             });
             

@@ -10,6 +10,7 @@ class HomepageSection extends Model
         'key',
         'title',
         'subtitle',
+        'background_color',
         'display_position',
         'display_order',
         'is_active',
