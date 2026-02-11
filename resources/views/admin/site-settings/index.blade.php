@@ -25,6 +25,7 @@
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <form action="{{ route('admin.site-settings.update') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     
                     <div class="p-6 space-y-6">
                         <!-- Site Name -->
