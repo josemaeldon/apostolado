@@ -67,12 +67,22 @@ class FeatureCard extends Model
         if (preg_match('/^#[0-9A-Fa-f]{6}$/', $this->color_from)) {
             // Use inline styles for custom hex colors
             // Colors are validated by controller but we escape them for extra security
+            $colorFrom = e($this->color_from);
+            $colorTo = e($this->color_to);
+            $borderColor = e($this->border_color);
+            $textColor = e($this->text_color);
+            
             return [
                 'gradient' => '',
                 'border' => '',
                 'text' => '',
-                'style' => "background: linear-gradient(to bottom right, " . e($this->color_from) . ", " . e($this->color_to) . "); border: 1px solid " . e($this->border_color) . "; ",
-                'text_style' => "color: " . e($this->text_color) . ";"
+                'style' => sprintf(
+                    'background: linear-gradient(to bottom right, %s, %s); border: 1px solid %s;',
+                    $colorFrom,
+                    $colorTo,
+                    $borderColor
+                ),
+                'text_style' => sprintf('color: %s;', $textColor)
             ];
         }
         
