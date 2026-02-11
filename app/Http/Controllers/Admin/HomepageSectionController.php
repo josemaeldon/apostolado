@@ -57,6 +57,9 @@ class HomepageSectionController extends Controller
      */
     public function edit(HomepageSection $homepageSection)
     {
+        $homepageSection->load(['featureCards' => function($query) {
+            $query->orderBy('order');
+        }]);
         return view('admin.homepage-sections.edit', compact('homepageSection'));
     }
 

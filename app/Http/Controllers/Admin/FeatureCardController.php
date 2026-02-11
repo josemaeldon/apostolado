@@ -49,6 +49,12 @@ class FeatureCardController extends Controller
 
         FeatureCard::create($validated);
 
+        // Redirect back to homepage section edit if card is associated with a section
+        if ($validated['homepage_section_id']) {
+            return redirect()->route('admin.homepage-sections.edit', $validated['homepage_section_id'])
+                ->with('success', 'Card criado com sucesso!');
+        }
+
         return redirect()->route('admin.feature-cards.index')
             ->with('success', 'Card criado com sucesso!');
     }
@@ -91,13 +97,26 @@ class FeatureCardController extends Controller
 
         $featureCard->update($validated);
 
+        // Redirect back to homepage section edit if card is associated with a section
+        if ($validated['homepage_section_id']) {
+            return redirect()->route('admin.homepage-sections.edit', $validated['homepage_section_id'])
+                ->with('success', 'Card atualizado com sucesso!');
+        }
+
         return redirect()->route('admin.feature-cards.index')
             ->with('success', 'Card atualizado com sucesso!');
     }
 
     public function destroy(FeatureCard $featureCard)
     {
+        $homepageSectionId = $featureCard->homepage_section_id;
         $featureCard->delete();
+
+        // Redirect back to homepage section edit if card was associated with a section
+        if ($homepageSectionId) {
+            return redirect()->route('admin.homepage-sections.edit', $homepageSectionId)
+                ->with('success', 'Card excluído com sucesso!');
+        }
 
         return redirect()->route('admin.feature-cards.index')
             ->with('success', 'Card excluído com sucesso!');
