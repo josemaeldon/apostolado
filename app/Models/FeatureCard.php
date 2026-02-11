@@ -66,12 +66,13 @@ class FeatureCard extends Model
         // Check if colors are hex codes
         if (preg_match('/^#[0-9A-Fa-f]{6}$/', $this->color_from)) {
             // Use inline styles for custom hex colors
+            // Colors are validated by controller but we escape them for extra security
             return [
                 'gradient' => '',
                 'border' => 'border',
                 'text' => '',
-                'style' => "background: linear-gradient(to bottom right, {$this->color_from}, {$this->color_to}); border-color: {$this->border_color}; ",
-                'text_style' => "color: {$this->text_color};"
+                'style' => "background: linear-gradient(to bottom right, " . e($this->color_from) . ", " . e($this->color_to) . "); border-color: " . e($this->border_color) . "; ",
+                'text_style' => "color: " . e($this->text_color) . ";"
             ];
         }
         

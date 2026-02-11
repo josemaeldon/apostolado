@@ -5,7 +5,7 @@
         @php
             $section = $item['data'];
             $sectionCards = $section->featureCards ?? collect();
-            $bgColor = $section->background_color ?? '#f0f5ff';
+            $bgColor = e($section->background_color ?? '#f0f5ff');
         @endphp
         <div class="py-12 sm:py-16 lg:py-24" style="background: linear-gradient(to bottom right, {{ $bgColor }}, #ffffff);">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

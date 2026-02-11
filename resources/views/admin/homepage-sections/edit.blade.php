@@ -398,9 +398,6 @@
                 }
             });
             
-            // Color preset selector functionality
-            // Removed as we now use direct color pickers
-            
             // Close modal on outside click
             document.getElementById('cardModal').addEventListener('click', function(e) {
                 if (e.target === this) {
