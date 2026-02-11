@@ -70,15 +70,11 @@
                                     <label for="color_preset" class="block text-sm font-medium text-gray-600 mb-2">Escolha um modelo pronto:</label>
                                     <select id="color_preset" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                         <option value="">-- Selecione um modelo --</option>
-                                        @foreach(\App\Models\FeatureCard::getExtendedColorPresets() as $key => $preset)
-                                            <option value="{{ $key }}" 
-                                                    data-from="{{ $preset['from'] }}" 
-                                                    data-to="{{ $preset['to'] }}" 
-                                                    data-border="{{ $preset['border'] }}" 
-                                                    data-text="{{ $preset['text'] }}">
-                                                {{ $preset['name'] }}
-                                            </option>
-                                        @endforeach
+                                        <option value="primary" data-from="#fef5e7" data-to="#ffffff" data-border="#fdeaa3" data-text="#8b6914">Dourado Suave</option>
+                                        <option value="gold" data-from="#fef3c7" data-to="#ffffff" data-border="#fcd34d" data-text="#92400e">Dourado Vibrante</option>
+                                        <option value="blue" data-from="#e0f2fe" data-to="#ffffff" data-border="#bae6fd" data-text="#0c4a6e">Azul Celestial</option>
+                                        <option value="green" data-from="#d1fae5" data-to="#ffffff" data-border="#a7f3d0" data-text="#065f46">Verde Esperança</option>
+                                        <option value="neutral" data-from="#f5f5f4" data-to="#ffffff" data-border="#e7e5e4" data-text="#44403c">Neutro Elegante</option>
                                     </select>
                                     <p class="mt-1 text-sm text-gray-500">Ou personalize as cores manualmente abaixo</p>
                                 </div>
@@ -86,50 +82,100 @@
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label for="color_from" class="block text-sm font-medium text-gray-700">Cor Inicial do Gradiente *</label>
-                                    <select name="color_from" id="color_from" required
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <option value="primary-50" {{ old('color_from', $featureCard->color_from) == 'primary-50' ? 'selected' : '' }}>Primary 50</option>
-                                        <option value="gold-50" {{ old('color_from', $featureCard->color_from) == 'gold-50' ? 'selected' : '' }}>Gold 50</option>
-                                        <option value="neutral-50" {{ old('color_from', $featureCard->color_from) == 'neutral-50' ? 'selected' : '' }}>Neutral 50</option>
-                                        <option value="blue-50" {{ old('color_from', $featureCard->color_from) == 'blue-50' ? 'selected' : '' }}>Blue 50</option>
-                                        <option value="green-50" {{ old('color_from', $featureCard->color_from) == 'green-50' ? 'selected' : '' }}>Green 50</option>
-                                    </select>
+                                    <label for="color_from" class="block text-sm font-medium text-gray-700 mb-2">Cor Inicial do Gradiente *</label>
+                                    <div class="flex gap-2 items-center">
+                                        <input 
+                                            type="color" 
+                                            id="color_from_picker" 
+                                            value="{{ old('color_from', $featureCard->color_from) }}"
+                                            class="h-10 w-16 rounded border border-gray-300 cursor-pointer"
+                                        >
+                                        <input 
+                                            type="text" 
+                                            name="color_from" 
+                                            id="color_from" 
+                                            value="{{ old('color_from', $featureCard->color_from) }}" 
+                                            required
+                                            pattern="^#[0-9A-Fa-f]{6}$"
+                                            placeholder="#FFFFFF"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 uppercase"
+                                        >
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">Use o seletor de cor ou digite o código hexadecimal</p>
                                     @error('color_from')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                                 </div>
 
                                 <div>
-                                    <label for="color_to" class="block text-sm font-medium text-gray-700">Cor Final do Gradiente *</label>
-                                    <select name="color_to" id="color_to" required
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <option value="white" {{ old('color_to', $featureCard->color_to) == 'white' ? 'selected' : '' }}>Branco</option>
-                                        <option value="primary-100" {{ old('color_to', $featureCard->color_to) == 'primary-100' ? 'selected' : '' }}>Primary 100</option>
-                                        <option value="gold-100" {{ old('color_to', $featureCard->color_to) == 'gold-100' ? 'selected' : '' }}>Gold 100</option>
-                                    </select>
+                                    <label for="color_to" class="block text-sm font-medium text-gray-700 mb-2">Cor Final do Gradiente *</label>
+                                    <div class="flex gap-2 items-center">
+                                        <input 
+                                            type="color" 
+                                            id="color_to_picker" 
+                                            value="{{ old('color_to', $featureCard->color_to) }}"
+                                            class="h-10 w-16 rounded border border-gray-300 cursor-pointer"
+                                        >
+                                        <input 
+                                            type="text" 
+                                            name="color_to" 
+                                            id="color_to" 
+                                            value="{{ old('color_to', $featureCard->color_to) }}" 
+                                            required
+                                            pattern="^#[0-9A-Fa-f]{6}$"
+                                            placeholder="#FFFFFF"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 uppercase"
+                                        >
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">Use o seletor de cor ou digite o código hexadecimal</p>
                                     @error('color_to')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label for="border_color" class="block text-sm font-medium text-gray-700">Cor da Borda *</label>
-                                    <select name="border_color" id="border_color" required
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <option value="primary-100" {{ old('border_color', $featureCard->border_color) == 'primary-100' ? 'selected' : '' }}>Primary 100</option>
-                                        <option value="gold-100" {{ old('border_color', $featureCard->border_color) == 'gold-100' ? 'selected' : '' }}>Gold 100</option>
-                                        <option value="neutral-200" {{ old('border_color', $featureCard->border_color) == 'neutral-200' ? 'selected' : '' }}>Neutral 200</option>
-                                    </select>
+                                    <label for="border_color" class="block text-sm font-medium text-gray-700 mb-2">Cor da Borda *</label>
+                                    <div class="flex gap-2 items-center">
+                                        <input 
+                                            type="color" 
+                                            id="border_color_picker" 
+                                            value="{{ old('border_color', $featureCard->border_color) }}"
+                                            class="h-10 w-16 rounded border border-gray-300 cursor-pointer"
+                                        >
+                                        <input 
+                                            type="text" 
+                                            name="border_color" 
+                                            id="border_color" 
+                                            value="{{ old('border_color', $featureCard->border_color) }}" 
+                                            required
+                                            pattern="^#[0-9A-Fa-f]{6}$"
+                                            placeholder="#FFFFFF"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 uppercase"
+                                        >
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">Use o seletor de cor ou digite o código hexadecimal</p>
                                     @error('border_color')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                                 </div>
 
                                 <div>
-                                    <label for="text_color" class="block text-sm font-medium text-gray-700">Cor do Texto do Título *</label>
-                                    <select name="text_color" id="text_color" required
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                                        <option value="primary-800" {{ old('text_color', $featureCard->text_color) == 'primary-800' ? 'selected' : '' }}>Primary 800</option>
-                                        <option value="gold-800" {{ old('text_color', $featureCard->text_color) == 'gold-800' ? 'selected' : '' }}>Gold 800</option>
-                                        <option value="neutral-900" {{ old('text_color', $featureCard->text_color) == 'neutral-900' ? 'selected' : '' }}>Neutral 900</option>
-                                    </select>
+                                    <label for="text_color" class="block text-sm font-medium text-gray-700 mb-2">Cor do Texto do Título *</label>
+                                    <div class="flex gap-2 items-center">
+                                        <input 
+                                            type="color" 
+                                            id="text_color_picker" 
+                                            value="{{ old('text_color', $featureCard->text_color) }}"
+                                            class="h-10 w-16 rounded border border-gray-300 cursor-pointer"
+                                        >
+                                        <input 
+                                            type="text" 
+                                            name="text_color" 
+                                            id="text_color" 
+                                            value="{{ old('text_color', $featureCard->text_color) }}" 
+                                            required
+                                            pattern="^#[0-9A-Fa-f]{6}$"
+                                            placeholder="#FFFFFF"
+                                            class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 uppercase"
+                                        >
+                                    </div>
+                                    <p class="mt-1 text-xs text-gray-500">Use o seletor de cor ou digite o código hexadecimal</p>
                                     @error('text_color')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                                 </div>
                             </div>
@@ -185,14 +231,50 @@
     </div>
 
     <script>
+        // Sync color pickers with text inputs
+        function syncColorPicker(pickerId, textId) {
+            const picker = document.getElementById(pickerId);
+            const text = document.getElementById(textId);
+            
+            // Update text when picker changes
+            picker.addEventListener('input', function() {
+                text.value = this.value.toUpperCase();
+            });
+            
+            // Update picker when text changes
+            text.addEventListener('input', function() {
+                if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+                    picker.value = this.value;
+                }
+            });
+        }
+        
+        // Initialize color picker sync
+        syncColorPicker('color_from_picker', 'color_from');
+        syncColorPicker('color_to_picker', 'color_to');
+        syncColorPicker('border_color_picker', 'border_color');
+        syncColorPicker('text_color_picker', 'text_color');
+        
         // Color preset selector functionality
         document.getElementById('color_preset').addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             if (selectedOption.value) {
-                document.getElementById('color_from').value = selectedOption.dataset.from;
-                document.getElementById('color_to').value = selectedOption.dataset.to;
-                document.getElementById('border_color').value = selectedOption.dataset.border;
-                document.getElementById('text_color').value = selectedOption.dataset.text;
+                const from = selectedOption.dataset.from;
+                const to = selectedOption.dataset.to;
+                const border = selectedOption.dataset.border;
+                const text = selectedOption.dataset.text;
+                
+                // Update text inputs
+                document.getElementById('color_from').value = from;
+                document.getElementById('color_to').value = to;
+                document.getElementById('border_color').value = border;
+                document.getElementById('text_color').value = text;
+                
+                // Update color pickers
+                document.getElementById('color_from_picker').value = from;
+                document.getElementById('color_to_picker').value = to;
+                document.getElementById('border_color_picker').value = border;
+                document.getElementById('text_color_picker').value = text;
             }
         });
     </script>

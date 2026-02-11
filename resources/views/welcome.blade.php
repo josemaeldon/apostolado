@@ -35,19 +35,21 @@
                     <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
                 </div>
                 <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
-                    <div class="max-w-2xl">
-                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4 sm:mb-6 drop-shadow-2xl">
+                    <div class="max-w-2xl space-y-4 sm:space-y-6">
+                        <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white drop-shadow-2xl">
                             {{ $slider->title }}
                         </h2>
                         @if($slider->description)
-                        <p class="text-base sm:text-lg lg:text-xl text-white/90 mb-6 sm:mb-8 drop-shadow-lg">
+                        <p class="text-base sm:text-lg lg:text-xl text-white/90 drop-shadow-lg leading-relaxed">
                             {{ $slider->description }}
                         </p>
                         @endif
                         @if($slider->button_text && ($slider->button_link || $slider->linkable))
-                        <a href="{{ $slider->effective_link }}" class="inline-block bg-gradient-to-r from-gold-500 to-gold-600 text-white hover:from-gold-600 hover:to-gold-700 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-bold shadow-2xl transition transform hover:scale-105">
-                            {{ $slider->button_text }}
-                        </a>
+                        <div class="pt-2">
+                            <a href="{{ $slider->effective_link }}" class="inline-block bg-gradient-to-r from-gold-500 to-gold-600 text-white hover:from-gold-600 hover:to-gold-700 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-bold shadow-2xl transition transform hover:scale-105">
+                                {{ $slider->button_text }}
+                            </a>
+                        </div>
                         @endif
                     </div>
                 </div>
