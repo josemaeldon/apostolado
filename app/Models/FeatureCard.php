@@ -63,6 +63,19 @@ class FeatureCard extends Model
      */
     public function getCssClasses(): array
     {
+        // Check if colors are hex codes
+        if (preg_match('/^#[0-9A-Fa-f]{6}$/', $this->color_from)) {
+            // Use inline styles for custom hex colors
+            return [
+                'gradient' => '',
+                'border' => 'border',
+                'text' => '',
+                'style' => "background: linear-gradient(to bottom right, {$this->color_from}, {$this->color_to}); border-color: {$this->border_color}; ",
+                'text_style' => "color: {$this->text_color};"
+            ];
+        }
+        
+        // Fallback to preset colors for backward compatibility
         $presets = self::getColorPresets();
         
         // Map stored values to preset names
@@ -78,6 +91,8 @@ class FeatureCard extends Model
             'gradient' => $preset['gradient'],
             'border' => 'border ' . $preset['border'],
             'text' => $preset['text'],
+            'style' => '',
+            'text_style' => ''
         ];
     }
     

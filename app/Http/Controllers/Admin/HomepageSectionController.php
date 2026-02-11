@@ -36,11 +36,13 @@ class HomepageSectionController extends Controller
             'key' => 'required|string|max:255|unique:homepage_sections,key|regex:/^[a-z0-9_-]+$/',
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:500',
+            'background_color' => 'nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
             'display_position' => 'nullable|string|max:255',
             'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
         ], [
             'key.regex' => 'A chave deve conter apenas letras minúsculas, números, underscores (_) e hífens (-).',
+            'background_color.regex' => 'A cor de fundo deve ser um código hexadecimal válido (ex: #FFFFFF).',
         ]);
 
         $validated['is_active'] = $request->has('is_active');
@@ -77,9 +79,12 @@ class HomepageSectionController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'subtitle' => 'nullable|string|max:500',
+            'background_color' => 'nullable|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
             'display_position' => 'nullable|string|max:255',
             'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
+        ], [
+            'background_color.regex' => 'A cor de fundo deve ser um código hexadecimal válido (ex: #FFFFFF).',
         ]);
 
         $validated['is_active'] = $request->has('is_active');

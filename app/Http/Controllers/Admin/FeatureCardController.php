@@ -29,14 +29,19 @@ class FeatureCardController extends Controller
             'description' => 'required|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'icon' => 'required|string|max:10',
-            'color_from' => 'required|string|max:50',
-            'color_to' => 'required|string|max:50',
-            'border_color' => 'required|string|max:50',
-            'text_color' => 'required|string|max:50',
+            'color_from' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'color_to' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'border_color' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'text_color' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
             'order' => 'required|integer',
             'display_position' => 'nullable|string|max:255',
             'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
+        ], [
+            'color_from.regex' => 'A cor inicial deve ser um código hexadecimal válido (ex: #FFFFFF).',
+            'color_to.regex' => 'A cor final deve ser um código hexadecimal válido (ex: #FFFFFF).',
+            'border_color.regex' => 'A cor da borda deve ser um código hexadecimal válido (ex: #FFFFFF).',
+            'text_color.regex' => 'A cor do texto deve ser um código hexadecimal válido (ex: #FFFFFF).',
         ]);
 
         // Handle image upload
@@ -73,14 +78,19 @@ class FeatureCardController extends Controller
             'description' => 'required|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
             'icon' => 'required|string|max:10',
-            'color_from' => 'required|string|max:50',
-            'color_to' => 'required|string|max:50',
-            'border_color' => 'required|string|max:50',
-            'text_color' => 'required|string|max:50',
+            'color_from' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'color_to' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'border_color' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
+            'text_color' => 'required|string|max:7|regex:/^#[0-9A-Fa-f]{6}$/',
             'order' => 'required|integer',
             'display_position' => 'nullable|string|max:255',
             'display_order' => 'nullable|integer|min:0',
             'is_active' => 'boolean',
+        ], [
+            'color_from.regex' => 'A cor inicial deve ser um código hexadecimal válido (ex: #FFFFFF).',
+            'color_to.regex' => 'A cor final deve ser um código hexadecimal válido (ex: #FFFFFF).',
+            'border_color.regex' => 'A cor da borda deve ser um código hexadecimal válido (ex: #FFFFFF).',
+            'text_color.regex' => 'A cor do texto deve ser um código hexadecimal válido (ex: #FFFFFF).',
         ]);
 
         // Handle image upload
