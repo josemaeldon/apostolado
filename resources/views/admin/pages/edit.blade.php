@@ -76,7 +76,7 @@
             height: 500px;
         }
         
-        /* Style font picker dropdown and apply fonts to editor content */
+        /* Style font picker dropdown */
         .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
         .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="arial"]::before {
             content: 'Arial';
