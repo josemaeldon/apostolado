@@ -83,7 +83,7 @@
             height: 500px;
         }
         
-        /* Register custom fonts with Quill */
+        /* Style font picker dropdown and apply fonts to editor content */
         .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
         .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="arial"]::before {
             content: 'Arial';
