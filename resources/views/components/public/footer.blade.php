@@ -1,11 +1,3 @@
-@php
-    use App\Models\SiteSetting;
-    $footerTitle = SiteSetting::get('footer_title', 'Apostolado da Oração');
-    $footerDescription = SiteSetting::get('footer_description', 'Rede Mundial de Oração do Papa');
-    $footerEmail = SiteSetting::get('footer_email', 'contato@apostoladodaoracao.org.br');
-    $footerPhone = SiteSetting::get('footer_phone', '(11) 1234-5678');
-@endphp
-
 <footer class="bg-neutral-900 text-white py-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
