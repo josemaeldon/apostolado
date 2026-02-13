@@ -68,23 +68,56 @@
         </div>
     </div>
     
-    <!-- TinyMCE Editor -->
-    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <!-- Quill Editor -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <style>
+        #editor-container {
+            height: 500px;
+        }
+    </style>
     <script>
-        tinymce.init({
-            selector: '#content',
-            height: 500,
-            menubar: true,
-            plugins: [
-                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                'insertdatetime', 'media', 'table', 'help', 'wordcount'
-            ],
-            toolbar: 'undo redo | blocks | ' +
-                'bold italic forecolor | alignleft aligncenter ' +
-                'alignright alignjustify | bullist numlist outdent indent | ' +
-                'removeformat | help',
-            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide the original textarea
+            var textarea = document.querySelector('#content');
+            textarea.style.display = 'none';
+            
+            // Create a container for the editor
+            var editorContainer = document.createElement('div');
+            editorContainer.id = 'editor-container';
+            textarea.parentNode.insertBefore(editorContainer, textarea);
+            
+            // Initialize Quill
+            var quill = new Quill('#editor-container', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+            
+            // Set initial content using clipboard API for safer HTML handling
+            if (textarea.value) {
+                try {
+                    var delta = quill.clipboard.convert({ html: textarea.value });
+                    quill.setContents(delta);
+                } catch (e) {
+                    console.error('Error loading editor content:', e);
+                }
+            }
+            
+            // Update textarea when content changes
+            quill.on('text-change', function() {
+                textarea.value = quill.root.innerHTML;
+            });
         });
     </script>
 </x-admin-layout>
