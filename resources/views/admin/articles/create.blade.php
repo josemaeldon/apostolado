@@ -109,8 +109,12 @@
             
             // Set initial content using clipboard API for safer HTML handling
             if (textarea.value) {
-                var delta = quill.clipboard.convert({ html: textarea.value });
-                quill.setContents(delta);
+                try {
+                    var delta = quill.clipboard.convert({ html: textarea.value });
+                    quill.setContents(delta);
+                } catch (e) {
+                    console.error('Error loading editor content:', e);
+                }
             }
             
             // Update textarea when content changes
