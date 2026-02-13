@@ -107,18 +107,14 @@
                 }
             });
             
-            // Set initial content
+            // Set initial content using clipboard API for safer HTML handling
             if (textarea.value) {
-                quill.root.innerHTML = textarea.value;
+                var delta = quill.clipboard.convert({ html: textarea.value });
+                quill.setContents(delta);
             }
             
             // Update textarea when content changes
             quill.on('text-change', function() {
-                textarea.value = quill.root.innerHTML;
-            });
-            
-            // Update textarea before form submission
-            textarea.closest('form').addEventListener('submit', function() {
                 textarea.value = quill.root.innerHTML;
             });
         });
