@@ -29,5 +29,15 @@ class AppServiceProvider extends ServiceProvider
                 URL::forceScheme('https');
             }
         }
+        
+        // Share footer settings with the footer component
+        view()->composer('components.public.footer', function ($view) {
+            $view->with([
+                'footerTitle' => \App\Models\SiteSetting::get('footer_title', 'Apostolado da Oração'),
+                'footerDescription' => \App\Models\SiteSetting::get('footer_description', 'Rede Mundial de Oração do Papa'),
+                'footerEmail' => \App\Models\SiteSetting::get('footer_email', 'contato@apostoladodaoracao.org.br'),
+                'footerPhone' => \App\Models\SiteSetting::get('footer_phone', '(11) 1234-5678'),
+            ]);
+        });
     }
 }

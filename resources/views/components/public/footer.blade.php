@@ -2,9 +2,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-                <h4 class="text-xl font-bold mb-4 text-gold-400">Apostolado da Oração</h4>
+                <h4 class="text-xl font-bold mb-4 text-gold-400">{{ $footerTitle }}</h4>
                 <p class="text-neutral-400">
-                    Rede Mundial de Oração do Papa
+                    {{ $footerDescription }}
                 </p>
             </div>
             <div>
@@ -21,8 +21,8 @@
             <div>
                 <h4 class="text-xl font-bold mb-4 text-gold-400">Contato</h4>
                 <p class="text-neutral-400">
-                    Email: contato@apostoladodaoracao.org.br<br>
-                    Tel: (11) 1234-5678
+                    Email: {{ $footerEmail }}<br>
+                    Tel: {{ $footerPhone }}
                 </p>
             </div>
         </div>
