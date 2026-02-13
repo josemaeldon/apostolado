@@ -71,9 +71,84 @@
         #editor-container {
             height: 500px;
         }
+        
+        /* Register custom fonts with Quill */
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="arial"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="arial"]::before {
+            content: 'Arial';
+            font-family: 'Arial', sans-serif;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="trebuchet"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="trebuchet"]::before {
+            content: 'Trebuchet MS';
+            font-family: 'Trebuchet MS', sans-serif;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="georgia"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="georgia"]::before {
+            content: 'Georgia';
+            font-family: 'Georgia', serif;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="times"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="times"]::before {
+            content: 'Times New Roman';
+            font-family: 'Times New Roman', serif;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="verdana"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="verdana"]::before {
+            content: 'Verdana';
+            font-family: 'Verdana', sans-serif;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="courier"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="courier"]::before {
+            content: 'Courier New';
+            font-family: 'Courier New', monospace;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="comic"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="comic"]::before {
+            content: 'Comic Sans MS';
+            font-family: 'Comic Sans MS', cursive;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="impact"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="impact"]::before {
+            content: 'Impact';
+            font-family: 'Impact', sans-serif;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="lucida"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="lucida"]::before {
+            content: 'Lucida Sans';
+            font-family: 'Lucida Sans', sans-serif;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="palatino"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="palatino"]::before {
+            content: 'Palatino';
+            font-family: 'Palatino Linotype', serif;
+        }
+        .ql-snow .ql-picker.ql-font .ql-picker-label[data-value="tahoma"]::before,
+        .ql-snow .ql-picker.ql-font .ql-picker-item[data-value="tahoma"]::before {
+            content: 'Tahoma';
+            font-family: 'Tahoma', sans-serif;
+        }
+        
+        /* Apply fonts to editor content */
+        .ql-font-arial { font-family: 'Arial', sans-serif; }
+        .ql-font-trebuchet { font-family: 'Trebuchet MS', sans-serif; }
+        .ql-font-georgia { font-family: 'Georgia', serif; }
+        .ql-font-times { font-family: 'Times New Roman', serif; }
+        .ql-font-verdana { font-family: 'Verdana', sans-serif; }
+        .ql-font-courier { font-family: 'Courier New', monospace; }
+        .ql-font-comic { font-family: 'Comic Sans MS', cursive; }
+        .ql-font-impact { font-family: 'Impact', sans-serif; }
+        .ql-font-lucida { font-family: 'Lucida Sans', sans-serif; }
+        .ql-font-palatino { font-family: 'Palatino Linotype', serif; }
+        .ql-font-tahoma { font-family: 'Tahoma', sans-serif; }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Register custom fonts with Quill
+            var Font = Quill.import('formats/font');
+            Font.whitelist = ['arial', 'trebuchet', 'georgia', 'times', 'verdana', 'courier', 'comic', 'impact', 'lucida', 'palatino', 'tahoma'];
+            Quill.register(Font, true);
+            
             // Hide the original textarea
             var textarea = document.querySelector('#content');
             textarea.style.display = 'none';
@@ -89,6 +164,7 @@
                 modules: {
                     toolbar: [
                         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        [{ 'font': [] }],
                         ['bold', 'italic', 'underline', 'strike'],
                         [{ 'color': [] }, { 'background': [] }],
                         [{ 'align': [] }],
