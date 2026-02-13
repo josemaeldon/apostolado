@@ -19,8 +19,17 @@ class SiteSettingsController extends Controller
         $useLogo = SiteSetting::get('use_logo', '0');
         $logoPosition = SiteSetting::get('logo_position', 'left');
         $favicon = SiteSetting::get('favicon');
+        
+        // Footer settings
+        $footerTitle = SiteSetting::get('footer_title', 'Apostolado da Oração');
+        $footerDescription = SiteSetting::get('footer_description', 'Rede Mundial de Oração do Papa');
+        $footerEmail = SiteSetting::get('footer_email', 'contato@apostoladodaoracao.org.br');
+        $footerPhone = SiteSetting::get('footer_phone', '(11) 1234-5678');
 
-        return view('admin.site-settings.index', compact('siteName', 'siteLogo', 'useLogo', 'logoPosition', 'favicon'));
+        return view('admin.site-settings.index', compact(
+            'siteName', 'siteLogo', 'useLogo', 'logoPosition', 'favicon',
+            'footerTitle', 'footerDescription', 'footerEmail', 'footerPhone'
+        ));
     }
 
     /**
@@ -34,6 +43,11 @@ class SiteSettingsController extends Controller
             'logo_position' => 'required|in:left,center,right',
             'site_logo' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'favicon' => 'nullable|file|mimes:ico,png,jpg,gif|max:1024',
+            // Footer settings validation
+            'footer_title' => 'required|string|max:255',
+            'footer_description' => 'required|string|max:500',
+            'footer_email' => 'required|email|max:255',
+            'footer_phone' => 'required|string|max:50',
         ]);
 
         // Update site name
@@ -70,6 +84,12 @@ class SiteSettingsController extends Controller
             $faviconPath = $request->file('favicon')->store('favicons', 'public');
             SiteSetting::set('favicon', $faviconPath);
         }
+        
+        // Update footer settings
+        SiteSetting::set('footer_title', $request->footer_title);
+        SiteSetting::set('footer_description', $request->footer_description);
+        SiteSetting::set('footer_email', $request->footer_email);
+        SiteSetting::set('footer_phone', $request->footer_phone);
 
         // Clear all cache
         SiteSetting::clearCache();
