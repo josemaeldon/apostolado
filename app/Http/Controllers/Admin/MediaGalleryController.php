@@ -39,6 +39,7 @@ class MediaGalleryController extends Controller
             'file_path' => 'nullable|file|max:51200', // 50MB max
             'url' => 'nullable|string|max:500',
             'thumbnail' => 'nullable|string|max:500',
+            'thumbnail_file' => 'nullable|image|max:10240', // 10MB max for thumbnails
             'is_published' => 'boolean',
             'order' => 'nullable|integer',
         ]);
@@ -48,6 +49,12 @@ class MediaGalleryController extends Controller
 
         if ($request->hasFile('file_path')) {
             $validated['file_path'] = $request->file('file_path')->store('media-gallery');
+        }
+        
+        // Handle thumbnail file upload
+        if ($request->hasFile('thumbnail_file')) {
+            $validated['thumbnail'] = $request->file('thumbnail_file')->store('media-gallery/thumbnails');
+            unset($validated['thumbnail_file']);
         }
         
         // Normalize YouTube URL if provided
@@ -89,6 +96,7 @@ class MediaGalleryController extends Controller
             'file_path' => 'nullable|file|max:51200', // 50MB max
             'url' => 'nullable|string|max:500',
             'thumbnail' => 'nullable|string|max:500',
+            'thumbnail_file' => 'nullable|image|max:10240', // 10MB max for thumbnails
             'is_published' => 'boolean',
             'order' => 'nullable|integer',
         ]);
@@ -100,6 +108,16 @@ class MediaGalleryController extends Controller
                 Storage::delete($mediaGallery->file_path);
             }
             $validated['file_path'] = $request->file('file_path')->store('media-gallery');
+        }
+        
+        // Handle thumbnail file upload
+        if ($request->hasFile('thumbnail_file')) {
+            // Delete old thumbnail if it's a file path (not a URL)
+            if ($mediaGallery->thumbnail && !filter_var($mediaGallery->thumbnail, FILTER_VALIDATE_URL)) {
+                Storage::delete($mediaGallery->thumbnail);
+            }
+            $validated['thumbnail'] = $request->file('thumbnail_file')->store('media-gallery/thumbnails');
+            unset($validated['thumbnail_file']);
         }
         
         // Normalize YouTube URL if provided
@@ -157,6 +175,11 @@ class MediaGalleryController extends Controller
     {
         if ($mediaGallery->file_path) {
             Storage::delete($mediaGallery->file_path);
+        }
+        
+        // Delete thumbnail if it's a file path (not a URL)
+        if ($mediaGallery->thumbnail && !filter_var($mediaGallery->thumbnail, FILTER_VALIDATE_URL)) {
+            Storage::delete($mediaGallery->thumbnail);
         }
         
         $mediaGallery->delete();
