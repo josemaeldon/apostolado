@@ -55,11 +55,21 @@
                                 </p>
                             </div>
 
-                            <div>
-                                <label for="thumbnail" class="block text-sm font-medium text-gray-700">Miniatura (URL ou caminho)</label>
+                            <div id="thumbnail-field" style="display: none;">
+                                <label for="thumbnail_file" class="block text-sm font-medium text-gray-700">Miniatura do Vídeo (Upload de Imagem)</label>
+                                <input type="file" name="thumbnail_file" id="thumbnail_file" accept="image/*"
+                                       class="mt-1 block w-full">
+                                @error('thumbnail_file')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                <p class="mt-1 text-sm text-gray-500">Faça upload de uma imagem para usar como miniatura do vídeo</p>
+                            </div>
+
+                            <div id="thumbnail-url-field" style="display: none;">
+                                <label for="thumbnail" class="block text-sm font-medium text-gray-700">Miniatura (URL)</label>
                                 <input type="text" name="thumbnail" id="thumbnail" value="{{ old('thumbnail') }}"
+                                       placeholder="https://..."
                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 @error('thumbnail')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                                <p class="mt-1 text-sm text-gray-500">Ou cole a URL de uma imagem externa</p>
                             </div>
 
                             <div>
@@ -95,15 +105,24 @@
             const type = document.getElementById('type').value;
             const fileField = document.getElementById('file-upload-field');
             const urlField = document.getElementById('url-field');
+            const thumbnailField = document.getElementById('thumbnail-field');
+            const thumbnailUrlField = document.getElementById('thumbnail-url-field');
             
             if (type === 'image') {
                 fileField.querySelector('label').textContent = 'Arquivo (Imagem)';
                 fileField.querySelector('input').accept = 'image/*';
                 fileField.querySelector('p').textContent = 'Faça upload de uma imagem';
+                thumbnailField.style.display = 'none';
+                thumbnailUrlField.style.display = 'none';
             } else if (type === 'video') {
                 fileField.querySelector('label').textContent = 'Arquivo (Vídeo) - Opcional';
                 fileField.querySelector('input').accept = 'video/*';
                 fileField.querySelector('p').textContent = 'Faça upload de um vídeo ou use o link do YouTube abaixo';
+                thumbnailField.style.display = 'block';
+                thumbnailUrlField.style.display = 'block';
+            } else {
+                thumbnailField.style.display = 'none';
+                thumbnailUrlField.style.display = 'none';
             }
         }
         
