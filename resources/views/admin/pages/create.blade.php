@@ -176,18 +176,23 @@
                 }
             });
             
-            // Set initial content using clipboard API for safer HTML handling
+            // Update textarea when content changes
+            quill.on('text-change', function() {
+                textarea.value = quill.root.innerHTML;
+            });
+
+            // Set initial content
             if (textarea.value) {
                 try {
-                    var delta = quill.clipboard.convert({ html: textarea.value });
-                    quill.setContents(delta);
+                    var delta = quill.clipboard.convert(textarea.value);
+                    quill.setContents(delta, 'silent');
                 } catch (e) {
                     console.error('Error loading editor content:', e);
                 }
             }
-            
-            // Update textarea when content changes
-            quill.on('text-change', function() {
+
+            // Sync content to textarea before form submission
+            textarea.closest('form').addEventListener('submit', function() {
                 textarea.value = quill.root.innerHTML;
             });
         });

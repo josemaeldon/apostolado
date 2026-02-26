@@ -63,12 +63,12 @@ class SiteSettingsController extends Controller
         if ($request->hasFile('site_logo')) {
             // Delete old logo if exists
             $oldLogo = SiteSetting::get('site_logo');
-            if ($oldLogo && Storage::disk('public')->exists($oldLogo)) {
-                Storage::disk('public')->delete($oldLogo);
+            if ($oldLogo && Storage::exists($oldLogo)) {
+                Storage::delete($oldLogo);
             }
 
             // Store new logo
-            $logoPath = $request->file('site_logo')->store('logos', 'public');
+            $logoPath = $request->file('site_logo')->store('logos');
             SiteSetting::set('site_logo', $logoPath);
         }
         
@@ -76,12 +76,12 @@ class SiteSettingsController extends Controller
         if ($request->hasFile('favicon')) {
             // Delete old favicon if exists
             $oldFavicon = SiteSetting::get('favicon');
-            if ($oldFavicon && Storage::disk('public')->exists($oldFavicon)) {
-                Storage::disk('public')->delete($oldFavicon);
+            if ($oldFavicon && Storage::exists($oldFavicon)) {
+                Storage::delete($oldFavicon);
             }
 
             // Store new favicon
-            $faviconPath = $request->file('favicon')->store('favicons', 'public');
+            $faviconPath = $request->file('favicon')->store('favicons');
             SiteSetting::set('favicon', $faviconPath);
         }
         
@@ -105,8 +105,8 @@ class SiteSettingsController extends Controller
     {
         $logo = SiteSetting::get('site_logo');
         
-        if ($logo && Storage::disk('public')->exists($logo)) {
-            Storage::disk('public')->delete($logo);
+        if ($logo && Storage::exists($logo)) {
+            Storage::delete($logo);
         }
 
         SiteSetting::set('site_logo', null);
@@ -124,8 +124,8 @@ class SiteSettingsController extends Controller
     {
         $favicon = SiteSetting::get('favicon');
         
-        if ($favicon && Storage::disk('public')->exists($favicon)) {
-            Storage::disk('public')->delete($favicon);
+        if ($favicon && Storage::exists($favicon)) {
+            Storage::delete($favicon);
         }
 
         SiteSetting::set('favicon', null);
