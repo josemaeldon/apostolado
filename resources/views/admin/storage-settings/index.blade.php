@@ -156,7 +156,7 @@
                         <div class="mb-6 bg-gray-50 border border-gray-200 px-4 py-3 rounded">
                             <p class="text-sm text-gray-700">
                                 📚 Para instruções detalhadas sobre como configurar o MinIO, consulte o arquivo 
-                                <a href="https://github.com/josemaeldon/apostolado/blob/main/MINIO-SETUP.md" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
+                                <a href="https://github.com/josemaeldon/apostolado/blob/main/docs/MINIO-SETUP.md" target="_blank" class="text-blue-600 hover:text-blue-800 underline">
                                     MINIO-SETUP.md
                                 </a>
                             </p>
