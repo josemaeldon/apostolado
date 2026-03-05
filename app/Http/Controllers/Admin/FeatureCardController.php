@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FeatureCard;
 use App\Models\HomepageSection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FeatureCardController extends Controller
 {
@@ -47,7 +48,7 @@ class FeatureCardController extends Controller
 
         // Handle image upload
         if ($request->hasFile('featured_image')) {
-            $validated['featured_image'] = $request->file('featured_image')->store('feature-cards', 'public');
+            $validated['featured_image'] = $request->file('featured_image')->store('feature-cards');
         }
 
         $validated['is_active'] = $request->has('is_active');
@@ -97,10 +98,18 @@ class FeatureCardController extends Controller
         // Handle image upload
         if ($request->hasFile('featured_image')) {
             // Delete old image if exists
-            if ($featureCard->featured_image && \Storage::disk('public')->exists($featureCard->featured_image)) {
-                \Storage::disk('public')->delete($featureCard->featured_image);
+            $oldImage = $featureCard->featured_image;
+            if ($oldImage) {
+                if (Storage::disk('public')->exists($oldImage)) {
+                    Storage::disk('public')->delete($oldImage);
+                }
+
+                $defaultDisk = config('filesystems.default', 'local');
+                if (Storage::disk($defaultDisk)->exists($oldImage)) {
+                    Storage::disk($defaultDisk)->delete($oldImage);
+                }
             }
-            $validated['featured_image'] = $request->file('featured_image')->store('feature-cards', 'public');
+            $validated['featured_image'] = $request->file('featured_image')->store('feature-cards');
         }
 
         $validated['is_active'] = $request->has('is_active');
