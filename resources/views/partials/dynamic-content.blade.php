@@ -23,30 +23,69 @@
                 {{-- Render associated cards if any --}}
                 @if($sectionCards->count() > 0)
                     @php
+                        $useCarousel = $sectionCards->count() > 6;
+                        $carouselId = 'section-cards-' . ($section->id ?? \Illuminate\Support\Str::slug($section->title));
                         $gridCols = $sectionCards->count() === 1 ? 'md:grid-cols-1' : 
                                    ($sectionCards->count() === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3');
                     @endphp
-                <div class="grid grid-cols-1 {{ $gridCols }} gap-6 sm:gap-8">
-                    @foreach($sectionCards as $card)
-                        @php
-                            $classes = $card->getCssClasses();
-                        @endphp
-                        <div class="{{ $classes['gradient'] }} {{ $classes['border'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition" style="{{ $classes['style'] ?? '' }}">
-                            @if($card->featured_image)
-                                <div class="mb-4 rounded-lg overflow-hidden">
-                                    <img src="{{ \App\Helpers\ImageHelper::storageUrl($card->featured_image) }}" 
-                                         alt="{{ $card->title }}" 
-                                         class="w-full h-48 object-cover">
+                    @if($useCarousel)
+                    <div class="relative">
+                        <div id="{{ $carouselId }}" class="flex gap-6 sm:gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                            @foreach($sectionCards as $card)
+                                @php
+                                    $classes = $card->getCssClasses();
+                                @endphp
+                                <div class="min-w-[85%] md:min-w-[48%] lg:min-w-[31%] snap-start flex-shrink-0 {{ $classes['gradient'] }} {{ $classes['border'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition" style="{{ $classes['style'] ?? '' }}">
+                                    @if($card->featured_image)
+                                        <div class="mb-4 rounded-lg overflow-hidden">
+                                            <img src="{{ \App\Helpers\ImageHelper::storageUrl($card->featured_image) }}"
+                                                 alt="{{ $card->title }}"
+                                                 class="w-full h-48 object-cover">
+                                        </div>
+                                    @endif
+                                    <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
+                                    <h4 class="text-xl sm:text-2xl font-bold {{ $classes['text'] }} mb-3" style="{{ $classes['text_style'] ?? '' }}">{{ $card->title }}</h4>
+                                    <p class="text-sm sm:text-base text-neutral-700">
+                                        {{ $card->description }}
+                                    </p>
                                 </div>
-                            @endif
-                            <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
-                            <h4 class="text-xl sm:text-2xl font-bold {{ $classes['text'] }} mb-3" style="{{ $classes['text_style'] ?? '' }}">{{ $card->title }}</h4>
-                            <p class="text-sm sm:text-base text-neutral-700">
-                                {{ $card->description }}
-                            </p>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
+
+                        <button onclick="scrollCards('{{ $carouselId }}', -1)" class="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-2 sm:-translate-x-4 bg-white hover:bg-neutral-100 text-neutral-800 p-2 sm:p-3 rounded-full shadow-xl transition z-10" aria-label="Cards anteriores">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                        </button>
+                        <button onclick="scrollCards('{{ $carouselId }}', 1)" class="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-2 sm:translate-x-4 bg-white hover:bg-neutral-100 text-neutral-800 p-2 sm:p-3 rounded-full shadow-xl transition z-10" aria-label="Próximos cards">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    @else
+                    <div class="grid grid-cols-1 {{ $gridCols }} gap-6 sm:gap-8">
+                        @foreach($sectionCards as $card)
+                            @php
+                                $classes = $card->getCssClasses();
+                            @endphp
+                            <div class="{{ $classes['gradient'] }} {{ $classes['border'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition" style="{{ $classes['style'] ?? '' }}">
+                                @if($card->featured_image)
+                                    <div class="mb-4 rounded-lg overflow-hidden">
+                                        <img src="{{ \App\Helpers\ImageHelper::storageUrl($card->featured_image) }}"
+                                             alt="{{ $card->title }}"
+                                             class="w-full h-48 object-cover">
+                                    </div>
+                                @endif
+                                <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
+                                <h4 class="text-xl sm:text-2xl font-bold {{ $classes['text'] }} mb-3" style="{{ $classes['text_style'] ?? '' }}">{{ $card->title }}</h4>
+                                <p class="text-sm sm:text-base text-neutral-700">
+                                    {{ $card->description }}
+                                </p>
+                            </div>
+                        @endforeach
+                    </div>
+                    @endif
                 @endif
             </div>
         </div>
