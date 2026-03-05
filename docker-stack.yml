@@ -9,6 +9,8 @@ services:
       - cloudbrnet
 
     volumes:
+      # IMPORTANT: keep these paths under /var/www/html (not /public),
+      # so storage persistence and bootstrap cache survive redeploys.
       - apostolado-storage-data:/var/www/html/storage
       - apostolado-cache-data:/var/www/html/bootstrap/cache
 

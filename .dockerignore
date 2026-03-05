@@ -19,3 +19,4 @@ storage/*.key
 Thumbs.db
 *.log
 tests/
+*.md
