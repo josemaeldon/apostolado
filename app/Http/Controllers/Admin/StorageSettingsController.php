@@ -13,7 +13,7 @@ class StorageSettingsController extends Controller
      */
     public function index()
     {
-        $currentDisk = config('filesystems.default');
+        $currentDisk = $this->getPersistedEnvValue('FILESYSTEM_DISK', config('filesystems.default'));
         
         // Test connection to current disk
         $connectionStatus = $this->testConnection($currentDisk);
@@ -48,8 +48,14 @@ class StorageSettingsController extends Controller
             'MINIO_USE_PATH_STYLE_ENDPOINT' => 'true',
         ]);
 
+        // Update runtime config for current request cycle and prevent stale UI status.
+        config(['filesystems.default' => $validated['filesystem_disk']]);
+
+        // Remove stale cached config so the app reads fresh .env values after update/restart.
+        $this->clearConfigCacheFiles();
+
         return redirect()->route('admin.storage-settings.index')
-            ->with('success', 'Configurações de armazenamento atualizadas com sucesso! Reinicie a aplicação para aplicar as mudanças.');
+            ->with('success', 'Configurações de armazenamento atualizadas com sucesso!');
     }
 
     /**
@@ -132,5 +138,53 @@ class StorageSettingsController extends Controller
         }
 
         file_put_contents($persistentEnvFile, $envContent, LOCK_EX);
+    }
+
+    /**
+     * Read env values from persistent env file first, then fallback to .env.
+     */
+    private function getPersistedEnvValue(string $key, ?string $default = null): ?string
+    {
+        $sources = [
+            storage_path('app/config/.env.persistent'),
+            base_path('.env'),
+        ];
+
+        foreach ($sources as $file) {
+            if (!is_file($file)) {
+                continue;
+            }
+
+            $content = file_get_contents($file);
+            if ($content === false) {
+                continue;
+            }
+
+            $escapedKey = preg_quote($key, '/');
+            if (preg_match('/^' . $escapedKey . '=(.*)$/m', $content, $matches)) {
+                $value = trim($matches[1]);
+                return trim($value, "\"'");
+            }
+        }
+
+        return $default;
+    }
+
+    /**
+     * Remove cached config artifacts that can keep old env values.
+     */
+    private function clearConfigCacheFiles(): void
+    {
+        $cacheFiles = [
+            base_path('bootstrap/cache/config.php'),
+            base_path('bootstrap/cache/services.php'),
+            base_path('bootstrap/cache/packages.php'),
+        ];
+
+        foreach ($cacheFiles as $file) {
+            if (is_file($file)) {
+                @unlink($file);
+            }
+        }
     }
 }
