@@ -4,6 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instalador - Apostolado da Oração</title>
+    @php
+        $favicon = null;
+        try {
+            $favicon = \App\Models\SiteSetting::get('favicon');
+        } catch (\Throwable $e) {
+            $favicon = null;
+        }
+    @endphp
+    @if($favicon)
+        <link rel="icon" type="image/x-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+        <link rel="shortcut icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+    @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gradient-to-b from-indigo-50 to-white">

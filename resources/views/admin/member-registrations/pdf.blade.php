@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastros de Membros</title>
+    @php
+        $favicon = \App\Models\SiteSetting::get('favicon');
+    @endphp
+    @if($favicon)
+        <link rel="icon" type="image/x-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+        <link rel="shortcut icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+    @endif
     <style>
         * {
             margin: 0;
