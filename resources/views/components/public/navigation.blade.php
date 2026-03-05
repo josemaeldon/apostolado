@@ -7,11 +7,13 @@
                         ['site_name', 'site_logo', 'use_logo'],
                         ['site_name' => 'Apostolado da Oração', 'use_logo' => '0']
                     );
+                    $hasLogo = $settings['use_logo'] == '1' && !empty($settings['site_logo']);
+                    $logoUrl = $hasLogo ? \App\Helpers\ImageHelper::storageUrl($settings['site_logo']) : null;
                 @endphp
                 
                 <a href="{{ route('home') }}" class="flex items-center">
-                    @if($settings['use_logo'] == '1' && $settings['site_logo'])
-                        <img src="{{ \App\Helpers\ImageHelper::storageUrl($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-12 object-contain">
+                    @if($hasLogo)
+                        <img src="{{ $logoUrl }}" alt="{{ $settings['site_name'] }}" class="h-12 object-contain">
                     @else
                         <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-700 to-primary-900 bg-clip-text text-transparent">
                             {{ $settings['site_name'] }}
@@ -53,7 +55,10 @@
 
             <!-- Mobile menu button -->
             <div class="flex items-center lg:hidden">
-                <button type="button" id="mobile-menu-button" class="text-neutral-700 hover:text-primary-700 focus:outline-none focus:text-primary-700">
+                <button type="button" id="mobile-menu-button" class="flex items-center gap-2 text-neutral-700 hover:text-primary-700 focus:outline-none focus:text-primary-700" aria-label="Abrir ou fechar menu">
+                    @if($hasLogo)
+                        <img src="{{ $logoUrl }}" alt="{{ $settings['site_name'] }}" class="h-8 w-auto object-contain">
+                    @endif
                     <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                         <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>

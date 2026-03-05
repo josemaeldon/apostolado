@@ -40,11 +40,16 @@
                                 ['site_name', 'site_logo', 'use_logo'],
                                 ['site_name' => config('app.name', 'Apostolado'), 'use_logo' => '0']
                             );
+                            $hasLogo = $settings['use_logo'] == '1' && !empty($settings['site_logo']);
+                            $logoUrl = $hasLogo ? \App\Helpers\ImageHelper::storageUrl($settings['site_logo']) : null;
                         @endphp
                         
-                        @if($settings['use_logo'] == '1' && $settings['site_logo'])
+                        @if($hasLogo)
                             <div x-show="sidebarOpen" class="transition-opacity duration-300">
-                                <img src="{{ \App\Helpers\ImageHelper::storageUrl($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-8 object-contain">
+                                <img src="{{ $logoUrl }}" alt="{{ $settings['site_name'] }}" class="h-8 object-contain">
+                            </div>
+                            <div x-show="!sidebarOpen" class="transition-opacity duration-300" x-cloak>
+                                <img src="{{ $logoUrl }}" alt="{{ $settings['site_name'] }}" class="h-8 w-8 object-contain rounded">
                             </div>
                         @else
                             <h2 x-show="sidebarOpen" class="font-semibold text-xl text-gray-800 transition-opacity duration-300">
