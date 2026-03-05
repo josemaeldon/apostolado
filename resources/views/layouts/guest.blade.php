@@ -12,8 +12,8 @@
             $favicon = \App\Models\SiteSetting::get('favicon');
         @endphp
         @if($favicon)
-            <link rel="icon" type="image/x-icon" href="{{ Storage::url($favicon) }}">
-            <link rel="shortcut icon" href="{{ Storage::url($favicon) }}">
+            <link rel="icon" type="image/x-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+            <link rel="shortcut icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
         @endif
 
         <!-- Fonts -->
@@ -28,7 +28,7 @@
             <div>
                 <a href="/">
                     @if($favicon)
-                        <img src="{{ Storage::url($favicon) }}" alt="{{ config('app.name', 'Laravel') }}" class="w-20 h-20 object-contain">
+                        <img src="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}" alt="{{ config('app.name', 'Laravel') }}" class="w-20 h-20 object-contain">
                     @else
                         <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
                     @endif

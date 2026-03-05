@@ -44,7 +44,7 @@
                                 <label for="featured_image" class="block text-sm font-medium text-gray-700">Imagem em Destaque</label>
                                 @if($featureCard->featured_image)
                                     <div class="mb-2">
-                                        <img src="{{ asset('storage/' . $featureCard->featured_image) }}" alt="Imagem atual" class="w-32 h-32 object-cover rounded-lg border border-gray-200">
+                                        <img src="{{ \App\Helpers\ImageHelper::storageUrl($featureCard->featured_image) }}" alt="Imagem atual" class="w-32 h-32 object-cover rounded-lg border border-gray-200">
                                         <p class="text-xs text-gray-500 mt-1">Imagem atual</p>
                                     </div>
                                 @endif

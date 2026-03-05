@@ -11,7 +11,7 @@
                 
                 <a href="{{ route('home') }}" class="flex items-center">
                     @if($settings['use_logo'] == '1' && $settings['site_logo'])
-                        <img src="{{ Storage::url($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-12 object-contain">
+                        <img src="{{ \App\Helpers\ImageHelper::storageUrl($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-12 object-contain">
                     @else
                         <h1 class="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-700 to-primary-900 bg-clip-text text-transparent">
                             {{ $settings['site_name'] }}

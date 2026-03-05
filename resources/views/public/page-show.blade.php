@@ -21,7 +21,7 @@
 
             <article class="bg-white rounded-2xl shadow-xl overflow-hidden border border-neutral-200">
                 @if($page->featured_image)
-                <div class="h-96 bg-cover bg-center" style="background-image: url('{{ Storage::url($page->featured_image) }}');"></div>
+                <div class="h-96 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($page->featured_image) }}');"></div>
                 @endif
 
                 <div class="p-8 lg:p-12">

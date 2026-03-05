@@ -26,7 +26,7 @@
                             <div>
                                 <label for="image" class="block text-sm font-medium text-gray-700">Nova Imagem (deixe em branco para manter a atual)</label>
                                 @if($slider->image)
-                                    <img src="{{ Storage::url($slider->image) }}" alt="{{ $slider->title }}" class="mt-2 h-32 rounded">
+                                    <img src="{{ \App\Helpers\ImageHelper::storageUrl($slider->image) }}" alt="{{ $slider->title }}" class="mt-2 h-32 rounded">
                                 @endif
                                 <input type="file" name="image" id="image" accept="image/*"
                                        class="mt-1 block w-full">

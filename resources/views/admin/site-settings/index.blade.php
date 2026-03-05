@@ -129,7 +129,7 @@
                                 <div class="flex items-center space-x-4">
                                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                         <img 
-                                            src="{{ Storage::url($siteLogo) }}" 
+                                            src="{{ \App\Helpers\ImageHelper::storageUrl($siteLogo) }}" 
                                             alt="Logo Atual" 
                                             class="h-16 object-contain"
                                         >
@@ -175,7 +175,7 @@
                                 <div class="flex items-center space-x-4">
                                     <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
                                         <img 
-                                            src="{{ Storage::url($favicon) }}" 
+                                            src="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}" 
                                             alt="Favicon Atual" 
                                             class="h-8 w-8 object-contain"
                                         >

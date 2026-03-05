@@ -38,10 +38,10 @@
                         <div class="border-t pt-6">
                             <dt class="text-sm font-medium text-gray-500 mb-2">Arquivo</dt>
                             @if($mediaGallery->type === 'image')
-                                <img src="{{ Storage::url($mediaGallery->file_path) }}" alt="{{ $mediaGallery->title }}" class="max-w-md rounded shadow">
+                                <img src="{{ \App\Helpers\ImageHelper::storageUrl($mediaGallery->file_path) }}" alt="{{ $mediaGallery->title }}" class="max-w-md rounded shadow">
                             @elseif($mediaGallery->type === 'video')
                                 <video controls class="max-w-md rounded shadow">
-                                    <source src="{{ Storage::url($mediaGallery->file_path) }}" type="video/mp4">
+                                    <source src="{{ \App\Helpers\ImageHelper::storageUrl($mediaGallery->file_path) }}" type="video/mp4">
                                     Seu navegador não suporta o elemento de vídeo.
                                 </video>
                             @endif

@@ -56,7 +56,7 @@
                             <div>
                                 <label for="image" class="block text-sm font-medium text-gray-700">Nova Imagem (deixe em branco para manter a atual)</label>
                                 @if($prayerIntention->image)
-                                    <img src="{{ Storage::url($prayerIntention->image) }}" alt="{{ $prayerIntention->title }}" class="mt-2 h-32 rounded">
+                                    <img src="{{ \App\Helpers\ImageHelper::storageUrl($prayerIntention->image) }}" alt="{{ $prayerIntention->title }}" class="mt-2 h-32 rounded">
                                 @endif
                                 <input type="file" name="image" id="image" accept="image/*"
                                        class="mt-1 block w-full">

@@ -39,7 +39,7 @@
                                 <label for="file_path" class="block text-sm font-medium text-gray-700">Novo Arquivo (deixe em branco para manter o atual)</label>
                                 @if($mediaGallery->file_path)
                                     @if($mediaGallery->type === 'image')
-                                        <img src="{{ Storage::url($mediaGallery->file_path) }}" alt="{{ $mediaGallery->title }}" class="mt-2 h-32 rounded">
+                                        <img src="{{ \App\Helpers\ImageHelper::storageUrl($mediaGallery->file_path) }}" alt="{{ $mediaGallery->title }}" class="mt-2 h-32 rounded">
                                     @else
                                         <p class="mt-2 text-sm text-gray-600">Arquivo atual: {{ basename($mediaGallery->file_path) }}</p>
                                     @endif
@@ -65,7 +65,7 @@
                             <div id="thumbnail-field" style="display: none;">
                                 <label for="thumbnail_file" class="block text-sm font-medium text-gray-700">Nova Miniatura do Vídeo (Upload de Imagem)</label>
                                 @if($mediaGallery->thumbnail && !filter_var($mediaGallery->thumbnail, FILTER_VALIDATE_URL))
-                                    <img src="{{ Storage::url($mediaGallery->thumbnail) }}" alt="Miniatura atual" class="mt-2 h-32 rounded">
+                                    <img src="{{ \App\Helpers\ImageHelper::storageUrl($mediaGallery->thumbnail) }}" alt="Miniatura atual" class="mt-2 h-32 rounded">
                                     <p class="mt-2 text-sm text-gray-600">Miniatura atual (deixe em branco para manter)</p>
                                 @elseif($mediaGallery->thumbnail)
                                     <img src="{{ $mediaGallery->thumbnail }}" alt="Miniatura atual" class="mt-2 h-32 rounded">

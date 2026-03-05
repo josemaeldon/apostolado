@@ -21,7 +21,7 @@
 
             <article class="bg-white rounded-2xl shadow-xl overflow-hidden border border-neutral-200">
                 @if($event->image)
-                <div class="h-96 bg-cover bg-center" style="background-image: url('{{ Storage::url($event->image) }}');"></div>
+                <div class="h-96 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($event->image) }}');"></div>
                 @else
                 <div class="h-96 bg-gradient-to-br from-gold-600 via-primary-600 to-primary-700 flex items-center justify-center">
                     <div class="text-white text-8xl">📅</div>

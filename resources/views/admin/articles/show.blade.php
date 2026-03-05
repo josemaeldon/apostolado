@@ -44,7 +44,7 @@
                         @if($article->featured_image)
                         <div class="border-t pt-6">
                             <dt class="text-sm font-medium text-gray-500 mb-2">Imagem Destacada</dt>
-                            <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" class="max-w-md rounded shadow">
+                            <img src="{{ \App\Helpers\ImageHelper::storageUrl($article->featured_image) }}" alt="{{ $article->title }}" class="max-w-md rounded shadow">
                         </div>
                         @endif
 

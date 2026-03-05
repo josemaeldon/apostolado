@@ -48,7 +48,7 @@
                     <div class="relative h-64">
                         @if($media->type === 'image')
                             @if($media->file_path)
-                                <div class="h-full bg-cover bg-center" style="background-image: url('{{ Storage::url($media->file_path) }}');"></div>
+                                <div class="h-full bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($media->file_path) }}');"></div>
                             @else
                                 <div class="h-full bg-gradient-to-br from-neutral-300 to-neutral-400 flex items-center justify-center">
                                     <svg class="w-20 h-20 text-neutral-600" fill="currentColor" viewBox="0 0 20 20">
@@ -61,7 +61,7 @@
                             </span>
                         @elseif($media->type === 'video')
                             @if($media->thumbnail)
-                                <div class="h-full bg-cover bg-center" style="background-image: url('{{ Storage::url($media->thumbnail) }}');"></div>
+                                <div class="h-full bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($media->thumbnail) }}');"></div>
                             @else
                                 <div class="h-full bg-gradient-to-br from-neutral-700 to-neutral-900 flex items-center justify-center">
                                     <svg class="w-20 h-20 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -100,7 +100,7 @@
                         </div>
                         @if($media->type === 'image')
                             @if($media->file_path)
-                                <img src="{{ Storage::url($media->file_path) }}" alt="{{ $media->title }}" class="w-full h-auto rounded-lg shadow-2xl">
+                                <img src="{{ \App\Helpers\ImageHelper::storageUrl($media->file_path) }}" alt="{{ $media->title }}" class="w-full h-auto rounded-lg shadow-2xl">
                             @else
                                 <div class="w-full h-96 bg-gradient-to-br from-neutral-300 to-neutral-400 flex items-center justify-center rounded-lg shadow-2xl">
                                     <div class="text-center">
@@ -114,7 +114,7 @@
                         @elseif($media->type === 'video')
                             @if($media->file_path)
                                 <video controls class="w-full h-auto rounded-lg shadow-2xl">
-                                    <source src="{{ Storage::url($media->file_path) }}" type="video/mp4">
+                                    <source src="{{ \App\Helpers\ImageHelper::storageUrl($media->file_path) }}" type="video/mp4">
                                     Seu navegador não suporta a reprodução de vídeo.
                                 </video>
                             @elseif($media->url)

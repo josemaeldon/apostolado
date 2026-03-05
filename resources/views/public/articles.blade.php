@@ -29,7 +29,7 @@
                 @foreach($articles as $article)
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden border border-neutral-200 transform hover:-translate-y-1 duration-300">
                     @if($article->featured_image)
-                    <div class="h-56 bg-cover bg-center" style="background-image: url('{{ Storage::url($article->featured_image) }}');"></div>
+                    <div class="h-56 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($article->featured_image) }}');"></div>
                     @else
                     <div class="h-56 bg-gradient-to-br from-primary-600 to-gold-600 flex items-center justify-center">
                         <div class="text-white text-6xl">📰</div>

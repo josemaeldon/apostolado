@@ -56,7 +56,7 @@
                 @foreach($prayerIntentions as $intention)
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden border border-neutral-200 transform hover:-translate-y-1 duration-300">
                     @if($intention->image)
-                    <div class="h-56 bg-cover bg-center" style="background-image: url('{{ Storage::url($intention->image) }}');"></div>
+                    <div class="h-56 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($intention->image) }}');"></div>
                     @else
                     <div class="h-56 bg-gradient-to-br from-primary-600 via-primary-700 to-gold-600 flex items-center justify-center">
                         <div class="text-center text-white">

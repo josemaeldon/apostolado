@@ -37,7 +37,7 @@
                         @if($event->image)
                         <div class="border-t pt-6">
                             <dt class="text-sm font-medium text-gray-500 mb-2">Imagem</dt>
-                            <img src="{{ Storage::url($event->image) }}" alt="{{ $event->title }}" class="max-w-md rounded shadow">
+                            <img src="{{ \App\Helpers\ImageHelper::storageUrl($event->image) }}" alt="{{ $event->title }}" class="max-w-md rounded shadow">
                         </div>
                         @endif
 

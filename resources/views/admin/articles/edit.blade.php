@@ -40,7 +40,7 @@
                             <div>
                                 <label for="featured_image" class="block text-sm font-medium text-gray-700">Nova Imagem Destacada (deixe em branco para manter a atual)</label>
                                 @if($article->featured_image)
-                                    <img src="{{ Storage::url($article->featured_image) }}" alt="{{ $article->title }}" class="mt-2 h-32 rounded">
+                                    <img src="{{ \App\Helpers\ImageHelper::storageUrl($article->featured_image) }}" alt="{{ $article->title }}" class="mt-2 h-32 rounded">
                                 @endif
                                 <input type="file" name="featured_image" id="featured_image" accept="image/*"
                                        class="mt-1 block w-full">

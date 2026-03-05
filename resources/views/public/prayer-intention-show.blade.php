@@ -21,7 +21,7 @@
 
             <article class="bg-white rounded-2xl shadow-xl overflow-hidden border border-neutral-200">
                 @if($prayerIntention->image)
-                <div class="h-96 bg-cover bg-center" style="background-image: url('{{ Storage::url($prayerIntention->image) }}');"></div>
+                <div class="h-96 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($prayerIntention->image) }}');"></div>
                 @else
                 <div class="h-96 bg-gradient-to-br from-primary-600 via-primary-700 to-gold-600 flex items-center justify-center">
                     <div class="text-center text-white">

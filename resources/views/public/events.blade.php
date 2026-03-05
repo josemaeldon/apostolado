@@ -29,7 +29,7 @@
                 @foreach($events as $event)
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden border border-neutral-200 transform hover:-translate-y-1 duration-300">
                     @if($event->image)
-                    <div class="h-56 bg-cover bg-center" style="background-image: url('{{ Storage::url($event->image) }}');"></div>
+                    <div class="h-56 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($event->image) }}');"></div>
                     @else
                     <div class="h-56 bg-gradient-to-br from-gold-600 via-primary-600 to-primary-700 flex items-center justify-center">
                         <div class="text-white text-6xl">📅</div>

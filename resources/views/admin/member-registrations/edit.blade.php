@@ -143,7 +143,7 @@
                                 <label for="profile_image" class="block text-sm font-medium text-gray-700">Foto de Perfil</label>
                                 @if($memberRegistration->profile_image)
                                     <div class="mt-2 mb-3">
-                                        <img src="{{ Storage::url($memberRegistration->profile_image) }}" alt="Foto atual" class="h-32 w-32 object-cover rounded-lg border border-gray-300">
+                                        <img src="{{ \App\Helpers\ImageHelper::storageUrl($memberRegistration->profile_image) }}" alt="Foto atual" class="h-32 w-32 object-cover rounded-lg border border-gray-300">
                                         <p class="text-xs text-gray-500 mt-1">Foto atual</p>
                                     </div>
                                 @endif
