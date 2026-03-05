@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Imagem indisponivel">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#d4d4d8"/>
+      <stop offset="100%" stop-color="#a1a1aa"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <g fill="#3f3f46" opacity="0.9">
+    <rect x="200" y="180" width="800" height="440" rx="24" fill="none" stroke="#3f3f46" stroke-width="24"/>
+    <circle cx="420" cy="340" r="52"/>
+    <path d="M280 560l190-170 120 120 110-95 220 145z"/>
+    <path d="M785 305l160 160" stroke="#3f3f46" stroke-width="26" stroke-linecap="round"/>
+    <path d="M945 305l-160 160" stroke="#3f3f46" stroke-width="26" stroke-linecap="round"/>
+  </g>
+  <text x="600" y="700" text-anchor="middle" font-family="Arial, sans-serif" font-size="44" fill="#27272a">Imagem indisponivel</text>
+</svg>
