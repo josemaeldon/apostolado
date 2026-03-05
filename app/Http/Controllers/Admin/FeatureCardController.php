@@ -11,8 +11,9 @@ class FeatureCardController extends Controller
 {
     public function index()
     {
-        $featureCards = FeatureCard::orderBy('order')->get();
-        return view('admin.feature-cards.index', compact('featureCards'));
+        return redirect()
+            ->to(route('admin.homepage-sections.index') . '#cards')
+            ->with('info', 'Os cartões de recurso agora são gerenciados dentro de "Gerenciar Página Inicial".');
     }
 
     public function create()
@@ -60,7 +61,7 @@ class FeatureCardController extends Controller
                 ->with('success', 'Card criado com sucesso!');
         }
 
-        return redirect()->route('admin.feature-cards.index')
+        return redirect()->route('admin.homepage-sections.index')
             ->with('success', 'Card criado com sucesso!');
     }
 
@@ -113,7 +114,7 @@ class FeatureCardController extends Controller
                 ->with('success', 'Card atualizado com sucesso!');
         }
 
-        return redirect()->route('admin.feature-cards.index')
+        return redirect()->route('admin.homepage-sections.index')
             ->with('success', 'Card atualizado com sucesso!');
     }
 
@@ -128,7 +129,7 @@ class FeatureCardController extends Controller
                 ->with('success', 'Card excluído com sucesso!');
         }
 
-        return redirect()->route('admin.feature-cards.index')
+        return redirect()->route('admin.homepage-sections.index')
             ->with('success', 'Card excluído com sucesso!');
     }
 }

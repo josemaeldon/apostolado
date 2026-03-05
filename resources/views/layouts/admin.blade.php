@@ -64,7 +64,7 @@
                         </button>
                     </div>
                     
-                    <div class="p-4 space-y-2" x-data="{ homepageOpen: {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'true' : 'false' }}, cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }} }">
+                    <div class="p-4 space-y-2" x-data="{ cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }} }">
                         <!-- Sidebar Items -->
                         <a href="{{ route('dashboard') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -75,32 +75,14 @@
                         </a>
                         
                         @if(auth()->user()->isAdmin())
-                        <!-- Página Inicial with submenu - Admin only -->
-                        <div>
-                            <button @click="homepageOpen = !homepageOpen" 
-                               class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'bg-blue-50 text-blue-700' : '' }}"
-                               :aria-label="!sidebarOpen ? 'Página Inicial' : ''"
-                               :title="!sidebarOpen ? 'Página Inicial' : ''">
-                                <div class="flex items-center">
-                                    <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🎨</span>
-                                    <span x-show="sidebarOpen" class="font-medium">Página Inicial</span>
-                                </div>
-                                <svg x-show="sidebarOpen" :class="homepageOpen ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                </svg>
-                            </button>
-                            <!-- Submenu -->
-                            <div x-show="homepageOpen && sidebarOpen" x-collapse class="ml-8 mt-1 space-y-1">
-                                <a href="{{ route('admin.homepage-sections.index') }}" 
-                                   class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') && !request()->routeIs('admin.feature-cards.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
-                                    Seções
-                                </a>
-                                <a href="{{ route('admin.feature-cards.index') }}" 
-                                   class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.feature-cards.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
-                                    Cartões de Recurso
-                                </a>
-                            </div>
-                        </div>
+                        <!-- Página Inicial (Seções + Cartões) - Admin only -->
+                        <a href="{{ route('admin.homepage-sections.index') }}" 
+                           class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                           :aria-label="!sidebarOpen ? 'Página Inicial' : ''"
+                           :title="!sidebarOpen ? 'Página Inicial' : ''">
+                            <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🎨</span>
+                            <span x-show="sidebarOpen" class="font-medium">Página Inicial</span>
+                        </a>
                         @endif
                         
                         <a href="{{ route('admin.pages.index') }}" 

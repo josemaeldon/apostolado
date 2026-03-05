@@ -23,11 +23,6 @@ class AppServiceProvider extends ServiceProvider
         // Register helper functions
         require_once app_path('Helpers/ImageHelper.php');
 
-        // Register Blade macros for easy image URL generation with cache busting
-        \Blade::macro('imageUrl', function ($path) {
-            return \App\Helpers\ImageHelper::storageUrl($path);
-        });
-
         // Force HTTPS URLs when the request is over HTTPS
         // This handles both direct HTTPS connections and proxied connections
         // We defer the check until after middleware has processed proxy headers

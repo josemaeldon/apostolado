@@ -8,14 +8,24 @@
             </div>
             @endif
 
+            @if(session('info'))
+            <div class="mb-4 bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative">
+                {{ session('info') }}
+            </div>
+            @endif
+
             <!-- Page Header -->
             <div class="mb-8">
                 <h1 class="text-3xl font-bold text-gray-900">Gerenciar Página Inicial</h1>
-                <p class="text-gray-600 mt-2">Configure as seções e cards de destaque da página inicial</p>
+                <p class="text-gray-600 mt-2">Área única para gerenciar seções e cartões de recurso da página inicial</p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    <a href="#sections" class="px-3 py-1.5 text-sm rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 transition">Ir para Seções</a>
+                    <a href="#cards" class="px-3 py-1.5 text-sm rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 transition">Ir para Cartões</a>
+                </div>
             </div>
 
             <!-- Homepage Sections Management -->
-            <div class="mb-8">
+            <div class="mb-8" id="sections">
                 <div class="flex justify-between items-center mb-4">
                     <h2 class="text-2xl font-bold text-gray-900">Seções da Página Inicial</h2>
                     <a href="{{ route('admin.homepage-sections.create') }}" 
@@ -106,15 +116,15 @@
             </div>
 
             <!-- Feature Cards Management -->
-            <div class="mb-8">
+            <div class="mb-8" id="cards">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-bold text-gray-900">Cards de Destaque Independentes</h2>
+                    <h2 class="text-2xl font-bold text-gray-900">Cartões de Recurso Independentes</h2>
                     <a href="{{ route('admin.feature-cards.create') }}" 
                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition">
-                        + Novo Card
+                        + Novo Cartão
                     </a>
                 </div>
-                <p class="text-gray-600 mb-4 text-sm">Cards não associados a nenhuma seção específica</p>
+                <p class="text-gray-600 mb-4 text-sm">Cartões não associados a nenhuma seção específica</p>
                 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">

@@ -210,7 +210,7 @@
                         </div>
 
                         <div class="mt-6 flex justify-end gap-3">
-                            <a href="{{ route('admin.feature-cards.index') }}" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            <a href="{{ route('admin.homepage-sections.index') }}#cards" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
                                 Cancelar
                             </a>
                             <button type="submit" class="px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
