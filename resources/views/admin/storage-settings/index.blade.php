@@ -76,7 +76,7 @@
                                             Endpoint do MinIO
                                         </label>
                                         <input type="text" name="minio_endpoint" id="minio_endpoint" 
-                                            value="{{ config('filesystems.disks.minio.endpoint', 'http://minio:9000') }}"
+                                            value="{{ old('minio_endpoint', $storageSettings['minio_endpoint']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="http://minio:9000">
                                         <p class="mt-1 text-xs text-gray-500">URL do servidor MinIO</p>
@@ -88,7 +88,7 @@
                                             Bucket
                                         </label>
                                         <input type="text" name="minio_bucket" id="minio_bucket" 
-                                            value="{{ config('filesystems.disks.minio.bucket', 'apostolado') }}"
+                                            value="{{ old('minio_bucket', $storageSettings['minio_bucket']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="apostolado">
                                         <p class="mt-1 text-xs text-gray-500">Nome do bucket</p>
@@ -100,7 +100,7 @@
                                             Access Key
                                         </label>
                                         <input type="text" name="minio_access_key" id="minio_access_key" 
-                                            value="{{ config('filesystems.disks.minio.key', '') }}"
+                                            value="{{ old('minio_access_key', $storageSettings['minio_access_key']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="minioadmin">
                                         <p class="mt-1 text-xs text-gray-500">Chave de acesso do MinIO</p>
@@ -112,7 +112,7 @@
                                             Secret Key
                                         </label>
                                         <input type="password" name="minio_secret_key" id="minio_secret_key" 
-                                            value="{{ config('filesystems.disks.minio.secret', '') }}"
+                                            value="{{ old('minio_secret_key', $storageSettings['minio_secret_key']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="••••••••">
                                         <p class="mt-1 text-xs text-gray-500">Chave secreta do MinIO</p>
@@ -124,7 +124,7 @@
                                             Região
                                         </label>
                                         <input type="text" name="minio_region" id="minio_region" 
-                                            value="{{ config('filesystems.disks.minio.region', 'us-east-1') }}"
+                                            value="{{ old('minio_region', $storageSettings['minio_region']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="us-east-1">
                                         <p class="mt-1 text-xs text-gray-500">Região do MinIO</p>
@@ -136,7 +136,7 @@
                                             URL Pública
                                         </label>
                                         <input type="text" name="minio_url" id="minio_url" 
-                                            value="{{ config('filesystems.disks.minio.url', 'http://localhost:9000/apostolado') }}"
+                                            value="{{ old('minio_url', $storageSettings['minio_url']) }}"
                                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                                             placeholder="http://localhost:9000/apostolado">
                                         <p class="mt-1 text-xs text-gray-500">URL pública para acessar os arquivos</p>

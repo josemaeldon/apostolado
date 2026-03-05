@@ -14,11 +14,19 @@ class StorageSettingsController extends Controller
     public function index()
     {
         $currentDisk = $this->getPersistedEnvValue('FILESYSTEM_DISK', config('filesystems.default'));
+        $storageSettings = [
+            'minio_endpoint' => $this->getPersistedEnvValue('MINIO_ENDPOINT', config('filesystems.disks.minio.endpoint', 'http://minio:9000')),
+            'minio_access_key' => $this->getPersistedEnvValue('MINIO_ACCESS_KEY_ID', config('filesystems.disks.minio.key', '')),
+            'minio_secret_key' => $this->getPersistedEnvValue('MINIO_SECRET_ACCESS_KEY', config('filesystems.disks.minio.secret', '')),
+            'minio_bucket' => $this->getPersistedEnvValue('MINIO_BUCKET', config('filesystems.disks.minio.bucket', 'apostolado')),
+            'minio_region' => $this->getPersistedEnvValue('MINIO_REGION', config('filesystems.disks.minio.region', 'us-east-1')),
+            'minio_url' => $this->getPersistedEnvValue('MINIO_URL', config('filesystems.disks.minio.url', '')),
+        ];
         
         // Test connection to current disk
         $connectionStatus = $this->testConnection($currentDisk);
         
-        return view('admin.storage-settings.index', compact('currentDisk', 'connectionStatus'));
+        return view('admin.storage-settings.index', compact('currentDisk', 'connectionStatus', 'storageSettings'));
     }
 
     /**
@@ -36,15 +44,25 @@ class StorageSettingsController extends Controller
             'minio_url' => 'nullable|string',
         ]);
 
+        // Preserve existing values when fields are submitted empty.
+        $existing = [
+            'minio_endpoint' => $this->getPersistedEnvValue('MINIO_ENDPOINT', ''),
+            'minio_access_key' => $this->getPersistedEnvValue('MINIO_ACCESS_KEY_ID', ''),
+            'minio_secret_key' => $this->getPersistedEnvValue('MINIO_SECRET_ACCESS_KEY', ''),
+            'minio_bucket' => $this->getPersistedEnvValue('MINIO_BUCKET', ''),
+            'minio_region' => $this->getPersistedEnvValue('MINIO_REGION', 'us-east-1'),
+            'minio_url' => $this->getPersistedEnvValue('MINIO_URL', ''),
+        ];
+
         // Update .env file
         $this->updateEnvFile([
             'FILESYSTEM_DISK' => $validated['filesystem_disk'],
-            'MINIO_ENDPOINT' => $validated['minio_endpoint'] ?? '',
-            'MINIO_ACCESS_KEY_ID' => $validated['minio_access_key'] ?? '',
-            'MINIO_SECRET_ACCESS_KEY' => $validated['minio_secret_key'] ?? '',
-            'MINIO_BUCKET' => $validated['minio_bucket'] ?? '',
-            'MINIO_REGION' => $validated['minio_region'] ?? 'us-east-1',
-            'MINIO_URL' => $validated['minio_url'] ?? '',
+            'MINIO_ENDPOINT' => $this->resolveSubmittedValue($validated['minio_endpoint'] ?? null, $existing['minio_endpoint']),
+            'MINIO_ACCESS_KEY_ID' => $this->resolveSubmittedValue($validated['minio_access_key'] ?? null, $existing['minio_access_key']),
+            'MINIO_SECRET_ACCESS_KEY' => $this->resolveSubmittedValue($validated['minio_secret_key'] ?? null, $existing['minio_secret_key']),
+            'MINIO_BUCKET' => $this->resolveSubmittedValue($validated['minio_bucket'] ?? null, $existing['minio_bucket']),
+            'MINIO_REGION' => $this->resolveSubmittedValue($validated['minio_region'] ?? null, $existing['minio_region'] ?: 'us-east-1'),
+            'MINIO_URL' => $this->resolveSubmittedValue($validated['minio_url'] ?? null, $existing['minio_url']),
             'MINIO_USE_PATH_STYLE_ENDPOINT' => 'true',
         ]);
 
@@ -186,5 +204,18 @@ class StorageSettingsController extends Controller
                 @unlink($file);
             }
         }
+    }
+
+    /**
+     * Keep the existing persisted value when submitted value is null/empty.
+     */
+    private function resolveSubmittedValue(?string $submitted, string $existing): string
+    {
+        if ($submitted === null) {
+            return $existing;
+        }
+
+        $trimmed = trim($submitted);
+        return $trimmed === '' ? $existing : $trimmed;
     }
 }
