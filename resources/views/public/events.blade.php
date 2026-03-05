@@ -9,13 +9,24 @@
 <body class="font-sans antialiased bg-neutral-50">
     <x-public.navigation />
 
+    @php
+        $heroEvent = $events->first(function ($item) {
+            return !empty($item->image);
+        });
+        $heroImageUrl = $heroEvent ? \App\Helpers\ImageHelper::storageUrl($heroEvent->image) : null;
+    @endphp
+
     <!-- Hero Section -->
-    <div class="bg-gradient-to-r from-primary-700 via-primary-600 to-primary-700 py-20">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="relative py-20 overflow-hidden">
+        @if($heroImageUrl)
+        <div class="absolute inset-0 bg-cover bg-center scale-110 blur-md" style="background-image: url('{{ $heroImageUrl }}');"></div>
+        @endif
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-900/85 via-primary-700/80 to-primary-900/85"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 class="text-5xl font-extrabold text-white mb-4 drop-shadow-lg">
                 Eventos
             </h2>
-            <p class="text-xl text-primary-100">
+            <p class="text-xl text-primary-100 drop-shadow">
                 Participe de nossos encontros e celebrações
             </p>
         </div>

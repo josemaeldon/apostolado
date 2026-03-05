@@ -9,6 +9,24 @@
 <body class="font-sans antialiased bg-neutral-50">
     <x-public.navigation />
 
+    @php
+        $heroImageUrl = $article->featured_image ? \App\Helpers\ImageHelper::storageUrl($article->featured_image) : null;
+    @endphp
+
+    <!-- Hero Section -->
+    <div class="relative py-16 overflow-hidden">
+        @if($heroImageUrl)
+        <div class="absolute inset-0 bg-cover bg-center scale-110 blur-md" style="background-image: url('{{ $heroImageUrl }}');"></div>
+        @endif
+        <div class="absolute inset-0 bg-gradient-to-r from-primary-900/85 via-primary-700/80 to-primary-900/85"></div>
+        <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p class="text-primary-100 font-semibold mb-3">Artigos e Notícias</p>
+            <h1 class="text-3xl md:text-5xl font-extrabold text-white leading-tight drop-shadow-lg">
+                {{ $article->title }}
+            </h1>
+        </div>
+    </div>
+
     <!-- Content -->
     <div class="py-16 bg-neutral-50">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
