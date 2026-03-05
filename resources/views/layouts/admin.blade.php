@@ -55,6 +55,11 @@
                             <h2 x-show="sidebarOpen" class="font-semibold text-xl text-gray-800 transition-opacity duration-300">
                                 {{ $settings['site_name'] }}
                             </h2>
+                            <div x-show="!sidebarOpen" class="transition-opacity duration-300" x-cloak>
+                                <span class="text-sm font-semibold text-gray-800" title="{{ $settings['site_name'] }}">
+                                    {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($settings['site_name'], 0, 1)) }}
+                                </span>
+                            </div>
                         @endif
                         
                         <button @click="sidebarOpen = !sidebarOpen" 
