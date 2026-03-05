@@ -94,6 +94,7 @@ class StorageSettingsController extends Controller
     private function updateEnvFile(array $data)
     {
         $envFile = base_path('.env');
+        $persistentEnvFile = storage_path('app/config/.env.persistent');
         
         if (!file_exists($envFile)) {
             \Log::error('Cannot update storage settings: .env file does not exist');
@@ -123,5 +124,13 @@ class StorageSettingsController extends Controller
 
         // Use file locking to prevent race conditions
         file_put_contents($envFile, $envContent, LOCK_EX);
+
+        // Keep a persistent mirror in storage volume so updates/redeploys can restore it.
+        $persistentDir = dirname($persistentEnvFile);
+        if (!is_dir($persistentDir)) {
+            @mkdir($persistentDir, 0775, true);
+        }
+
+        file_put_contents($persistentEnvFile, $envContent, LOCK_EX);
     }
 }

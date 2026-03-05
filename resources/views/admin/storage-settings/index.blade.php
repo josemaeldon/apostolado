@@ -148,7 +148,7 @@
                         <!-- Information Alert -->
                         <div class="mb-6 bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded">
                             <p class="text-sm">
-                                <strong>⚠️ Importante:</strong> Após salvar as configurações, será necessário reiniciar a aplicação para que as mudanças tenham efeito.
+                                <strong>⚠️ Importante:</strong> As configurações são salvas no arquivo <code>.env</code>. Em ambiente Docker, também são persistidas para sobreviver a atualizações e redeploys. Reinicie a aplicação para aplicar as mudanças.
                             </p>
                         </div>
 

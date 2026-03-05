@@ -10,6 +10,15 @@ echo -e "${GREEN}=== Apostolado da Oração - Inicialização ===${NC}"
 echo -e "Diretório atual: $(pwd)"
 echo -e "Usuário atual: $(whoami)"
 
+PERSISTENT_ENV_FILE="storage/app/config/.env.persistent"
+mkdir -p storage/app/config 2>/dev/null || true
+
+# Restore .env from persistent storage when available (survives container updates)
+if [ -f "$PERSISTENT_ENV_FILE" ] && [ -s "$PERSISTENT_ENV_FILE" ]; then
+    echo -e "${GREEN}Arquivo .env persistente encontrado. Restaurando configurações...${NC}"
+    cp "$PERSISTENT_ENV_FILE" .env 2>/dev/null || true
+fi
+
 # Verificar se o arquivo .env existe
 if [ ! -f .env ]; then
     echo -e "${YELLOW}Arquivo .env não encontrado. Criando a partir de .env.example...${NC}"
@@ -50,6 +59,9 @@ if [ -f .env ]; then
         chmod 664 .env 2>/dev/null || echo -e "${YELLOW}⚠ Não foi possível alterar permissões (verifique as permissões no host se estiver usando bind mount)${NC}"
     fi
     echo -e "${GREEN}✓ Arquivo .env está acessível${NC}"
+
+    # Keep persistent mirror synchronized with current .env
+    cp .env "$PERSISTENT_ENV_FILE" 2>/dev/null || true
 else
     echo -e "${YELLOW}⚠ Aviso: Não foi possível verificar o arquivo .env${NC}"
 fi
