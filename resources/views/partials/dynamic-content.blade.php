@@ -34,7 +34,7 @@
                         <div class="{{ $classes['gradient'] }} {{ $classes['border'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition" style="{{ $classes['style'] ?? '' }}">
                             @if($card->featured_image)
                                 <div class="mb-4 rounded-lg overflow-hidden">
-                                    <img src="{{ asset('storage/' . $card->featured_image) }}" 
+                                    <img src="{{ \App\Helpers\ImageHelper::storageUrl($card->featured_image) }}" 
                                          alt="{{ $card->title }}" 
                                          class="w-full h-48 object-cover">
                                 </div>
@@ -61,7 +61,7 @@
                     <div class="{{ $classes['gradient'] }} {{ $classes['border'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition" style="{{ $classes['style'] ?? '' }}">
                         @if($item['data']->featured_image)
                             <div class="mb-4 rounded-lg overflow-hidden">
-                                <img src="{{ asset('storage/' . $item['data']->featured_image) }}" 
+                                <img src="{{ \App\Helpers\ImageHelper::storageUrl($item['data']->featured_image) }}" 
                                      alt="{{ $item['data']->title }}" 
                                      class="w-full h-48 object-cover">
                             </div>

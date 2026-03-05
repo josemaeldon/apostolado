@@ -12,8 +12,8 @@
             $favicon = \App\Models\SiteSetting::get('favicon');
         @endphp
         @if($favicon)
-            <link rel="icon" type="image/x-icon" href="{{ Storage::url($favicon) }}">
-            <link rel="shortcut icon" href="{{ Storage::url($favicon) }}">
+            <link rel="icon" type="image/x-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+            <link rel="shortcut icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
         @endif
 
         <!-- Fonts -->
@@ -44,7 +44,7 @@
                         
                         @if($settings['use_logo'] == '1' && $settings['site_logo'])
                             <div x-show="sidebarOpen" class="transition-opacity duration-300">
-                                <img src="{{ Storage::url($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-8 object-contain">
+                                <img src="{{ \App\Helpers\ImageHelper::storageUrl($settings['site_logo']) }}" alt="{{ $settings['site_name'] }}" class="h-8 object-contain">
                             </div>
                         @else
                             <h2 x-show="sidebarOpen" class="font-semibold text-xl text-gray-800 transition-opacity duration-300">

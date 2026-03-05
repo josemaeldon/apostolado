@@ -10,8 +10,8 @@
         $favicon = \App\Models\SiteSetting::get('favicon');
     @endphp
     @if($favicon)
-        <link rel="icon" type="image/x-icon" href="{{ Storage::url($favicon) }}">
-        <link rel="shortcut icon" href="{{ Storage::url($favicon) }}">
+        <link rel="icon" type="image/x-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+        <link rel="shortcut icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
     @endif
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -31,7 +31,7 @@
         <div class="slider-container relative h-full">
             @foreach($sliders as $index => $slider)
             <div class="slider-item absolute inset-0 transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}" data-slide="{{ $index }}">
-                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ Storage::url($slider->image) }}');">
+                <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($slider->image) }}');">
                     <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
                 </div>
                 <div class="relative h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
@@ -117,7 +117,7 @@
                 @foreach($events as $event)
                 <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden border border-primary-100">
                     @if($event->image)
-                    <div class="h-48 bg-cover bg-center" style="background-image: url('{{ Storage::url($event->image) }}');"></div>
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($event->image) }}');"></div>
                     @else
                     <div class="h-48 bg-gradient-to-br from-gold-500 to-gold-700 flex items-center justify-center">
                         <svg class="w-16 h-16 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -199,7 +199,7 @@
                         <div class="news-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-2 sm:px-3">
                             <div class="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition overflow-hidden h-full border border-neutral-200">
                                 @if($article->featured_image)
-                                <div class="h-40 sm:h-48 bg-cover bg-center" style="background-image: url('{{ Storage::url($article->featured_image) }}');"></div>
+                                <div class="h-40 sm:h-48 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($article->featured_image) }}');"></div>
                                 @else
                                 <div class="h-40 sm:h-48 bg-gradient-to-br from-primary-600 to-primary-800"></div>
                                 @endif
