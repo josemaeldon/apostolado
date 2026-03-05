@@ -202,8 +202,35 @@
     <x-public.footer />
 
     <script>
+        function restoreModalMedia(modal) {
+            if (!modal) return;
+
+            modal.querySelectorAll('iframe').forEach(iframe => {
+                if (iframe.dataset.originalSrc && iframe.src === 'about:blank') {
+                    iframe.src = iframe.dataset.originalSrc;
+                }
+            });
+        }
+
+        function stopModalMedia(modal) {
+            if (!modal) return;
+
+            modal.querySelectorAll('video').forEach(video => {
+                video.pause();
+                video.currentTime = 0;
+            });
+
+            modal.querySelectorAll('iframe').forEach(iframe => {
+                if (!iframe.dataset.originalSrc) {
+                    iframe.dataset.originalSrc = iframe.src;
+                }
+                iframe.src = 'about:blank';
+            });
+        }
+
         function openModal(id) {
             const modal = document.getElementById('modal-' + id);
+            restoreModalMedia(modal);
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             document.body.style.overflow = 'hidden';
@@ -211,25 +238,18 @@
 
         function closeModal(id) {
             const modal = document.getElementById('modal-' + id);
+            stopModalMedia(modal);
             modal.classList.add('hidden');
             modal.classList.remove('flex');
             document.body.style.overflow = 'auto';
-            
-            const video = modal.querySelector('video');
-            if (video) {
-                video.pause();
-            }
         }
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 document.querySelectorAll('[id^="modal-"]').forEach(modal => {
+                    stopModalMedia(modal);
                     modal.classList.add('hidden');
                     modal.classList.remove('flex');
-                    const video = modal.querySelector('video');
-                    if (video) {
-                        video.pause();
-                    }
                 });
                 document.body.style.overflow = 'auto';
             }
