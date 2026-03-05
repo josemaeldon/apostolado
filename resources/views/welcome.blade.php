@@ -10,8 +10,9 @@
         $favicon = \App\Models\SiteSetting::get('favicon');
     @endphp
     @if($favicon)
-        <link rel="icon" type="image/x-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+        <link rel="icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
         <link rel="shortcut icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+        <link rel="apple-touch-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
     @endif
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -432,7 +433,7 @@
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            const step = Math.max(container.clientWidth * 0.9, 320);
+            const step = Math.max(container.clientWidth, 320);
             container.scrollBy({
                 left: direction * step,
                 behavior: 'smooth'

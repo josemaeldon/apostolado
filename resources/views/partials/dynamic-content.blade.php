@@ -30,24 +30,30 @@
                     @endphp
                     @if($useCarousel)
                     <div class="relative">
-                        <div id="{{ $carouselId }}" class="flex gap-6 sm:gap-8 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                            @foreach($sectionCards as $card)
-                                @php
-                                    $classes = $card->getCssClasses();
-                                @endphp
-                                <div class="min-w-[85%] md:min-w-[48%] lg:min-w-[31%] snap-start flex-shrink-0 {{ $classes['gradient'] }} {{ $classes['border'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition" style="{{ $classes['style'] ?? '' }}">
-                                    @if($card->featured_image)
-                                        <div class="mb-4 rounded-lg overflow-hidden">
-                                            <img src="{{ \App\Helpers\ImageHelper::storageUrl($card->featured_image) }}"
-                                                 alt="{{ $card->title }}"
-                                                 class="w-full h-48 object-cover">
-                                        </div>
-                                    @endif
-                                    <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
-                                    <h4 class="text-xl sm:text-2xl font-bold {{ $classes['text'] }} mb-3" style="{{ $classes['text_style'] ?? '' }}">{{ $card->title }}</h4>
-                                    <p class="text-sm sm:text-base text-neutral-700">
-                                        {{ $card->description }}
-                                    </p>
+                        <div id="{{ $carouselId }}" class="flex overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                            @foreach($sectionCards->chunk(6) as $cardsChunk)
+                                <div class="w-full min-w-full snap-start flex-shrink-0">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                                        @foreach($cardsChunk as $card)
+                                            @php
+                                                $classes = $card->getCssClasses();
+                                            @endphp
+                                            <div class="{{ $classes['gradient'] }} {{ $classes['border'] }} p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition" style="{{ $classes['style'] ?? '' }}">
+                                                @if($card->featured_image)
+                                                    <div class="mb-4 rounded-lg overflow-hidden">
+                                                        <img src="{{ \App\Helpers\ImageHelper::storageUrl($card->featured_image) }}"
+                                                             alt="{{ $card->title }}"
+                                                             class="w-full h-48 object-cover">
+                                                    </div>
+                                                @endif
+                                                <div class="text-4xl sm:text-5xl mb-4">{{ $card->icon }}</div>
+                                                <h4 class="text-xl sm:text-2xl font-bold {{ $classes['text'] }} mb-3" style="{{ $classes['text_style'] ?? '' }}">{{ $card->title }}</h4>
+                                                <p class="text-sm sm:text-base text-neutral-700">
+                                                    {{ $card->description }}
+                                                </p>
+                                            </div>
+                                        @endforeach
+                                    </div>
                                 </div>
                             @endforeach
                         </div>

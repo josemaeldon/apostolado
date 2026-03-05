@@ -8,8 +8,9 @@
         $favicon = \App\Models\SiteSetting::get('favicon');
     @endphp
     @if($favicon)
-        <link rel="icon" type="image/x-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+        <link rel="icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
         <link rel="shortcut icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
+        <link rel="apple-touch-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
     @endif
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
