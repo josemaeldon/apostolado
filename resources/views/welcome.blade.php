@@ -427,6 +427,19 @@
             }
         }
 
+        // Dynamic section cards slider (enabled when section has more than 6 cards)
+        function scrollCards(containerId, direction) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const step = Math.max(container.clientWidth * 0.9, 320);
+            container.scrollBy({
+                left: direction * step,
+                behavior: 'smooth'
+            });
+        }
+        window.scrollCards = scrollCards;
+
         // News Slider
         let currentNewsSlide = 0;
         const newsSlider = document.querySelector('.news-slider');
