@@ -28,18 +28,13 @@ class SiteSetting extends Model
      */
     public static function getMultiple(array $keys, array $defaults = []): array
     {
-        $cacheKey = 'site_settings_' . md5(implode(',', $keys));
-        
-        return Cache::remember($cacheKey, 3600, function () use ($keys, $defaults) {
-            $settings = self::whereIn('key', $keys)->pluck('value', 'key')->toArray();
-            
-            $result = [];
-            foreach ($keys as $key) {
-                $result[$key] = $settings[$key] ?? ($defaults[$key] ?? null);
-            }
-            
-            return $result;
-        });
+        // Build from per-key cached values so invalidation in set() stays consistent.
+        $result = [];
+        foreach ($keys as $key) {
+            $result[$key] = self::get($key, $defaults[$key] ?? null);
+        }
+
+        return $result;
     }
 
     /**
