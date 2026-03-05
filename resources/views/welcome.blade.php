@@ -27,7 +27,7 @@
 
     <!-- Hero Slider Section -->
     @if($sliders->count() > 0)
-    <div class="relative overflow-hidden bg-neutral-900 h-[400px] sm:h-[500px] lg:h-[600px]">
+    <div class="relative overflow-hidden bg-neutral-900 h-[520px] sm:h-[650px] lg:h-[780px]">
         <div class="slider-container relative h-full">
             @foreach($sliders as $index => $slider)
             <div class="slider-item absolute inset-0 transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}" data-slide="{{ $index }}">
