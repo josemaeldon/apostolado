@@ -55,17 +55,17 @@
         
         <!-- Slider Controls -->
         @if($sliders->count() > 1)
-        <div class="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2 sm:space-x-3">
+        <div class="absolute bottom-4 sm:bottom-8 left-1/2 z-30 flex -translate-x-1/2 transform space-x-2 sm:space-x-3">
             @foreach($sliders as $index => $slider)
-            <button onclick="goToSlide({{ $index }})" class="slider-dot w-2 h-2 sm:w-3 sm:h-3 rounded-full {{ $index === 0 ? 'bg-gold-500' : 'bg-white/50' }} hover:bg-gold-500 transition"></button>
+            <button onclick="goToSlide({{ $index }})" class="slider-dot h-2 w-2 rounded-full border border-white/70 transition hover:bg-gold-500 sm:h-3 sm:w-3 {{ $index === 0 ? 'bg-gold-500' : 'bg-white/50' }}" aria-label="Ir para slide {{ $index + 1 }}"></button>
             @endforeach
         </div>
-        <button onclick="prevSlide()" class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-2 sm:p-3 rounded-full backdrop-blur-sm transition">
+        <button onclick="prevSlide()" class="absolute left-2 top-1/2 z-30 -translate-y-1/2 rounded-full bg-black/35 p-2 text-white backdrop-blur-sm transition hover:bg-black/55 sm:left-4 sm:p-3" aria-label="Slide anterior">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
             </svg>
         </button>
-        <button onclick="nextSlide()" class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white p-2 sm:p-3 rounded-full backdrop-blur-sm transition">
+        <button onclick="nextSlide()" class="absolute right-2 top-1/2 z-30 -translate-y-1/2 rounded-full bg-black/35 p-2 text-white backdrop-blur-sm transition hover:bg-black/55 sm:right-4 sm:p-3" aria-label="Próximo slide">
             <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
             </svg>
