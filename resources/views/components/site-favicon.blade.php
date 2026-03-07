@@ -1,6 +1,6 @@
 @php
-    $faviconUrl = null;
     $version = null;
+    $faviconUrl = route('site.favicon');
 
     try {
         $favicon = \App\Models\SiteSetting::get('favicon');
@@ -12,14 +12,17 @@
 
             $version = $updatedAt ? strtotime((string) $updatedAt) : null;
             $faviconUrl = route('site.favicon', $version ? ['v' => $version] : []);
+        } else {
+            $fallbackPath = public_path('favicon.ico');
+            $version = file_exists($fallbackPath) ? filemtime($fallbackPath) : null;
+            $faviconUrl = route('site.favicon', $version ? ['v' => $version] : []);
         }
     } catch (\Throwable $e) {
-        $faviconUrl = null;
+        $faviconUrl = asset('favicon.ico');
     }
 @endphp
 
-@if($faviconUrl)
-    <link rel="icon" href="{{ $faviconUrl }}" type="image/x-icon">
-    <link rel="shortcut icon" href="{{ $faviconUrl }}" type="image/x-icon">
-    <link rel="apple-touch-icon" href="{{ $faviconUrl }}">
-@endif
+<link rel="icon" href="{{ $faviconUrl }}" sizes="any">
+<link rel="shortcut icon" href="{{ $faviconUrl }}">
+<link rel="apple-touch-icon" href="{{ $faviconUrl }}">
+<meta name="theme-color" content="#ffffff">

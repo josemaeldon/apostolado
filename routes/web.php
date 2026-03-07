@@ -14,7 +14,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MemberRegistrationController as AdminMemberRegistrationController;
 use App\Http\Controllers\Admin\FeatureCardController;
 use App\Models\SiteSetting;
-use App\Helpers\ImageHelper;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Route;
 
 // Rotas do Instalador
@@ -36,11 +37,24 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/_site-favicon', function () {
     $favicon = SiteSetting::get('favicon');
 
-    if (!$favicon) {
-        return redirect()->to(asset('favicon.ico'));
+    if ($favicon && Storage::exists($favicon)) {
+        $mimeType = Storage::mimeType($favicon) ?: 'image/x-icon';
+        $contents = Storage::get($favicon);
+
+        return response($contents, 200, [
+            'Content-Type' => $mimeType,
+            'Cache-Control' => 'public, max-age=604800, must-revalidate',
+        ]);
     }
 
-    return redirect()->to(ImageHelper::storageUrl($favicon));
+    $fallbackPath = public_path('favicon.ico');
+    if (File::exists($fallbackPath)) {
+        return response()->file($fallbackPath, [
+            'Cache-Control' => 'public, max-age=604800, must-revalidate',
+        ]);
+    }
+
+    abort(404);
 })->name('site.favicon');
 
 // Public Content Pages
