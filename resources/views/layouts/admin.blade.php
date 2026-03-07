@@ -23,7 +23,7 @@
                 <!-- Sidebar -->
                 <aside 
                     :class="sidebarOpen ? 'w-64' : 'w-20'"
-                    class="relative z-40 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-y-auto overflow-x-visible flex-shrink-0"
+                    class="relative z-40 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-visible flex-shrink-0"
                     role="navigation"
                     aria-label="Menu lateral principal">
                     
@@ -79,7 +79,7 @@
                         </button>
                     </div>
                     
-                    <div class="p-4 space-y-2" x-data="{ cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, cadastrosHover: false, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }}, configuracoesHover: false }">
+                    <div class="p-4 space-y-2 overflow-y-auto overflow-x-visible" style="max-height: calc(100vh - 73px);" x-data="{ cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, cadastrosHover: false, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }}, configuracoesHover: false }">
                         <!-- Sidebar Items -->
                         <a href="{{ route('dashboard') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}"
