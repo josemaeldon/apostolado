@@ -79,7 +79,63 @@
                         </button>
                     </div>
                     
-                    <div class="p-4 space-y-2 overflow-y-auto overflow-x-visible" style="max-height: calc(100vh - 73px);" x-data="{ cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, cadastrosHover: false, cadastrosTimer: null, cadastrosTop: 0, cadastrosLeft: 0, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }}, configuracoesHover: false, configuracoesTimer: null, configuracoesTop: 0, configuracoesLeft: 0 }">
+                    <div class="p-4 space-y-2 overflow-y-auto overflow-x-visible" style="max-height: calc(100vh - 73px);" x-data="{
+                        cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }},
+                        cadastrosHover: false,
+                        cadastrosTimer: null,
+                        cadastrosTop: 0,
+                        cadastrosLeft: 0,
+                        configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }},
+                        configuracoesHover: false,
+                        configuracoesTimer: null,
+                        configuracoesTop: 0,
+                        configuracoesLeft: 0,
+                        openCadastrosFlyout(triggerEl) {
+                            const rect = triggerEl.getBoundingClientRect();
+                            const margin = 8;
+                            const panelWidth = 224;
+
+                            let left = rect.right + margin;
+                            if (left + panelWidth > window.innerWidth - margin) {
+                                left = Math.max(margin, rect.left - panelWidth - margin);
+                            }
+
+                            this.cadastrosLeft = left;
+                            this.cadastrosTop = rect.top;
+
+                            this.$nextTick(() => {
+                                const panel = this.$refs.cadastrosFlyout;
+                                if (!panel) return;
+
+                                const panelHeight = panel.offsetHeight;
+                                const maxTop = Math.max(margin, window.innerHeight - panelHeight - margin);
+                                this.cadastrosTop = Math.min(Math.max(margin, rect.top), maxTop);
+                            });
+                        },
+                        openConfiguracoesFlyout(triggerEl) {
+                            const rect = triggerEl.getBoundingClientRect();
+                            const margin = 8;
+                            const panelWidth = 224;
+
+                            let left = rect.right + margin;
+                            if (left + panelWidth > window.innerWidth - margin) {
+                                left = Math.max(margin, rect.left - panelWidth - margin);
+                            }
+
+                            this.configuracoesLeft = left;
+                            this.configuracoesTop = rect.top;
+
+                            this.$nextTick(() => {
+                                const panel = this.$refs.configuracoesFlyout;
+                                if (!panel) return;
+
+                                const panelHeight = panel.offsetHeight;
+                                const maxTop = Math.max(margin, window.innerHeight - panelHeight - margin);
+                                this.configuracoesTop = Math.min(Math.max(margin, rect.top), maxTop);
+                            });
+                        }
+                    }"
+                    @resize.window="if (!sidebarOpen && (cadastrosOpen || cadastrosHover) && $refs.cadastrosTrigger) openCadastrosFlyout($refs.cadastrosTrigger); if (!sidebarOpen && (configuracoesOpen || configuracoesHover) && $refs.configuracoesTrigger) openConfiguracoesFlyout($refs.configuracoesTrigger);">
                         <!-- Sidebar Items -->
                         <a href="{{ route('dashboard') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -168,11 +224,12 @@
                         </a>
                         
                         <!-- Cadastros with submenu -->
-                            <div class="relative"
-                                 @mouseenter="if (!sidebarOpen) { const rect = $el.getBoundingClientRect(); cadastrosTop = rect.top; cadastrosLeft = rect.right + 8; clearTimeout(cadastrosTimer); cadastrosHover = true }"
+                                <div class="relative"
+                                    x-ref="cadastrosTrigger"
+                                    @mouseenter="if (!sidebarOpen) { openCadastrosFlyout($el); clearTimeout(cadastrosTimer); cadastrosHover = true }"
                                 @mouseleave="if (!sidebarOpen) { clearTimeout(cadastrosTimer); cadastrosTimer = setTimeout(() => { cadastrosHover = false }, 180) }"
                              @click.outside="if (!sidebarOpen) cadastrosOpen = false">
-                                <button @click="if (sidebarOpen) { cadastrosOpen = !cadastrosOpen } else { const rect = $el.parentElement.getBoundingClientRect(); cadastrosTop = rect.top; cadastrosLeft = rect.right + 8; cadastrosOpen = !cadastrosOpen }" 
+                                   <button @click="if (sidebarOpen) { cadastrosOpen = !cadastrosOpen } else { openCadastrosFlyout($el.parentElement); cadastrosOpen = !cadastrosOpen }" 
                                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'bg-blue-50 text-blue-700' : '' }}"
                                          :class="sidebarOpen ? '' : 'justify-center px-0'"
                                :aria-label="!sidebarOpen ? 'Cadastros' : ''"
@@ -208,11 +265,12 @@
                             </div>
 
                                                            <div x-show="!sidebarOpen && (cadastrosOpen || cadastrosHover)"
+                                                               x-ref="cadastrosFlyout"
                                  x-cloak
                                                                  @mouseenter="clearTimeout(cadastrosTimer); cadastrosHover = true"
                                                                  @mouseleave="clearTimeout(cadastrosTimer); cadastrosTimer = setTimeout(() => { cadastrosHover = false }, 180)"
                                                                :style="`top:${cadastrosTop}px; left:${cadastrosLeft}px;`"
-                                                               class="fixed w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[90] p-2 space-y-1">
+                                                               class="fixed w-56 max-h-[calc(100vh-16px)] overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-xl z-[90] p-2 space-y-1">
                                 <a href="{{ route('admin.member-registrations.index') }}"
                                    class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
                                     Membros
@@ -227,11 +285,12 @@
                         </div>
                         
                         <!-- Configurações with submenu -->
-                            <div class="relative"
-                                 @mouseenter="if (!sidebarOpen) { const rect = $el.getBoundingClientRect(); configuracoesTop = rect.top; configuracoesLeft = rect.right + 8; clearTimeout(configuracoesTimer); configuracoesHover = true }"
+                                <div class="relative"
+                                    x-ref="configuracoesTrigger"
+                                    @mouseenter="if (!sidebarOpen) { openConfiguracoesFlyout($el); clearTimeout(configuracoesTimer); configuracoesHover = true }"
                                 @mouseleave="if (!sidebarOpen) { clearTimeout(configuracoesTimer); configuracoesTimer = setTimeout(() => { configuracoesHover = false }, 180) }"
                              @click.outside="if (!sidebarOpen) configuracoesOpen = false">
-                                <button @click="if (sidebarOpen) { configuracoesOpen = !configuracoesOpen } else { const rect = $el.parentElement.getBoundingClientRect(); configuracoesTop = rect.top; configuracoesLeft = rect.right + 8; configuracoesOpen = !configuracoesOpen }" 
+                                   <button @click="if (sidebarOpen) { configuracoesOpen = !configuracoesOpen } else { openConfiguracoesFlyout($el.parentElement); configuracoesOpen = !configuracoesOpen }" 
                                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'bg-blue-50 text-blue-700' : '' }}"
                                          :class="sidebarOpen ? '' : 'justify-center px-0'"
                                :aria-label="!sidebarOpen ? 'Configurações' : ''"
@@ -279,11 +338,12 @@
                             </div>
 
                                                            <div x-show="!sidebarOpen && (configuracoesOpen || configuracoesHover)"
+                                                               x-ref="configuracoesFlyout"
                                  x-cloak
                                                                  @mouseenter="clearTimeout(configuracoesTimer); configuracoesHover = true"
                                                                  @mouseleave="clearTimeout(configuracoesTimer); configuracoesTimer = setTimeout(() => { configuracoesHover = false }, 180)"
                                                                :style="`top:${configuracoesTop}px; left:${configuracoesLeft}px;`"
-                                                               class="fixed w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-[90] p-2 space-y-1">
+                                                               class="fixed w-56 max-h-[calc(100vh-16px)] overflow-y-auto bg-white border border-gray-200 rounded-lg shadow-xl z-[90] p-2 space-y-1">
                                 <a href="{{ route('profile.edit') }}"
                                    class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
                                     Perfil
