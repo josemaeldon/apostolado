@@ -86,7 +86,8 @@ Route::middleware(['auth', 'verified', 'editor'])->prefix('admin')->name('admin.
     });
     
     Route::middleware('editor:member-registrations')->group(function () {
-        Route::post('member-registrations/bulk-action', [AdminMemberRegistrationController::class, 'bulkAction'])->name('member-registrations.bulk-action');
+        Route::match(['post', 'delete'], 'member-registrations/bulk-action', [AdminMemberRegistrationController::class, 'bulkAction'])
+            ->name('member-registrations.bulk-action');
         Route::get('member-registrations/bulk-action', function () {
             return redirect()->route('admin.member-registrations.index');
         });
