@@ -1,5 +1,6 @@
 @php
     $faviconUrl = null;
+    $version = null;
 
     try {
         $favicon = \App\Models\SiteSetting::get('favicon');
@@ -10,8 +11,7 @@
                 ->value('updated_at');
 
             $version = $updatedAt ? strtotime((string) $updatedAt) : null;
-            $faviconUrl = \App\Helpers\ImageHelper::storageUrl($favicon);
-            $faviconUrl = $version ? $faviconUrl . '?v=' . $version : $faviconUrl;
+            $faviconUrl = route('site.favicon', $version ? ['v' => $version] : []);
         }
     } catch (\Throwable $e) {
         $faviconUrl = null;

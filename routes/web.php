@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MemberRegistrationController as AdminMemberRegistrationController;
 use App\Http\Controllers\Admin\FeatureCardController;
+use App\Models\SiteSetting;
+use App\Helpers\ImageHelper;
 use Illuminate\Support\Facades\Route;
 
 // Rotas do Instalador
@@ -29,6 +31,17 @@ Route::prefix('install')->name('installer.')->group(function () {
 
 // Home
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
+// Dynamic favicon endpoint to ensure consistent icon across all areas/pages.
+Route::get('/_site-favicon', function () {
+    $favicon = SiteSetting::get('favicon');
+
+    if (!$favicon) {
+        return redirect()->to(asset('favicon.ico'));
+    }
+
+    return redirect()->to(ImageHelper::storageUrl($favicon));
+})->name('site.favicon');
 
 // Public Content Pages
 Route::get('/intencoes-oracao', [App\Http\Controllers\PublicController::class, 'prayerIntentions'])->name('public.prayer-intentions');
