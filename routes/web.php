@@ -86,8 +86,14 @@ Route::middleware(['auth', 'verified', 'editor'])->prefix('admin')->name('admin.
     });
     
     Route::middleware('editor:member-registrations')->group(function () {
-        Route::resource('member-registrations', AdminMemberRegistrationController::class)->only(['index', 'store', 'show', 'edit', 'update', 'destroy']);
         Route::post('member-registrations/bulk-action', [AdminMemberRegistrationController::class, 'bulkAction'])->name('member-registrations.bulk-action');
+        Route::get('member-registrations/bulk-action', function () {
+            return redirect()->route('admin.member-registrations.index');
+        });
+
+        Route::resource('member-registrations', AdminMemberRegistrationController::class)
+            ->where(['member_registration' => '[0-9]+'])
+            ->only(['index', 'store', 'show', 'edit', 'update', 'destroy']);
         Route::get('member-registrations-export-pdf', [AdminMemberRegistrationController::class, 'exportPdf'])->name('member-registrations.export-pdf');
     });
 });
