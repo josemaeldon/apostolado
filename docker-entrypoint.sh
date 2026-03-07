@@ -19,6 +19,36 @@ if [ -f "$PERSISTENT_ENV_FILE" ] && [ -s "$PERSISTENT_ENV_FILE" ]; then
     cp "$PERSISTENT_ENV_FILE" .env 2>/dev/null || true
 fi
 
+# Apply persisted storage settings to runtime env so Docker stack defaults
+# do not override admin updates after redeploy.
+apply_persisted_env_key() {
+    local key="$1"
+
+    if [ ! -f "$PERSISTENT_ENV_FILE" ]; then
+        return
+    fi
+
+    local line
+    line=$(grep -E "^${key}=" "$PERSISTENT_ENV_FILE" | tail -n 1 || true)
+    if [ -z "$line" ]; then
+        return
+    fi
+
+    local value="${line#*=}"
+    value="${value%\"}"
+    value="${value#\"}"
+    export "$key=$value"
+}
+
+apply_persisted_env_key "FILESYSTEM_DISK"
+apply_persisted_env_key "MINIO_ENDPOINT"
+apply_persisted_env_key "MINIO_ACCESS_KEY_ID"
+apply_persisted_env_key "MINIO_SECRET_ACCESS_KEY"
+apply_persisted_env_key "MINIO_BUCKET"
+apply_persisted_env_key "MINIO_REGION"
+apply_persisted_env_key "MINIO_USE_PATH_STYLE_ENDPOINT"
+apply_persisted_env_key "MINIO_URL"
+
 # Verificar se o arquivo .env existe
 if [ ! -f .env ]; then
     echo -e "${YELLOW}Arquivo .env não encontrado. Criando a partir de .env.example...${NC}"
