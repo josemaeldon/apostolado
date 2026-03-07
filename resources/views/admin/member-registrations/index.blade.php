@@ -287,11 +287,13 @@
                                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                                     <a href="{{ route('admin.member-registrations.show', $registration) }}" class="text-blue-600 hover:text-blue-900 mr-3">Ver</a>
                                                     <a href="{{ route('admin.member-registrations.edit', $registration) }}" class="text-green-600 hover:text-green-900 mr-3">Editar</a>
-                                                    <form action="{{ route('admin.member-registrations.destroy', $registration) }}" method="POST" class="inline" onsubmit="return confirm('Tem certeza que deseja excluir este cadastro?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="text-red-600 hover:text-red-900">Excluir</button>
-                                                    </form>
+                                                    <button
+                                                        type="button"
+                                                        class="text-red-600 hover:text-red-900 single-delete-btn"
+                                                        data-url="{{ route('admin.member-registrations.destroy', $registration) }}"
+                                                    >
+                                                        Excluir
+                                                    </button>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -324,6 +326,7 @@
             const bulkStatusButton = document.getElementById('bulk-status-btn');
             const bulkDeleteButton = document.getElementById('bulk-delete-btn');
             const bulkStatus = document.getElementById('bulk-status');
+            const singleDeleteButtons = Array.from(document.querySelectorAll('.single-delete-btn'));
 
             function updateSelectedCount() {
                 const checked = rowCheckboxes.filter((checkbox) => checkbox.checked).length;
@@ -397,6 +400,33 @@
                     }
                 });
             }
+
+            singleDeleteButtons.forEach((button) => {
+                button.addEventListener('click', function () {
+                    if (!confirm('Tem certeza que deseja excluir este cadastro?')) {
+                        return;
+                    }
+
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = button.dataset.url;
+
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = '{{ csrf_token() }}';
+
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+
+                    form.appendChild(csrfInput);
+                    form.appendChild(methodInput);
+                    document.body.appendChild(form);
+                    form.submit();
+                });
+            });
         })();
     </script>
 </x-admin-layout>
