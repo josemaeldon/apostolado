@@ -84,7 +84,7 @@ class MemberRegistrationController extends Controller
             'cpf' => 'required|string|size:14|unique:member_registrations,cpf|regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/',
             'address' => 'required|string',
             'phone' => 'required|string|size:14|regex:/^\(\d{2}\)\d{5}-\d{4}$/',
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'birth_date' => 'required|date',
             'marital_status' => 'required|string|max:255',
             'profession' => 'required|string|max:255',
@@ -124,6 +124,9 @@ class MemberRegistrationController extends Controller
         if ($request->hasFile('profile_image')) {
             $validated['profile_image'] = $request->file('profile_image')->store('member-profiles', 'public');
         }
+
+        // Column is non-nullable in legacy databases; keep empty string when omitted.
+        $validated['email'] = $validated['email'] ?? '';
 
         $registration = MemberRegistration::create($validated);
 

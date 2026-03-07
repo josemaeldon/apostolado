@@ -51,7 +51,7 @@
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-neutral-600">Email</p>
-                                <p class="text-lg font-semibold text-neutral-900">{{ $registration->email }}</p>
+                                <p class="text-lg font-semibold text-neutral-900">{{ $registration->email ?: 'Nao informado' }}</p>
                             </div>
                             <div>
                                 <p class="text-sm font-medium text-neutral-600">Paróquia</p>

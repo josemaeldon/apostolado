@@ -7,6 +7,7 @@ use App\Models\MemberRegistration;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class MemberRegistrationController extends Controller
 {
@@ -56,6 +57,21 @@ class MemberRegistrationController extends Controller
         return view('admin.member-registrations.show', compact('memberRegistration'));
     }
 
+    public function store(Request $request)
+    {
+        $validated = $request->validate($this->registrationRules());
+
+        // Column is non-nullable in legacy databases; keep empty string when omitted.
+        $validated['email'] = $validated['email'] ?? '';
+
+        $this->handleProfileImageUpload($request, $validated);
+
+        MemberRegistration::create($validated);
+
+        return redirect()->route('admin.member-registrations.index')
+            ->with('success', 'Novo cadastro criado com sucesso!');
+    }
+
     public function edit(MemberRegistration $memberRegistration)
     {
         return view('admin.member-registrations.edit', compact('memberRegistration'));
@@ -80,40 +96,12 @@ class MemberRegistrationController extends Controller
         }
         
         // Full validation for complete update (from edit page)
-        $validated = $request->validate([
-            'status' => 'required|in:pending,approved,rejected',
-            'full_name' => 'required|string|max:255',
-            'cpf' => 'required|string|size:14|regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/|unique:member_registrations,cpf,' . $memberRegistration->id,
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:20',
-            'address' => 'required|string',
-            'birth_date' => 'required|date',
-            'marital_status' => 'required|in:Solteiro(a),Casado(a),Divorciado(a),Viúvo(a)',
-            'profession' => 'required|string|max:255',
-            'parish' => 'required|string|max:255',
-            'member_city' => 'required|string|max:255',
-            'member_parish' => 'nullable|string|max:255',
-            'baptism_date' => 'nullable|date',
-            'how_met' => 'nullable|string',
-            'why_join' => 'nullable|string',
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ], [
-            'cpf.regex' => 'O CPF deve estar no formato 000.000.000-00',
-            'cpf.size' => 'O CPF deve estar no formato 000.000.000-00',
-            'cpf.unique' => 'Este CPF já está cadastrado em nosso sistema.',
-            'profile_image.image' => 'O arquivo deve ser uma imagem.',
-            'profile_image.mimes' => 'A imagem deve ser do tipo: jpeg, png, jpg ou gif.',
-            'profile_image.max' => 'A imagem não pode ser maior que 2MB.',
-        ]);
+        $validated = $request->validate($this->registrationRules($memberRegistration->id));
 
-        // Handle profile image upload
-        if ($request->hasFile('profile_image')) {
-            // Delete old image if exists
-            if ($memberRegistration->profile_image) {
-                Storage::disk('public')->delete($memberRegistration->profile_image);
-            }
-            $validated['profile_image'] = $request->file('profile_image')->store('member-profiles', 'public');
-        }
+        // Column is non-nullable in legacy databases; keep empty string when omitted.
+        $validated['email'] = $validated['email'] ?? '';
+
+        $this->handleProfileImageUpload($request, $validated, $memberRegistration);
 
         $memberRegistration->update($validated);
 
@@ -127,6 +115,47 @@ class MemberRegistrationController extends Controller
 
         return redirect()->route('admin.member-registrations.index')
             ->with('success', 'Cadastro excluído com sucesso!');
+    }
+
+    public function bulkAction(Request $request)
+    {
+        $filters = [
+            'search' => $request->input('search'),
+            'parish' => $request->input('parish'),
+            'status' => $request->input('filter_status'),
+            'city' => $request->input('city'),
+            'date_from' => $request->input('date_from'),
+            'date_to' => $request->input('date_to'),
+        ];
+
+        $validated = $request->validate([
+            'selected_ids' => 'required|array|min:1',
+            'selected_ids.*' => 'integer|exists:member_registrations,id',
+            'action' => 'required|in:update_status,delete',
+            'status' => 'nullable|in:pending,approved,rejected',
+        ], [
+            'selected_ids.required' => 'Selecione ao menos um cadastro.',
+            'action.required' => 'Selecione uma ação em lote.',
+        ]);
+
+        $query = MemberRegistration::whereIn('id', $validated['selected_ids']);
+
+        if ($validated['action'] === 'update_status') {
+            $request->validate([
+                'status' => 'required|in:pending,approved,rejected',
+            ]);
+
+            $updatedCount = $query->update(['status' => $validated['status']]);
+
+            return redirect()->route('admin.member-registrations.index', $filters)
+                ->with('success', "Status atualizado para {$updatedCount} cadastro(s).");
+        }
+
+        $deletedCount = $query->count();
+        $query->delete();
+
+        return redirect()->route('admin.member-registrations.index', $filters)
+            ->with('success', "{$deletedCount} cadastro(s) excluído(s) com sucesso.");
     }
 
     public function exportPdf(Request $request)
@@ -168,5 +197,46 @@ class MemberRegistrationController extends Controller
         $filename = 'cadastros_' . now()->format('Y-m-d_His') . '.pdf';
 
         return $pdf->download($filename);
+    }
+
+    private function registrationRules(?int $registrationId = null): array
+    {
+        return [
+            'status' => 'required|in:pending,approved,rejected',
+            'full_name' => 'required|string|max:255',
+            'cpf' => [
+                'required',
+                'string',
+                'size:14',
+                'regex:/^\d{3}\.\d{3}\.\d{3}-\d{2}$/',
+                Rule::unique('member_registrations', 'cpf')->ignore($registrationId),
+            ],
+            'email' => 'nullable|email|max:255',
+            'phone' => 'required|string|max:20',
+            'address' => 'required|string',
+            'birth_date' => 'required|date',
+            'marital_status' => 'required|in:Solteiro(a),Casado(a),Divorciado(a),Viúvo(a)',
+            'profession' => 'required|string|max:255',
+            'parish' => 'required|string|max:255',
+            'member_city' => 'required|string|max:255',
+            'member_parish' => 'nullable|string|max:255',
+            'baptism_date' => 'nullable|date',
+            'how_met' => 'nullable|string',
+            'why_join' => 'nullable|string',
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ];
+    }
+
+    private function handleProfileImageUpload(Request $request, array &$validated, ?MemberRegistration $memberRegistration = null): void
+    {
+        if (!$request->hasFile('profile_image')) {
+            return;
+        }
+
+        if ($memberRegistration?->profile_image) {
+            Storage::disk('public')->delete($memberRegistration->profile_image);
+        }
+
+        $validated['profile_image'] = $request->file('profile_image')->store('member-profiles', 'public');
     }
 }

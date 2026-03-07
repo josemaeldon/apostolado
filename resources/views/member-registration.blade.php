@@ -193,9 +193,9 @@
 
                             <div>
                                 <label for="email" class="block text-sm font-medium text-neutral-700 mb-2">
-                                    E-mail <span class="text-primary-600">*</span>
+                                    E-mail (Opcional)
                                 </label>
-                                <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                                <input type="email" name="email" id="email" value="{{ old('email') }}"
                                        class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
                                 @error('email')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
@@ -237,7 +237,7 @@
                         <h3 class="text-2xl font-bold text-primary-800 mb-6">Foto de Perfil</h3>
                         <div>
                             <label for="profile_image" class="block text-sm font-medium text-neutral-700 mb-2">
-                                Foto de Perfil (Opcional)
+                                Foto de Perfil (Opcional) - Upload ou Webcam
                             </label>
                             <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-neutral-300 border-dashed rounded-lg hover:border-primary-400 transition">
                                 <div class="space-y-1 text-center">
@@ -255,6 +255,29 @@
                                         PNG, JPG, GIF até 2MB
                                     </p>
                                 </div>
+                            </div>
+                            <div class="mt-4">
+                                <button type="button" id="open-camera-btn" class="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg font-semibold hover:bg-primary-700 transition">
+                                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h2l1.5-2h7L17 7h2a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+                                        <circle cx="12" cy="13" r="4" stroke-width="2"/>
+                                    </svg>
+                                    Usar Webcam
+                                </button>
+                            </div>
+                            <div id="webcam-container" class="mt-4 hidden rounded-lg border border-neutral-300 bg-neutral-50 p-4">
+                                <p class="text-sm font-medium text-neutral-700 mb-3">Capture sua foto pela webcam</p>
+                                <video id="webcam-video" class="w-full max-w-md rounded-lg border border-neutral-300" autoplay playsinline muted></video>
+                                <canvas id="webcam-canvas" class="hidden"></canvas>
+                                <div class="mt-3 flex flex-wrap gap-2">
+                                    <button type="button" id="capture-photo-btn" class="px-4 py-2 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition">
+                                        Capturar Foto
+                                    </button>
+                                    <button type="button" id="close-camera-btn" class="px-4 py-2 bg-neutral-200 text-neutral-700 rounded-lg font-semibold hover:bg-neutral-300 transition">
+                                        Fechar Webcam
+                                    </button>
+                                </div>
+                                <p id="webcam-error" class="mt-2 text-sm text-red-600 hidden"></p>
                             </div>
                             <div id="image-preview" class="mt-4 hidden">
                                 <p class="text-sm font-medium text-neutral-700 mb-2">Pré-visualização:</p>
@@ -588,7 +611,7 @@
                                     </h3>
                                     <div class="text-sm ${textColor} space-y-1">
                                         <p><strong>Nome:</strong> ${data.data.full_name}</p>
-                                        <p><strong>Email:</strong> ${data.data.email}</p>
+                                        <p><strong>Email:</strong> ${data.data.email || 'Nao informado'}</p>
                                         <p><strong>Paróquia:</strong> ${data.data.parish}</p>
                                         <p><strong>Status:</strong> <span class="font-semibold">${statusText}</span></p>
                                         <p><strong>Data do Cadastro:</strong> ${data.data.created_at}</p>
@@ -661,6 +684,82 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        const openCameraBtn = document.getElementById('open-camera-btn');
+        const closeCameraBtn = document.getElementById('close-camera-btn');
+        const capturePhotoBtn = document.getElementById('capture-photo-btn');
+        const webcamContainer = document.getElementById('webcam-container');
+        const webcamVideo = document.getElementById('webcam-video');
+        const webcamCanvas = document.getElementById('webcam-canvas');
+        const webcamError = document.getElementById('webcam-error');
+        const profileImageInput = document.getElementById('profile_image');
+        let webcamStream = null;
+
+        async function startWebcam() {
+            webcamError.classList.add('hidden');
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                webcamError.textContent = 'Seu navegador não suporta acesso à webcam.';
+                webcamError.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                webcamStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+                    audio: false,
+                });
+
+                webcamVideo.srcObject = webcamStream;
+                webcamContainer.classList.remove('hidden');
+            } catch (error) {
+                webcamError.textContent = 'Não foi possível acessar a webcam. Verifique as permissões do navegador.';
+                webcamError.classList.remove('hidden');
+                webcamContainer.classList.remove('hidden');
+            }
+        }
+
+        function stopWebcam() {
+            if (webcamStream) {
+                webcamStream.getTracks().forEach((track) => track.stop());
+                webcamStream = null;
+            }
+
+            webcamVideo.srcObject = null;
+            webcamContainer.classList.add('hidden');
+        }
+
+        function captureWebcamPhoto() {
+            if (!webcamVideo.videoWidth || !webcamVideo.videoHeight) {
+                return;
+            }
+
+            webcamCanvas.width = webcamVideo.videoWidth;
+            webcamCanvas.height = webcamVideo.videoHeight;
+            const ctx = webcamCanvas.getContext('2d');
+            ctx.drawImage(webcamVideo, 0, 0, webcamCanvas.width, webcamCanvas.height);
+
+            webcamCanvas.toBlob((blob) => {
+                if (!blob) {
+                    return;
+                }
+
+                const capturedFile = new File([blob], 'webcam-member-photo.jpg', { type: 'image/jpeg' });
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(capturedFile);
+                profileImageInput.files = dataTransfer.files;
+
+                document.getElementById('preview-img').src = URL.createObjectURL(blob);
+                document.getElementById('image-preview').classList.remove('hidden');
+
+                stopWebcam();
+            }, 'image/jpeg', 0.9);
+        }
+
+        openCameraBtn.addEventListener('click', startWebcam);
+        closeCameraBtn.addEventListener('click', stopWebcam);
+        capturePhotoBtn.addEventListener('click', captureWebcamPhoto);
+        window.addEventListener('beforeunload', stopWebcam);
     </script>
 </body>
 </html>
