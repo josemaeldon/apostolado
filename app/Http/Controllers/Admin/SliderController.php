@@ -9,6 +9,7 @@ use App\Models\Article;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class SliderController extends Controller
 {
@@ -33,26 +34,42 @@ class SliderController extends Controller
             'description' => 'nullable|string',
             'image' => 'required|image|max:2048',
             'button_text' => 'nullable|string|max:255',
-            'button_link' => 'nullable|string|max:255',
-            'link_type' => 'nullable|in:page,article,event,custom',
+            'button_link' => 'nullable|string|max:255|required_if:link_type,custom',
+            'link_type' => 'required|in:page,article,event,custom',
             'link_id' => 'nullable|integer',
             'order' => 'required|integer',
             'is_active' => 'boolean',
         ]);
 
+        if ($request->link_type !== 'custom') {
+            $request->validate([
+                'link_id' => [
+                    'required',
+                    Rule::exists(match ($request->link_type) {
+                        'page' => 'pages',
+                        'article' => 'articles',
+                        'event' => 'events',
+                    }, 'id'),
+                ],
+            ]);
+        }
+
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('sliders');
         }
 
-        // Handle linkable relationship
-        if ($request->link_type && $request->link_type !== 'custom' && $request->link_id) {
-            $validated['linkable_type'] = match($request->link_type) {
+        // Keep link data mutually exclusive: either internal target or custom URL.
+        if ($request->link_type === 'custom') {
+            $validated['linkable_type'] = null;
+            $validated['linkable_id'] = null;
+        } else {
+            $validated['linkable_type'] = match ($request->link_type) {
                 'page' => \App\Models\Page::class,
                 'article' => \App\Models\Article::class,
                 'event' => \App\Models\Event::class,
-                default => null,
             };
-            $validated['linkable_id'] = $request->link_id;
+            $validated['linkable_id'] = $request->integer('link_id');
+            $validated['button_link'] = null;
         }
 
         // Remove helper fields
@@ -79,12 +96,25 @@ class SliderController extends Controller
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
             'button_text' => 'nullable|string|max:255',
-            'button_link' => 'nullable|string|max:255',
-            'link_type' => 'nullable|in:page,article,event,custom',
+            'button_link' => 'nullable|string|max:255|required_if:link_type,custom',
+            'link_type' => 'required|in:page,article,event,custom',
             'link_id' => 'nullable|integer',
             'order' => 'required|integer',
             'is_active' => 'boolean',
         ]);
+
+        if ($request->link_type !== 'custom') {
+            $request->validate([
+                'link_id' => [
+                    'required',
+                    Rule::exists(match ($request->link_type) {
+                        'page' => 'pages',
+                        'article' => 'articles',
+                        'event' => 'events',
+                    }, 'id'),
+                ],
+            ]);
+        }
 
         if ($request->hasFile('image')) {
             if ($slider->image) {
@@ -93,19 +123,18 @@ class SliderController extends Controller
             $validated['image'] = $request->file('image')->store('sliders');
         }
 
-        // Handle linkable relationship
-        if ($request->link_type && $request->link_type !== 'custom' && $request->link_id) {
-            $validated['linkable_type'] = match($request->link_type) {
+        // Keep link data mutually exclusive: either internal target or custom URL.
+        if ($request->link_type === 'custom') {
+            $validated['linkable_type'] = null;
+            $validated['linkable_id'] = null;
+        } else {
+            $validated['linkable_type'] = match ($request->link_type) {
                 'page' => \App\Models\Page::class,
                 'article' => \App\Models\Article::class,
                 'event' => \App\Models\Event::class,
-                default => null,
             };
-            $validated['linkable_id'] = $request->link_id;
-        } else {
-            // Clear linkable if custom link is selected
-            $validated['linkable_type'] = null;
-            $validated['linkable_id'] = null;
+            $validated['linkable_id'] = $request->integer('link_id');
+            $validated['button_link'] = null;
         }
 
         // Remove helper fields

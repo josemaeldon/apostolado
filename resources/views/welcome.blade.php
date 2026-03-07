@@ -24,7 +24,7 @@
     <div class="relative overflow-hidden bg-neutral-900 h-[520px] sm:h-[650px] lg:h-[780px]">
         <div class="slider-container relative h-full">
             @foreach($sliders as $index => $slider)
-            <div class="slider-item absolute inset-0 transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }}" data-slide="{{ $index }}">
+            <div class="slider-item absolute inset-0 transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100 z-10 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none' }}" data-slide="{{ $index }}">
                 <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{{ \App\Helpers\ImageHelper::storageUrl($slider->image) }}');">
                     <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
                 </div>
@@ -40,7 +40,7 @@
                             </p>
                             @endif
                         </div>
-                        @if($slider->button_text && ($slider->button_link || $slider->linkable))
+                        @if($slider->button_text && $slider->effective_link)
                         <div class="mt-6 sm:mt-8">
                             <a href="{{ $slider->effective_link }}" class="inline-block bg-gradient-to-r from-gold-500 to-gold-600 text-white hover:from-gold-600 hover:to-gold-700 px-6 sm:px-8 py-3 sm:py-4 rounded-lg text-base sm:text-lg font-bold shadow-2xl transition transform hover:scale-105">
                                 {{ $slider->button_text }}
@@ -339,7 +339,8 @@
         function showSlide(n) {
             slides.forEach((slide, index) => {
                 slide.classList.remove('opacity-100');
-                slide.classList.add('opacity-0');
+                slide.classList.remove('z-10', 'pointer-events-auto');
+                slide.classList.add('opacity-0', 'z-0', 'pointer-events-none');
                 if (dots[index]) {
                     dots[index].classList.remove('bg-gold-500');
                     dots[index].classList.add('bg-white/50');
@@ -348,7 +349,8 @@
 
             currentSlide = (n + totalSlides) % totalSlides;
             slides[currentSlide].classList.remove('opacity-0');
-            slides[currentSlide].classList.add('opacity-100');
+            slides[currentSlide].classList.remove('z-0', 'pointer-events-none');
+            slides[currentSlide].classList.add('opacity-100', 'z-10', 'pointer-events-auto');
             if (dots[currentSlide]) {
                 dots[currentSlide].classList.remove('bg-white/50');
                 dots[currentSlide].classList.add('bg-gold-500');

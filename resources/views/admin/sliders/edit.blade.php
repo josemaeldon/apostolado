@@ -162,7 +162,7 @@
                 document.getElementById('link_id_page').disabled = true;
                 document.getElementById('link_id_article').disabled = true;
                 document.getElementById('link_id_event').disabled = true;
-                document.getElementById('button_link').disabled = false;
+                document.getElementById('button_link').disabled = linkType !== 'custom';
                 
                 // Show and enable appropriate section
                 if (linkType === 'page') {

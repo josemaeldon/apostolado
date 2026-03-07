@@ -35,6 +35,9 @@ class Slider extends Model
      */
     public function getEffectiveLinkAttribute()
     {
+        // Any internal link hint should block fallback to stale custom URLs.
+        $hasInternalTarget = !empty($this->linkable_type) || !empty($this->linkable_id);
+
         if ($this->linkable) {
             if ($this->linkable instanceof \App\Models\Page) {
                 return route('public.page.show', $this->linkable);
@@ -44,6 +47,11 @@ class Slider extends Model
                 return route('public.event.show', $this->linkable);
             }
         }
+
+        if ($hasInternalTarget) {
+            return null;
+        }
+
         return $this->button_link;
     }
 }
