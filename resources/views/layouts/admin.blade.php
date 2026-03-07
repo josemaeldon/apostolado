@@ -79,7 +79,7 @@
                         </button>
                     </div>
                     
-                    <div class="p-4 space-y-2" x-data="{ cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }} }">
+                    <div class="p-4 space-y-2" x-data="{ cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, cadastrosHover: false, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }}, configuracoesHover: false }">
                         <!-- Sidebar Items -->
                         <a href="{{ route('dashboard') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -168,8 +168,11 @@
                         </a>
                         
                         <!-- Cadastros with submenu -->
-                        <div>
-                            <button @click="cadastrosOpen = !cadastrosOpen" 
+                        <div class="relative"
+                             @mouseenter="if (!sidebarOpen) cadastrosHover = true"
+                             @mouseleave="cadastrosHover = false"
+                             @click.outside="if (!sidebarOpen) cadastrosOpen = false">
+                            <button @click="if (sidebarOpen) { cadastrosOpen = !cadastrosOpen } else { cadastrosOpen = !cadastrosOpen }" 
                                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'bg-blue-50 text-blue-700' : '' }}"
                                          :class="sidebarOpen ? '' : 'justify-center px-0'"
                                :aria-label="!sidebarOpen ? 'Cadastros' : ''"
@@ -181,6 +184,14 @@
                                 <svg x-show="sidebarOpen" :class="cadastrosOpen ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
+
+                                <span x-show="!sidebarOpen" x-cloak
+                                      class="absolute right-2 bottom-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-white"
+                                      aria-hidden="true">
+                                    <svg class="h-2.5 w-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
                             </button>
                             <!-- Submenu -->
                             <div x-show="cadastrosOpen && sidebarOpen" x-collapse class="ml-8 mt-1 space-y-1">
@@ -195,11 +206,31 @@
                                 </a>
                                 @endif
                             </div>
+
+                            <div x-show="!sidebarOpen && (cadastrosOpen || cadastrosHover)"
+                                 x-cloak
+                                 @mouseenter="cadastrosHover = true"
+                                 @mouseleave="cadastrosHover = false"
+                                 class="absolute left-full top-0 ml-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 space-y-1">
+                                <a href="{{ route('admin.member-registrations.index') }}"
+                                   class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Membros
+                                </a>
+                                @if(auth()->user()->isAdmin())
+                                <a href="{{ route('admin.registration-tokens.index') }}"
+                                   class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.registration-tokens.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Tokens de Cadastro
+                                </a>
+                                @endif
+                            </div>
                         </div>
                         
                         <!-- Configurações with submenu -->
-                        <div>
-                            <button @click="configuracoesOpen = !configuracoesOpen" 
+                        <div class="relative"
+                             @mouseenter="if (!sidebarOpen) configuracoesHover = true"
+                             @mouseleave="configuracoesHover = false"
+                             @click.outside="if (!sidebarOpen) configuracoesOpen = false">
+                            <button @click="if (sidebarOpen) { configuracoesOpen = !configuracoesOpen } else { configuracoesOpen = !configuracoesOpen }" 
                                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'bg-blue-50 text-blue-700' : '' }}"
                                          :class="sidebarOpen ? '' : 'justify-center px-0'"
                                :aria-label="!sidebarOpen ? 'Configurações' : ''"
@@ -211,6 +242,14 @@
                                 <svg x-show="sidebarOpen" :class="configuracoesOpen ? 'rotate-180' : ''" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
+
+                                <span x-show="!sidebarOpen" x-cloak
+                                      class="absolute right-2 bottom-2 inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-white"
+                                      aria-hidden="true">
+                                    <svg class="h-2.5 w-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                    </svg>
+                                </span>
                             </button>
                             <!-- Submenu -->
                             <div x-show="configuracoesOpen && sidebarOpen" x-collapse class="ml-8 mt-1 space-y-1">
@@ -233,6 +272,35 @@
                                 </a>
                                 <a href="{{ route('admin.users.index') }}" 
                                    class="flex items-center px-4 py-2 rounded-lg text-sm text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Usuários
+                                </a>
+                                @endif
+                            </div>
+
+                            <div x-show="!sidebarOpen && (configuracoesOpen || configuracoesHover)"
+                                 x-cloak
+                                 @mouseenter="configuracoesHover = true"
+                                 @mouseleave="configuracoesHover = false"
+                                 class="absolute left-full top-0 ml-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 space-y-1">
+                                <a href="{{ route('profile.edit') }}"
+                                   class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Perfil
+                                </a>
+                                @if(auth()->user()->isAdmin())
+                                <a href="{{ route('admin.site-settings.index') }}"
+                                   class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.site-settings.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Site
+                                </a>
+                                <a href="{{ route('admin.storage-settings.index') }}"
+                                   class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.storage-settings.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    Armazenamento
+                                </a>
+                                <a href="{{ route('admin.api-settings.index') }}"
+                                   class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.api-settings.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
+                                    API REST
+                                </a>
+                                <a href="{{ route('admin.users.index') }}"
+                                   class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
                                     Usuários
                                 </a>
                                 @endif
