@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class SiteSettingsController extends Controller
@@ -83,6 +84,7 @@ class SiteSettingsController extends Controller
             // Store new favicon
             $faviconPath = $request->file('favicon')->store('favicons');
             SiteSetting::set('favicon', $faviconPath);
+            $this->syncPublicFaviconFiles($faviconPath);
         }
         
         // Update footer settings
@@ -129,9 +131,46 @@ class SiteSettingsController extends Controller
         }
 
         SiteSetting::set('favicon', null);
+        $this->clearPublicFaviconFiles();
         SiteSetting::clearCache();
 
         return redirect()->route('admin.site-settings.index')
             ->with('success', 'Favicon removido com sucesso!');
+    }
+
+    /**
+     * Keep browser fallback favicon files in /public synchronized with current setting.
+     */
+    private function syncPublicFaviconFiles(string $storedPath): void
+    {
+        try {
+            $contents = Storage::get($storedPath);
+
+            File::put(public_path('favicon.ico'), $contents);
+            File::put(public_path('apple-touch-icon.png'), $contents);
+        } catch (\Throwable $e) {
+            // Ignore sync failures to avoid blocking settings update.
+        }
+    }
+
+    /**
+     * Remove generated public favicon files when custom favicon is deleted.
+     */
+    private function clearPublicFaviconFiles(): void
+    {
+        try {
+            $faviconPath = public_path('favicon.ico');
+            $applePath = public_path('apple-touch-icon.png');
+
+            if (File::exists($faviconPath)) {
+                File::delete($faviconPath);
+            }
+
+            if (File::exists($applePath)) {
+                File::delete($applePath);
+            }
+        } catch (\Throwable $e) {
+            // Ignore cleanup failures.
+        }
     }
 }
