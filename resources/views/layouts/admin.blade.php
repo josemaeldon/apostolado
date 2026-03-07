@@ -23,7 +23,7 @@
                 <!-- Sidebar -->
                 <aside 
                     :class="sidebarOpen ? 'w-64' : 'w-20'"
-                    class="bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-y-auto flex-shrink-0"
+                    class="relative z-40 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-visible flex-shrink-0"
                     role="navigation"
                     aria-label="Menu lateral principal">
                     
