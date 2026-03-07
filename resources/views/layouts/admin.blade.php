@@ -19,7 +19,7 @@
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
-            <div x-data="{ sidebarOpen: $persist(true).as('admin-sidebar-open') }" class="flex h-screen overflow-hidden">
+            <div x-data="{ sidebarOpen: $persist(true).as('admin-sidebar-open') }" class="flex h-screen overflow-y-hidden overflow-x-visible">
                 <!-- Sidebar -->
                 <aside 
                     :class="sidebarOpen ? 'w-64' : 'w-20'"
@@ -79,7 +79,7 @@
                         </button>
                     </div>
                     
-                    <div class="p-4 space-y-2 overflow-y-auto overflow-x-visible" style="max-height: calc(100vh - 73px);" x-data="{ cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, cadastrosHover: false, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }}, configuracoesHover: false }">
+                    <div class="p-4 space-y-2 overflow-y-auto overflow-x-visible" style="max-height: calc(100vh - 73px);" x-data="{ cadastrosOpen: {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'true' : 'false' }}, cadastrosHover: false, cadastrosTimer: null, configuracoesOpen: {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'true' : 'false' }}, configuracoesHover: false, configuracoesTimer: null }">
                         <!-- Sidebar Items -->
                         <a href="{{ route('dashboard') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -168,9 +168,9 @@
                         </a>
                         
                         <!-- Cadastros with submenu -->
-                        <div class="relative"
-                             @mouseenter="if (!sidebarOpen) cadastrosHover = true"
-                             @mouseleave="cadastrosHover = false"
+                            <div class="relative"
+                                @mouseenter="if (!sidebarOpen) { clearTimeout(cadastrosTimer); cadastrosHover = true }"
+                                @mouseleave="if (!sidebarOpen) { clearTimeout(cadastrosTimer); cadastrosTimer = setTimeout(() => { cadastrosHover = false }, 180) }"
                              @click.outside="if (!sidebarOpen) cadastrosOpen = false">
                             <button @click="if (sidebarOpen) { cadastrosOpen = !cadastrosOpen } else { cadastrosOpen = !cadastrosOpen }" 
                                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -207,10 +207,10 @@
                                 @endif
                             </div>
 
-                               <div x-show="!sidebarOpen && (cadastrosOpen || cadastrosHover)"
+                                                        <div x-show="!sidebarOpen && (cadastrosOpen || cadastrosHover)"
                                  x-cloak
-                                 @mouseenter="cadastrosHover = true"
-                                 @mouseleave="cadastrosHover = false"
+                                                                 @mouseenter="clearTimeout(cadastrosTimer); cadastrosHover = true"
+                                                                 @mouseleave="clearTimeout(cadastrosTimer); cadastrosTimer = setTimeout(() => { cadastrosHover = false }, 180)"
                                    class="absolute left-full top-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 space-y-1">
                                 <a href="{{ route('admin.member-registrations.index') }}"
                                    class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
@@ -226,9 +226,9 @@
                         </div>
                         
                         <!-- Configurações with submenu -->
-                        <div class="relative"
-                             @mouseenter="if (!sidebarOpen) configuracoesHover = true"
-                             @mouseleave="configuracoesHover = false"
+                            <div class="relative"
+                                @mouseenter="if (!sidebarOpen) { clearTimeout(configuracoesTimer); configuracoesHover = true }"
+                                @mouseleave="if (!sidebarOpen) { clearTimeout(configuracoesTimer); configuracoesTimer = setTimeout(() => { configuracoesHover = false }, 180) }"
                              @click.outside="if (!sidebarOpen) configuracoesOpen = false">
                             <button @click="if (sidebarOpen) { configuracoesOpen = !configuracoesOpen } else { configuracoesOpen = !configuracoesOpen }" 
                                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'bg-blue-50 text-blue-700' : '' }}"
@@ -277,10 +277,10 @@
                                 @endif
                             </div>
 
-                               <div x-show="!sidebarOpen && (configuracoesOpen || configuracoesHover)"
+                                                        <div x-show="!sidebarOpen && (configuracoesOpen || configuracoesHover)"
                                  x-cloak
-                                 @mouseenter="configuracoesHover = true"
-                                 @mouseleave="configuracoesHover = false"
+                                                                 @mouseenter="clearTimeout(configuracoesTimer); configuracoesHover = true"
+                                                                 @mouseleave="clearTimeout(configuracoesTimer); configuracoesTimer = setTimeout(() => { configuracoesHover = false }, 180)"
                                    class="absolute left-full top-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 space-y-1">
                                 <a href="{{ route('profile.edit') }}"
                                    class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
