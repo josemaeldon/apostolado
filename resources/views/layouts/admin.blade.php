@@ -42,29 +42,40 @@
                             <div x-show="sidebarOpen" class="transition-opacity duration-300">
                                 <img src="{{ $logoUrl }}" alt="{{ $settings['site_name'] }}" class="h-8 object-contain">
                             </div>
-                            <div x-show="!sidebarOpen" class="transition-opacity duration-300" x-cloak>
-                                <img src="{{ $logoUrl }}" alt="{{ $settings['site_name'] }}" class="h-8 w-8 object-contain rounded">
-                            </div>
+                            <div x-show="!sidebarOpen" class="w-0" x-cloak></div>
                         @else
                             <h2 x-show="sidebarOpen" class="font-semibold text-xl text-gray-800 transition-opacity duration-300">
                                 {{ $settings['site_name'] }}
                             </h2>
-                            <div x-show="!sidebarOpen" class="transition-opacity duration-300" x-cloak>
-                                <span class="text-sm font-semibold text-gray-800" title="{{ $settings['site_name'] }}">
-                                    {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($settings['site_name'], 0, 1)) }}
-                                </span>
-                            </div>
+                            <div x-show="!sidebarOpen" class="w-0" x-cloak></div>
                         @endif
                         
                         <button @click="sidebarOpen = !sidebarOpen" 
-                                class="p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            class="relative p-2 rounded-md text-gray-600 hover:text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 :class="sidebarOpen ? '' : 'mx-auto'"
                                 :aria-label="sidebarOpen ? 'Recolher menu lateral' : 'Expandir menu lateral'"
                                 :aria-expanded="sidebarOpen">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg x-show="sidebarOpen" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                       :d="sidebarOpen ? 'M11 19l-7-7 7-7m8 14l-7-7 7-7' : 'M13 5l7 7-7 7M5 5l7 7-7 7'"></path>
                             </svg>
+                            @if($hasLogo)
+                                <img x-show="!sidebarOpen" x-cloak src="{{ $logoUrl }}" alt="{{ $settings['site_name'] }}"
+                                     class="h-7 w-auto max-w-8 object-contain mx-auto">
+                            @else
+                                <span x-show="!sidebarOpen" x-cloak class="text-sm font-semibold text-gray-800" title="{{ $settings['site_name'] }}">
+                                    {{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr($settings['site_name'], 0, 1)) }}
+                                </span>
+                            @endif
+
+                            <span x-show="!sidebarOpen" x-cloak
+                                  class="absolute -right-1 -bottom-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-blue-600 text-white shadow-sm"
+                                  aria-hidden="true"
+                                  title="Clique para expandir">
+                                <svg class="h-2.5 w-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>
+                                </svg>
+                            </span>
                         </button>
                     </div>
                     
