@@ -23,7 +23,7 @@
                 <!-- Sidebar -->
                 <aside 
                     :class="sidebarOpen ? 'w-64' : 'w-20'"
-                    class="relative z-40 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-visible flex-shrink-0"
+                    class="relative z-40 bg-white border-r border-gray-200 transition-all duration-300 ease-in-out overflow-y-auto overflow-x-visible flex-shrink-0"
                     role="navigation"
                     aria-label="Menu lateral principal">
                     
@@ -207,11 +207,11 @@
                                 @endif
                             </div>
 
-                            <div x-show="!sidebarOpen && (cadastrosOpen || cadastrosHover)"
+                               <div x-show="!sidebarOpen && (cadastrosOpen || cadastrosHover)"
                                  x-cloak
                                  @mouseenter="cadastrosHover = true"
                                  @mouseleave="cadastrosHover = false"
-                                 class="absolute left-full top-0 ml-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 space-y-1">
+                                   class="absolute left-full top-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 space-y-1">
                                 <a href="{{ route('admin.member-registrations.index') }}"
                                    class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
                                     Membros
@@ -277,11 +277,11 @@
                                 @endif
                             </div>
 
-                            <div x-show="!sidebarOpen && (configuracoesOpen || configuracoesHover)"
+                               <div x-show="!sidebarOpen && (configuracoesOpen || configuracoesHover)"
                                  x-cloak
                                  @mouseenter="configuracoesHover = true"
                                  @mouseleave="configuracoesHover = false"
-                                 class="absolute left-full top-0 ml-2 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 space-y-1">
+                                   class="absolute left-full top-0 w-56 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-2 space-y-1">
                                 <a href="{{ route('profile.edit') }}"
                                    class="flex items-center px-3 py-2 rounded-lg text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') ? 'bg-blue-100 text-blue-700 font-medium' : '' }}">
                                     Perfil
