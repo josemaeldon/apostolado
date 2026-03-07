@@ -423,12 +423,16 @@
             }
         }
 
-        // Dynamic section cards slider (enabled when section has more than 6 cards)
+        // Dynamic section cards slider (mobile, enabled when section has more than 4 cards)
         function scrollCards(containerId, direction) {
             const container = document.getElementById(containerId);
             if (!container) return;
 
-            const step = Math.max(container.clientWidth, 320);
+            const firstItem = container.querySelector('[data-carousel-item]');
+            const containerStyles = window.getComputedStyle(container);
+            const gap = parseFloat(containerStyles.columnGap || containerStyles.gap || '0');
+            const step = firstItem ? firstItem.getBoundingClientRect().width + gap : Math.max(container.clientWidth, 320);
+
             container.scrollBy({
                 left: direction * step,
                 behavior: 'smooth'
