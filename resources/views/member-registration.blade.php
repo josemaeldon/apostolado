@@ -92,44 +92,9 @@
             <!-- Form -->
             <form method="POST" action="{{ route('member.store') }}" enctype="multipart/form-data" class="bg-white shadow-xl rounded-2xl overflow-hidden">
                 @csrf
+                <input type="hidden" name="parish" id="parish" value="{{ old('parish', old('member_parish')) }}">
 
                 <div class="p-8 space-y-8">
-                    <!-- Paróquia -->
-                    <div class="border-b border-neutral-200 pb-6">
-                        <h3 class="text-2xl font-bold text-primary-800 mb-4">Paróquia</h3>
-                        <div>
-                            <label for="parish" class="block text-sm font-medium text-neutral-700 mb-2">
-                                Nome da Paróquia <span class="text-primary-600">*</span>
-                            </label>
-                            <select name="parish" id="parish" required
-                                    class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
-                                <option value="">Selecione uma paróquia...</option>
-                                <option value="Cristo Crucificado" {{ old('parish') == 'Cristo Crucificado' ? 'selected' : '' }}>Cristo Crucificado</option>
-                                <option value="Imaculada Conceição" {{ old('parish') == 'Imaculada Conceição' ? 'selected' : '' }}>Imaculada Conceição</option>
-                                <option value="Nossa Senhora Aparecida" {{ old('parish') == 'Nossa Senhora Aparecida' ? 'selected' : '' }}>Nossa Senhora Aparecida</option>
-                                <option value="Nossa Senhora da Divina Providência" {{ old('parish') == 'Nossa Senhora da Divina Providência' ? 'selected' : '' }}>Nossa Senhora da Divina Providência</option>
-                                <option value="Nossa Senhora da Piedade" {{ old('parish') == 'Nossa Senhora da Piedade' ? 'selected' : '' }}>Nossa Senhora da Piedade</option>
-                                <option value="Nossa Senhora de Nazaré" {{ old('parish') == 'Nossa Senhora de Nazaré' ? 'selected' : '' }}>Nossa Senhora de Nazaré</option>
-                                <option value="Nossa Senhora do Perpétuo Socorro" {{ old('parish') == 'Nossa Senhora do Perpétuo Socorro' ? 'selected' : '' }}>Nossa Senhora do Perpétuo Socorro</option>
-                                <option value="Nossa Senhora do Rosário" {{ old('parish') == 'Nossa Senhora do Rosário' ? 'selected' : '' }}>Nossa Senhora do Rosário</option>
-                                <option value="Sagrado Coração de Jesus" {{ old('parish') == 'Sagrado Coração de Jesus' ? 'selected' : '' }}>Sagrado Coração de Jesus</option>
-                                <option value="Santa Luzia" {{ old('parish') == 'Santa Luzia' ? 'selected' : '' }}>Santa Luzia</option>
-                                <option value="Santa Teresinha do Menino Jesus" {{ old('parish') == 'Santa Teresinha do Menino Jesus' ? 'selected' : '' }}>Santa Teresinha do Menino Jesus</option>
-                                <option value="Santo Antônio Maria Zaccaria" {{ old('parish') == 'Santo Antônio Maria Zaccaria' ? 'selected' : '' }}>Santo Antônio Maria Zaccaria</option>
-                                <option value="São Francisco de Assis" {{ old('parish') == 'São Francisco de Assis' ? 'selected' : '' }}>São Francisco de Assis</option>
-                                <option value="São João Batista" {{ old('parish') == 'São João Batista' ? 'selected' : '' }}>São João Batista</option>
-                                <option value="São José" {{ old('parish') == 'São José' ? 'selected' : '' }}>São José</option>
-                                <option value="São Miguel Arcanjo" {{ old('parish') == 'São Miguel Arcanjo' ? 'selected' : '' }}>São Miguel Arcanjo</option>
-                                <option value="São Pedro Apóstolo" {{ old('parish') == 'São Pedro Apóstolo' ? 'selected' : '' }}>São Pedro Apóstolo</option>
-                                <option value="São Raimundo Nonato" {{ old('parish') == 'São Raimundo Nonato' ? 'selected' : '' }}>São Raimundo Nonato</option>
-                                <option value="São Sebastião" {{ old('parish') == 'São Sebastião' ? 'selected' : '' }}>São Sebastião</option>
-                            </select>
-                            @error('parish')
-                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
-                        </div>
-                    </div>
-
                     <!-- Dados Pessoais -->
                     <div class="border-b border-neutral-200 pb-6">
                         <h3 class="text-2xl font-bold text-primary-800 mb-6">Dados Pessoais</h3>
@@ -693,7 +658,17 @@
         const webcamCanvas = document.getElementById('webcam-canvas');
         const webcamError = document.getElementById('webcam-error');
         const profileImageInput = document.getElementById('profile_image');
+        const parishInput = document.getElementById('parish');
+        const memberParishInput = document.getElementById('member_parish');
         let webcamStream = null;
+
+        function syncParishField() {
+            if (!parishInput || !memberParishInput) {
+                return;
+            }
+
+            parishInput.value = memberParishInput.value;
+        }
 
         async function startWebcam() {
             webcamError.classList.add('hidden');
@@ -759,6 +734,10 @@
         openCameraBtn.addEventListener('click', startWebcam);
         closeCameraBtn.addEventListener('click', stopWebcam);
         capturePhotoBtn.addEventListener('click', captureWebcamPhoto);
+        if (memberParishInput) {
+            memberParishInput.addEventListener('change', syncParishField);
+            syncParishField();
+        }
         window.addEventListener('beforeunload', stopWebcam);
     </script>
 </body>

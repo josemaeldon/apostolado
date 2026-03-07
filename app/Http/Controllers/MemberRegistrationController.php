@@ -65,6 +65,10 @@ class MemberRegistrationController extends Controller
 
     public function store(Request $request)
     {
+        if (!$request->filled('parish') && $request->filled('member_parish')) {
+            $request->merge(['parish' => $request->input('member_parish')]);
+        }
+
         // Validate token from session
         $token = session('registration_token');
         if (!$token) {
