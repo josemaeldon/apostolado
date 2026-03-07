@@ -83,9 +83,25 @@
             </div>
 
             <!-- Form -->
+            @php
+                $isScopedToken = isset($registrationToken) && $registrationToken->hasScopedMemberLocation();
+                $lockedMemberCity = $registrationToken->member_city ?? null;
+                $lockedMemberParish = $registrationToken->member_parish ?? null;
+            @endphp
+
+            @if($isScopedToken)
+                <div class="mb-6 bg-amber-50 border border-amber-200 rounded-xl p-4">
+                    <p class="text-sm text-amber-800">
+                        <strong>Token vinculado:</strong> este cadastro está fixado em
+                        <strong>{{ $lockedMemberCity }}</strong> e <strong>{{ $lockedMemberParish }}</strong>.
+                        Esses campos não podem ser alterados.
+                    </p>
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('member.store') }}" enctype="multipart/form-data" class="bg-white shadow-xl rounded-2xl overflow-hidden">
                 @csrf
-                <input type="hidden" name="parish" id="parish" value="{{ old('parish', old('member_parish')) }}">
+                <input type="hidden" name="parish" id="parish" value="{{ $isScopedToken ? $lockedMemberParish : old('parish', old('member_parish')) }}">
 
                 <div class="p-8 space-y-8">
                     <!-- Dados Pessoais -->
@@ -255,30 +271,16 @@
                                 <label for="member_city" class="block text-sm font-medium text-neutral-700 mb-2">
                                     Cidade do Membro <span class="text-primary-600">*</span>
                                 </label>
-                                <select name="member_city" id="member_city" required
+                                <select name="member_city" id="member_city" required {{ $isScopedToken ? 'disabled' : '' }}
                                         class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
                                     <option value="">Selecione uma cidade...</option>
-                                    <option value="Augusto Corrêa" {{ old('member_city') == 'Augusto Corrêa' ? 'selected' : '' }}>Augusto Corrêa</option>
-                                    <option value="Aurora do Pará" {{ old('member_city') == 'Aurora do Pará' ? 'selected' : '' }}>Aurora do Pará</option>
-                                    <option value="Bonito" {{ old('member_city') == 'Bonito' ? 'selected' : '' }}>Bonito</option>
-                                    <option value="Bragança do Pará" {{ old('member_city') == 'Bragança do Pará' ? 'selected' : '' }}>Bragança do Pará</option>
-                                    <option value="Cachoeira do Piriá" {{ old('member_city') == 'Cachoeira do Piriá' ? 'selected' : '' }}>Cachoeira do Piriá</option>
-                                    <option value="Capitão Poço" {{ old('member_city') == 'Capitão Poço' ? 'selected' : '' }}>Capitão Poço</option>
-                                    <option value="Dom Eliseu" {{ old('member_city') == 'Dom Eliseu' ? 'selected' : '' }}>Dom Eliseu</option>
-                                    <option value="Garrafão do Norte" {{ old('member_city') == 'Garrafão do Norte' ? 'selected' : '' }}>Garrafão do Norte</option>
-                                    <option value="Ipixuna do Pará" {{ old('member_city') == 'Ipixuna do Pará' ? 'selected' : '' }}>Ipixuna do Pará</option>
-                                    <option value="Irituia" {{ old('member_city') == 'Irituia' ? 'selected' : '' }}>Irituia</option>
-                                    <option value="Mãe do Rio" {{ old('member_city') == 'Mãe do Rio' ? 'selected' : '' }}>Mãe do Rio</option>
-                                    <option value="Nova Esperança do Piriá" {{ old('member_city') == 'Nova Esperança do Piriá' ? 'selected' : '' }}>Nova Esperança do Piriá</option>
-                                    <option value="Ourém" {{ old('member_city') == 'Ourém' ? 'selected' : '' }}>Ourém</option>
-                                    <option value="Paragominas" {{ old('member_city') == 'Paragominas' ? 'selected' : '' }}>Paragominas</option>
-                                    <option value="Rondon do Pará" {{ old('member_city') == 'Rondon do Pará' ? 'selected' : '' }}>Rondon do Pará</option>
-                                    <option value="Santa Luzia do Pará" {{ old('member_city') == 'Santa Luzia do Pará' ? 'selected' : '' }}>Santa Luzia do Pará</option>
-                                    <option value="São Miguel do Guamá" {{ old('member_city') == 'São Miguel do Guamá' ? 'selected' : '' }}>São Miguel do Guamá</option>
-                                    <option value="Tracuateua" {{ old('member_city') == 'Tracuateua' ? 'selected' : '' }}>Tracuateua</option>
-                                    <option value="Ulianópolis" {{ old('member_city') == 'Ulianópolis' ? 'selected' : '' }}>Ulianópolis</option>
-                                    <option value="Viseu" {{ old('member_city') == 'Viseu' ? 'selected' : '' }}>Viseu</option>
+                                    @foreach($memberCities as $memberCity)
+                                        <option value="{{ $memberCity }}" {{ ($isScopedToken ? $lockedMemberCity : old('member_city')) === $memberCity ? 'selected' : '' }}>{{ $memberCity }}</option>
+                                    @endforeach
                                 </select>
+                                @if($isScopedToken)
+                                    <input type="hidden" name="member_city" value="{{ $lockedMemberCity }}">
+                                @endif
                                 @error('member_city')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
@@ -288,29 +290,16 @@
                                 <label for="member_parish" class="block text-sm font-medium text-neutral-700 mb-2">
                                     Paróquia do Membro <span class="text-primary-600">*</span>
                                 </label>
-                                <select name="member_parish" id="member_parish" required
+                                <select name="member_parish" id="member_parish" required {{ $isScopedToken ? 'disabled' : '' }}
                                         class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent transition">
                                     <option value="">Selecione uma paróquia...</option>
-                                    <option value="Cristo Crucificado" {{ old('member_parish') == 'Cristo Crucificado' ? 'selected' : '' }}>Cristo Crucificado</option>
-                                    <option value="Imaculada Conceição" {{ old('member_parish') == 'Imaculada Conceição' ? 'selected' : '' }}>Imaculada Conceição</option>
-                                    <option value="Nossa Senhora Aparecida" {{ old('member_parish') == 'Nossa Senhora Aparecida' ? 'selected' : '' }}>Nossa Senhora Aparecida</option>
-                                    <option value="Nossa Senhora da Divina Providência" {{ old('member_parish') == 'Nossa Senhora da Divina Providência' ? 'selected' : '' }}>Nossa Senhora da Divina Providência</option>
-                                    <option value="Nossa Senhora da Piedade" {{ old('member_parish') == 'Nossa Senhora da Piedade' ? 'selected' : '' }}>Nossa Senhora da Piedade</option>
-                                    <option value="Nossa Senhora de Nazaré" {{ old('member_parish') == 'Nossa Senhora de Nazaré' ? 'selected' : '' }}>Nossa Senhora de Nazaré</option>
-                                    <option value="Nossa Senhora do Perpétuo Socorro" {{ old('member_parish') == 'Nossa Senhora do Perpétuo Socorro' ? 'selected' : '' }}>Nossa Senhora do Perpétuo Socorro</option>
-                                    <option value="Nossa Senhora do Rosário" {{ old('member_parish') == 'Nossa Senhora do Rosário' ? 'selected' : '' }}>Nossa Senhora do Rosário</option>
-                                    <option value="Sagrado Coração de Jesus" {{ old('member_parish') == 'Sagrado Coração de Jesus' ? 'selected' : '' }}>Sagrado Coração de Jesus</option>
-                                    <option value="Santa Luzia" {{ old('member_parish') == 'Santa Luzia' ? 'selected' : '' }}>Santa Luzia</option>
-                                    <option value="Santa Teresinha do Menino Jesus" {{ old('member_parish') == 'Santa Teresinha do Menino Jesus' ? 'selected' : '' }}>Santa Teresinha do Menino Jesus</option>
-                                    <option value="Santo Antônio Maria Zaccaria" {{ old('member_parish') == 'Santo Antônio Maria Zaccaria' ? 'selected' : '' }}>Santo Antônio Maria Zaccaria</option>
-                                    <option value="São Francisco de Assis" {{ old('member_parish') == 'São Francisco de Assis' ? 'selected' : '' }}>São Francisco de Assis</option>
-                                    <option value="São João Batista" {{ old('member_parish') == 'São João Batista' ? 'selected' : '' }}>São João Batista</option>
-                                    <option value="São José" {{ old('member_parish') == 'São José' ? 'selected' : '' }}>São José</option>
-                                    <option value="São Miguel Arcanjo" {{ old('member_parish') == 'São Miguel Arcanjo' ? 'selected' : '' }}>São Miguel Arcanjo</option>
-                                    <option value="São Pedro Apóstolo" {{ old('member_parish') == 'São Pedro Apóstolo' ? 'selected' : '' }}>São Pedro Apóstolo</option>
-                                    <option value="São Raimundo Nonato" {{ old('member_parish') == 'São Raimundo Nonato' ? 'selected' : '' }}>São Raimundo Nonato</option>
-                                    <option value="São Sebastião" {{ old('member_parish') == 'São Sebastião' ? 'selected' : '' }}>São Sebastião</option>
+                                    @foreach($memberParishes as $memberParish)
+                                        <option value="{{ $memberParish }}" {{ ($isScopedToken ? $lockedMemberParish : old('member_parish')) === $memberParish ? 'selected' : '' }}>{{ $memberParish }}</option>
+                                    @endforeach
                                 </select>
+                                @if($isScopedToken)
+                                    <input type="hidden" name="member_parish" value="{{ $lockedMemberParish }}">
+                                @endif
                                 @error('member_parish')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror

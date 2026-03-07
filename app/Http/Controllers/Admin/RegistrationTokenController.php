@@ -22,7 +22,10 @@ class RegistrationTokenController extends Controller
      */
     public function create()
     {
-        return view('admin.registration-tokens.create');
+        $memberCities = RegistrationToken::MEMBER_CITIES;
+        $memberParishes = RegistrationToken::MEMBER_PARISHES;
+
+        return view('admin.registration-tokens.create', compact('memberCities', 'memberParishes'));
     }
 
     /**
@@ -35,6 +38,8 @@ class RegistrationTokenController extends Controller
             'is_active' => 'boolean',
             'max_uses' => 'nullable|integer|min:1',
             'expires_at' => 'nullable|date|after:now',
+            'member_city' => ['nullable', 'string', 'in:' . implode(',', RegistrationToken::MEMBER_CITIES), 'required_with:member_parish'],
+            'member_parish' => ['nullable', 'string', 'in:' . implode(',', RegistrationToken::MEMBER_PARISHES), 'required_with:member_city'],
         ]);
 
         $validated['token'] = RegistrationToken::generateToken();
@@ -51,7 +56,10 @@ class RegistrationTokenController extends Controller
      */
     public function edit(RegistrationToken $registrationToken)
     {
-        return view('admin.registration-tokens.edit', compact('registrationToken'));
+        $memberCities = RegistrationToken::MEMBER_CITIES;
+        $memberParishes = RegistrationToken::MEMBER_PARISHES;
+
+        return view('admin.registration-tokens.edit', compact('registrationToken', 'memberCities', 'memberParishes'));
     }
 
     /**
@@ -64,6 +72,8 @@ class RegistrationTokenController extends Controller
             'is_active' => 'boolean',
             'max_uses' => 'nullable|integer|min:1',
             'expires_at' => 'nullable|date|after_or_equal:now',
+            'member_city' => ['nullable', 'string', 'in:' . implode(',', RegistrationToken::MEMBER_CITIES), 'required_with:member_parish'],
+            'member_parish' => ['nullable', 'string', 'in:' . implode(',', RegistrationToken::MEMBER_PARISHES), 'required_with:member_city'],
         ]);
 
         $validated['is_active'] = $request->has('is_active');

@@ -43,6 +43,9 @@ services:
       DB_DATABASE: ${DB_DATABASE:-apostolado}
       DB_USERNAME: ${DB_USERNAME:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      AUTO_RUN_MIGRATIONS: "true"
+      MIGRATION_MAX_ATTEMPTS: 30
+      MIGRATION_RETRY_SECONDS: 2
     depends_on:
       db:
         condition: service_healthy

@@ -89,6 +89,38 @@ else
     echo -e "${GREEN}✓ Link simbólico do storage já existe${NC}"
 fi
 
+# Executar migrations automaticamente (com retry) para manter banco alinhado com novas versões.
+AUTO_RUN_MIGRATIONS="${AUTO_RUN_MIGRATIONS:-true}"
+MIGRATION_MAX_ATTEMPTS="${MIGRATION_MAX_ATTEMPTS:-30}"
+MIGRATION_RETRY_SECONDS="${MIGRATION_RETRY_SECONDS:-2}"
+
+if [ "$AUTO_RUN_MIGRATIONS" = "true" ]; then
+    if [ -f artisan ]; then
+        echo -e "${YELLOW}Executando migrations automáticas...${NC}"
+
+        migration_attempt=1
+        while [ "$migration_attempt" -le "$MIGRATION_MAX_ATTEMPTS" ]; do
+            if php artisan migrate --force; then
+                echo -e "${GREEN}✓ Migrations executadas com sucesso${NC}"
+                break
+            fi
+
+            if [ "$migration_attempt" -eq "$MIGRATION_MAX_ATTEMPTS" ]; then
+                echo -e "${YELLOW}⚠ Falha ao executar migrations após ${MIGRATION_MAX_ATTEMPTS} tentativas${NC}"
+                exit 1
+            fi
+
+            echo -e "${YELLOW}Tentativa ${migration_attempt}/${MIGRATION_MAX_ATTEMPTS} falhou. Tentando novamente em ${MIGRATION_RETRY_SECONDS}s...${NC}"
+            migration_attempt=$((migration_attempt + 1))
+            sleep "$MIGRATION_RETRY_SECONDS"
+        done
+    else
+        echo -e "${YELLOW}⚠ Arquivo artisan não encontrado. Pulando migrations automáticas.${NC}"
+    fi
+else
+    echo -e "${YELLOW}AUTO_RUN_MIGRATIONS=false. Pulando migrations automáticas.${NC}"
+fi
+
 # Executar o comando fornecido (normalmente supervisord)
 echo -e "${GREEN}=== Iniciando aplicação ===${NC}"
 exec "$@"

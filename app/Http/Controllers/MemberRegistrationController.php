@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MemberRegistration;
 use App\Models\Category;
+use App\Models\RegistrationToken;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -25,7 +26,7 @@ class MemberRegistrationController extends Controller
         ]);
 
         $token = strtoupper($request->token);
-        $registrationToken = \App\Models\RegistrationToken::where('token', $token)->first();
+        $registrationToken = RegistrationToken::where('token', $token)->first();
 
         if (!$registrationToken || !$registrationToken->isValid()) {
             return back()->withErrors(['token' => 'Token inválido, expirado ou sem usos disponíveis.']);
@@ -45,7 +46,7 @@ class MemberRegistrationController extends Controller
         }
 
         // Validate token
-        $registrationToken = \App\Models\RegistrationToken::where('token', strtoupper($token))->first();
+        $registrationToken = RegistrationToken::where('token', strtoupper($token))->first();
         
         if (!$registrationToken || !$registrationToken->isValid()) {
             return redirect()->route('member.token-form')
@@ -59,8 +60,11 @@ class MemberRegistrationController extends Controller
             ->where('show_in_menu', true)
             ->orderBy('order')
             ->get();
+
+        $memberCities = RegistrationToken::MEMBER_CITIES;
+        $memberParishes = RegistrationToken::MEMBER_PARISHES;
             
-        return view('member-registration', compact('categories', 'registrationToken'));
+        return view('member-registration', compact('categories', 'registrationToken', 'memberCities', 'memberParishes'));
     }
 
     public function store(Request $request)
@@ -76,10 +80,18 @@ class MemberRegistrationController extends Controller
                 ->with('error', 'Token de sessão ausente. Por favor, tente novamente.');
         }
 
-        $registrationToken = \App\Models\RegistrationToken::where('token', $token)->first();
+        $registrationToken = RegistrationToken::where('token', $token)->first();
         if (!$registrationToken || !$registrationToken->isValid()) {
             return redirect()->route('member.token-form')
                 ->with('error', 'Token inválido ou expirado.');
+        }
+
+        if ($registrationToken->hasScopedMemberLocation()) {
+            $request->merge([
+                'member_city' => $registrationToken->member_city,
+                'member_parish' => $registrationToken->member_parish,
+                'parish' => $registrationToken->member_parish,
+            ]);
         }
 
         $validated = $request->validate([
@@ -92,8 +104,8 @@ class MemberRegistrationController extends Controller
             'birth_date' => 'required|date',
             'marital_status' => 'required|string|max:255',
             'profession' => 'required|string|max:255',
-            'member_city' => 'required|string|max:255',
-            'member_parish' => 'required|string|max:255',
+            'member_city' => ['required', 'string', 'max:255', 'in:' . implode(',', RegistrationToken::MEMBER_CITIES)],
+            'member_parish' => ['required', 'string', 'max:255', 'in:' . implode(',', RegistrationToken::MEMBER_PARISHES)],
             'baptism_date' => 'nullable|date',
             'commitment_1' => 'required|accepted',
             'commitment_2' => 'required|accepted',
@@ -123,6 +135,12 @@ class MemberRegistrationController extends Controller
             'profile_image.mimes' => 'A imagem deve ser do tipo: jpeg, png, jpg ou gif.',
             'profile_image.max' => 'A imagem não pode ser maior que 2MB.',
         ]);
+
+        if ($registrationToken->hasScopedMemberLocation()) {
+            $validated['member_city'] = $registrationToken->member_city;
+            $validated['member_parish'] = $registrationToken->member_parish;
+            $validated['parish'] = $registrationToken->member_parish;
+        }
 
         // Handle profile image upload
         if ($request->hasFile('profile_image')) {

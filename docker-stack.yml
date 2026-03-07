@@ -46,6 +46,11 @@ services:
       # Generate with: php artisan key:generate --show
       APP_KEY: ${APP_KEY:-base64:CHANGE_THIS_TO_YOUR_ACTUAL_APP_KEY}
 
+      # Automatic migrations on container startup/update
+      AUTO_RUN_MIGRATIONS: "true"
+      MIGRATION_MAX_ATTEMPTS: 30
+      MIGRATION_RETRY_SECONDS: 2
+
     deploy:
       replicas: 1
       placement:

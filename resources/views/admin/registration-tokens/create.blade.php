@@ -48,6 +48,45 @@
 
                         <div class="mb-6">
                             <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Escopo do Token (Cidade e Paróquia do Membro)
+                            </label>
+                            <p class="text-sm text-gray-500 mb-3">
+                                Deixe os dois campos abaixo em branco para criar um token geral (campos livres no formulário).
+                            </p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="member_city" class="block text-sm font-medium text-gray-700 mb-2">Cidade do Membro</label>
+                                    <select name="member_city" id="member_city"
+                                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Token geral (sem trava)</option>
+                                        @foreach($memberCities as $memberCity)
+                                            <option value="{{ $memberCity }}" {{ old('member_city') === $memberCity ? 'selected' : '' }}>{{ $memberCity }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('member_city')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="member_parish" class="block text-sm font-medium text-gray-700 mb-2">Paróquia do Membro</label>
+                                    <select name="member_parish" id="member_parish"
+                                            class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="">Token geral (sem trava)</option>
+                                        @foreach($memberParishes as $memberParish)
+                                            <option value="{{ $memberParish }}" {{ old('member_parish') === $memberParish ? 'selected' : '' }}>{{ $memberParish }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('member_parish')
+                                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Data de expiração (opcional)
                             </label>
                             <input type="datetime-local" name="expires_at" value="{{ old('expires_at') }}"

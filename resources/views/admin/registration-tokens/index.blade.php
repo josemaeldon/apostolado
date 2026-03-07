@@ -24,6 +24,7 @@
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Token</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Descrição</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Escopo</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Usos</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expira em</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -37,6 +38,14 @@
                                                 <code class="px-2 py-1 bg-gray-100 rounded font-mono text-lg font-bold">{{ $token->token }}</code>
                                             </td>
                                             <td class="px-6 py-4 text-sm text-gray-900">{{ $token->description ?? '-' }}</td>
+                                            <td class="px-6 py-4 text-sm text-gray-700">
+                                                @if($token->hasScopedMemberLocation())
+                                                    <div><strong>Cidade:</strong> {{ $token->member_city }}</div>
+                                                    <div><strong>Paróquia:</strong> {{ $token->member_parish }}</div>
+                                                @else
+                                                    <span class="text-gray-500">Geral (campos livres)</span>
+                                                @endif
+                                            </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                                 {{ $token->used_count }}{{ $token->max_uses ? ' / ' . $token->max_uses : ' / ∞' }}
                                             </td>
