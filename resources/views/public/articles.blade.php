@@ -4,14 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Artigos - {{ config('app.name') }}</title>
-    @php
-        $favicon = \App\Models\SiteSetting::get('favicon');
-    @endphp
-    @if($favicon)
-        <link rel="icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
-        <link rel="shortcut icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
-        <link rel="apple-touch-icon" href="{{ \App\Helpers\ImageHelper::storageUrl($favicon) }}">
-    @endif
+    <x-site-favicon />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-neutral-50">
