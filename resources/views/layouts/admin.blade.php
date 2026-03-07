@@ -83,6 +83,7 @@
                         <!-- Sidebar Items -->
                         <a href="{{ route('dashboard') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            aria-label="Dashboard"
                            :title="!sidebarOpen ? 'Dashboard' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🏠</span>
@@ -93,6 +94,7 @@
                         <!-- Página Inicial (Seções + Cartões) - Admin only -->
                         <a href="{{ route('admin.homepage-sections.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.homepage-sections.*') || request()->routeIs('admin.feature-cards.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            :aria-label="!sidebarOpen ? 'Página Inicial' : ''"
                            :title="!sidebarOpen ? 'Página Inicial' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🎨</span>
@@ -102,6 +104,7 @@
                         
                         <a href="{{ route('admin.pages.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.pages.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            aria-label="Páginas"
                            :title="!sidebarOpen ? 'Páginas' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">📄</span>
@@ -110,6 +113,7 @@
                         
                         <a href="{{ route('admin.articles.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.articles.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            aria-label="Artigos"
                            :title="!sidebarOpen ? 'Artigos' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">📰</span>
@@ -118,6 +122,7 @@
                         
                         <a href="{{ route('admin.prayer-intentions.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.prayer-intentions.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            aria-label="Intenções de Oração"
                            :title="!sidebarOpen ? 'Intenções' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🙏</span>
@@ -126,6 +131,7 @@
                         
                         <a href="{{ route('admin.events.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.events.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            aria-label="Eventos"
                            :title="!sidebarOpen ? 'Eventos' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">📅</span>
@@ -134,6 +140,7 @@
                         
                         <a href="{{ route('admin.media-gallery.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.media-gallery.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            aria-label="Galeria de Mídia"
                            :title="!sidebarOpen ? 'Galeria' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🖼️</span>
@@ -143,6 +150,7 @@
                         @if(auth()->user()->isAdmin())
                         <a href="{{ route('admin.sliders.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.sliders.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            aria-label="Sliders"
                            :title="!sidebarOpen ? 'Sliders' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🎭</span>
@@ -152,6 +160,7 @@
                         
                         <a href="{{ route('admin.categories.index') }}" 
                            class="flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.categories.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                            aria-label="Categorias"
                            :title="!sidebarOpen ? 'Categorias' : ''">
                             <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">📑</span>
@@ -162,6 +171,7 @@
                         <div>
                             <button @click="cadastrosOpen = !cadastrosOpen" 
                                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('admin.member-registrations.*') || request()->routeIs('admin.registration-tokens.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                         :class="sidebarOpen ? '' : 'justify-center px-0'"
                                :aria-label="!sidebarOpen ? 'Cadastros' : ''"
                                :title="!sidebarOpen ? 'Cadastros' : ''">
                                 <div class="flex items-center">
@@ -191,6 +201,7 @@
                         <div>
                             <button @click="configuracoesOpen = !configuracoesOpen" 
                                class="w-full flex items-center justify-between px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors {{ request()->routeIs('profile.edit') || request()->routeIs('admin.site-settings.*') || request()->routeIs('admin.storage-settings.*') || request()->routeIs('admin.api-settings.*') || request()->routeIs('admin.users.*') ? 'bg-blue-50 text-blue-700' : '' }}"
+                                         :class="sidebarOpen ? '' : 'justify-center px-0'"
                                :aria-label="!sidebarOpen ? 'Configurações' : ''"
                                :title="!sidebarOpen ? 'Configurações' : ''">
                                 <div class="flex items-center">
@@ -236,6 +247,7 @@
                             @csrf
                             <button type="submit" 
                                     class="w-full flex items-center px-4 py-3 rounded-lg text-gray-700 hover:bg-red-50 hover:text-red-700 transition-colors"
+                                    :class="sidebarOpen ? '' : 'justify-center px-0'"
                                     aria-label="Sair do sistema"
                                     :title="!sidebarOpen ? 'Sair' : ''">
                                 <span class="text-2xl" :class="sidebarOpen ? 'mr-3' : 'mx-auto'" aria-hidden="true">🚪</span>
